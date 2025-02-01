@@ -1,0 +1,35 @@
+{
+    "providers": [
+        {
+            "type": "bitmap",
+            "file": "genesis:font/stat/pre_post.png",
+            "height": 13,
+            "ascent": 6,
+            "chars": [
+                "ABCDEFGHIJKLM",
+                "NOPQRSTUVWXYZ"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "genesis:font/stat/mid.png",
+            "height": 13,
+            "ascent": 6,
+            "chars": ["abcdefghijklm"]
+        },
+        {
+            "type": "space",
+            "advances": {
+                "+": -6,
+                ",": -1
+            }
+        },
+        {
+            "type": "bitmap",
+            "file": "genesis:font/numbers.png",
+            "height": 7,
+            "ascent": 3,
+            "chars": ["-0123456789"]
+        }
+    ]
+}

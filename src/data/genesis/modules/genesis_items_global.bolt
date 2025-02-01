@@ -1,0 +1,110 @@
+from ps_beet_bolt.bolt_item import transformer, custom_component, event_decorator, deep_merge, camel_case_to_snake_case
+from beet import Language
+
+def add_translation(key: str, value: str):
+    lang = ctx.assets.languages.get("genesis:en_us", {data:{}}).data
+    lang[key] = value
+    ctx.assets.languages["genesis:en_us"] = Language(lang)
+
+char_width = {' ': 3, '!': 1, '"': 1, '#': 5, '$': 5, '%': 5, '&': 5, "'": 1, '(': 3, ')': 3, '*': 3, '+': 5, ',': 1, '-': 5, '.': 1, '/': 5, '0': 5, '1': 5, '2': 5, '3': 5, '4': 5, '5': 5, '6': 5, '7': 5, '8': 5, '9': 5, ':': 1, ';': 1, '<': 4, '=': 5, '>': 4, '?': 5, '@': 6, 'A': 5, 'B': 5, 'C': 5, 'D': 5, 'E': 5, 'F': 5, 'G': 5, 'H': 5, 'I': 3, 'J': 5, 'K': 5, 'L': 5, 'M': 5, 'N': 5, 'O': 5, 'P': 5, 'Q': 5, 'R': 5, 'S': 5, 'T': 5, 'U': 5, 'V': 5, 'W': 5, 'X': 5, 'Y': 5, 'Z': 5, '[': 3, '\\': 5, ']': 3, '^': 5, '_': 5, '`': 2, 'a': 5, 'b': 5, 'c': 5, 'd': 5, 'e': 5, 'f': 4, 'g': 5, 'h': 5, 'i': 1, 'j': 5, 'k': 4, 'l': 2, 'm': 5, 'n': 5, 'o': 5, 'p': 5, 'q': 5, 'r': 5, 's': 5, 't': 3, 'u': 5, 'v': 5, 'w': 5, 'x': 5, 'y': 5, 'z': 5, '{': 3, '|': 1, '}': 3, '~': 6, '£': 5, 'ƒ': 5, 'ª': 4, 'º': 4, '¬': 5, '«': 6, '»': 6, '░': 1, '▒': 8, '▓': 8, '│': 2, '┤': 5, '╡': 5, '╢': 4, '╖': 7, '╕': 5, '╣': 4, '║': 2, '╗': 7, '╝': 7, '╜': 7, '╛': 5, '┐': 5, '└': 5, '┴': 8, '┬': 8, '├': 5, '─': 8, '┼': 8, '╞': 5, '╟': 2, '╚': 6, '╔': 6, '╩': 8, '╦': 8, '╠': 2, '═': 8, '╬': 4, '╧': 8, '╨': 8, '╤': 8, '╥': 8, '╙': 6, '╘': 5, '╒': 5, '╓': 6, '╫': 8, '╪': 8, '┘': 5, '┌': 5, '█': 8, '▄': 8, '▌': 4, '▐': 4, '▀': 8, '∅': 7, '∈': 5, '≡': 6, '±': 5, '≥': 5, '≤': 5, '⌠': 4, '⌡': 4, '÷': 5, '≈': 6, '°': 4, '∙': 2, '√': 6, 'ⁿ': 4, '²': 4, '■': 5}
+
+stat_lookup = {
+    "ability_haste":        {"pre":"M","post":"Z","mid":"m"},
+    "armor":                {"pre":"E","post":"R","mid":"e"},
+    "armor_toughness":      {"pre":"H","post":"U","mid":"h"},
+    "artifact_power":       {"pre":"J","post":"W","mid":"j"},
+    "attack_speed":         {"pre":"C","post":"P","mid":"c"},
+    "health":               {"pre":"D","post":"Q","mid":"d"},
+    "knockback_resistance": {"pre":"I","post":"V","mid":"i"},
+    "luck":                 {"pre":"G","post":"T","mid":"g"},
+    "magic_power":          {"pre":"B","post":"O","mid":"b"},
+    "mana_pool":            {"pre":"K","post":"X","mid":"k"},
+    "mana_regen":           {"pre":"L","post":"Y","mid":"l"},
+    "physical_power":       {"pre":"A","post":"N","mid":"a"},
+    "speed":                {"pre":"F","post":"S","mid":"f"},
+}
+
+rarity_text_color = {
+    "common": "white",
+    "uncommon": "yellow",
+    "rare": "aqua",
+    "epic": "light_purple",
+    "legendary": "#3b2b06",
+    "mythical": "#211905",
+    "transcendent": "#403303",
+}
+
+class StatItem:
+    @custom_component(component = "category")
+    def category_handler(item, category):
+        item.lore = [[
+            {"text":"","italic":false},
+            {"text":"A","font":"genesis:icon","color":"white"},
+            {"translate":f'rarity.genesis.{item.rarity}',"color":rarity_text_color[item.rarity]},
+            " ",
+            {"translate":f'category.genesis.{category}',"color":rarity_text_color[item.rarity]},
+        ]] + item.get("lore", [])
+
+    @custom_component(component = "stats")
+    def custom_stats_component(item, stats):
+        line = []
+        for stat_name, chars in stat_lookup.items():
+            if stat_name not in stats:
+                continue
+            color = "white"
+            if stats[stat_name] < 0:
+                color = "red"
+            value_length = len(str(stats[stat_name]))
+            post = (value_length * "+") + ((value_length - 1) * ("," + chars["mid"])) + ("," + chars["post"])
+            line += [{"text":chars["pre"],"font":"genesis:stat","color":"white","italic":false},{"text":str(stats[stat_name]),"font":"genesis:stat","color":color},{"text":post,"font":"genesis:stat"}]
+        item.merge("lore", [line,""])
+
+    @transformer(component = "rarity")
+    def rarity_transformer(item, rarity):
+        if rarity in ["legendary","mythical","transcendent"]:
+            return "epic"
+        return rarity
+
+    @transformer(component = "item_name")
+    def item_name_transformer(item, item_name):
+        trans_string = f"item.{item.namespace}.{item.id}"
+        add_translation(trans_string, item_name[0])
+        return {"translate":trans_string} | item_name[1]
+
+    @custom_component(component = "passives")
+    def passives_handler(item, passives):
+        for passive in passives:
+            passive_name_id = camel_case_to_snake_case(passive[0])
+            trans_key = f'item.{item.namespace}.{item.id}.{passive_name_id}'
+            add_translation(trans_key, passive[0])
+            line = [
+                [{"text":"❂","color":rarity_text_color["transcendent"],"italic":false}," ",{"translate":trans_key,"color":"gold"}],
+                {"translate":"text.genesis.passive_ability","color":"dark_gray"},
+            ]
+
+            line_index = 0
+            line_length = char_width[passive[1][0]]
+            passive_line = passive[1][0]
+            for i in range(len(passive[1])-1):
+                if (line_length + char_width[passive[1][i+1]]) > 200:
+                    overflow = ""
+                    while passive_line[-1] is not ' ':
+                        overflow = passive_line[-1] + overflow
+                        passive_line = passive_line[:-1]
+                    passive_line = passive_line[:-1]
+
+                    trans_key = f'item.{item.namespace}.{item.id}.{passive_name_id}.{line_index}'
+                    add_translation(trans_key, passive_line)
+                    line += [{"translate":trans_key,"color":"gray","italic":false}]
+                    line_length = 0
+                    line_index += 1
+                    passive_line = overflow
+
+                line_length += char_width[passive[1][i+1]]
+                passive_line += passive[1][i+1]
+            if passive_line:
+                trans_key = f'item.{item.namespace}.{item.id}.{passive_name_id}.{line_index}'
+                add_translation(trans_key, passive_line)
+                line += [{"translate":trans_key,"color":"gray","italic":false}]
+
+            item.merge("lore", line)

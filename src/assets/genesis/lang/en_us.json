@@ -1,0 +1,18 @@
+{
+    "category.genesis.chest": "Chestplate",
+    
+    "icon.genesis.logo": "\u0041",
+    
+    "rarity.genesis.transcendent": "Transcendent",
+    "rarity.genesis.mythical": "Mythical",
+    "rarity.genesis.legendary": "Legendary",
+    "rarity.genesis.epic": "Epic",
+    "rarity.genesis.rare": "Rare",
+    "rarity.genesis.uncommon": "Uncommon",
+    "rarity.genesis.common": "Common",
+    
+    "text.genesis.passive_ability": "Passive Ability",
+    "text.genesis.activated_ability": "Activated Ability",
+
+    "":""
+}

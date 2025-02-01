@@ -1,0 +1,13 @@
+{
+    "providers": [
+	{
+            "type": "bitmap",
+            "file": "genesis:font/icon/logo.png",
+            "height": 16,
+            "ascent": 8,
+            "chars": [
+                "\u0041"
+            ]
+        }
+    ]
+}
