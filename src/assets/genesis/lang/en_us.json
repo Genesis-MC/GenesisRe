@@ -1,8 +1,29 @@
 {
-    "category.genesis.chest": "Chestplate",
-    
+    "category.genesis.helmet": "Helmet",
+    "category.genesis.chestplate": "Chestplate",
+    "category.genesis.leggings": "Leggings",
+    "category.genesis.boots": "Boots",
+    "category.genesis.polearm": "Polearm",
+    "category.genesis.sword": "Sword",
+    "category.genesis.greatsword": "Greatsword",
+    "category.genesis.dagger": "Dagger",
+    "category.genesis.scythe": "Scythe",
+    "category.genesis.tool": "Tool",
+    "category.genesis.book": "Book",
+    "category.genesis.crafting_station": "Crafting Station",
+    "category.genesis.ingredient": "Ingredient",
+    "category.genesis.mineral": "Mineral",
+    "category.genesis.food": "Food",
+    "category.genesis.meal": "Meal",
+    "category.genesis.snack": "Snack",
+    "category.genesis.confectionery": "Confectionery",
+    "category.genesis.crop": "Crop",
+
+    "category_modifiers.genesis.void": "Void",
+    "category_modifiers.genesis.elemental": "Elemental",
+
     "icon.genesis.logo": "\u0041",
-    
+
     "rarity.genesis.transcendent": "Transcendent",
     "rarity.genesis.mythical": "Mythical",
     "rarity.genesis.legendary": "Legendary",
@@ -10,7 +31,7 @@
     "rarity.genesis.rare": "Rare",
     "rarity.genesis.uncommon": "Uncommon",
     "rarity.genesis.common": "Common",
-    
+
     "text.genesis.passive_ability": "Passive Ability",
     "text.genesis.activated_ability": "Activated Ability",
 
