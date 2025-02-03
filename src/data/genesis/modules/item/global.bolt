@@ -1,0 +1,95 @@
+from ps_beet_bolt.bolt_item import transformer, custom_component, event_decorator, camel_case_to_snake_case
+from genesis:mapping import stat_wrapper_characters, rarity_text_color, categories, rarities, stat_names, category_modifiers
+from genesis:utils import add_translation, break_text_into_lines
+
+
+class GenesisItem:
+    @custom_component(component = "category")
+    def category_handler(item, category):
+        category_modifier = None
+        if len(category) > 1:
+            category_modifier = category[-2]
+            if category_modifier not in category_modifiers:
+                raise Exception(f'"{category_modifier}" is not a valid category modifier')
+        main_category = category[-1]
+        if main_category not in categories:
+            raise Exception(f'Category "{main_category}" is not a valid category')
+
+        line = [
+            {"text":"","italic":false},
+            {"text":"A","font":"genesis:icon","color":"white"},
+            {"translate":f'rarity.genesis.{item.rarity}',"color":rarity_text_color[item.rarity]},
+            {"text":" ","color":"white"}, #! "color" is added to avoid "optimization". The optimization causes a bug in the macro. This can likely be removed if the bug gets fixed.
+        ]
+        if category_modifier:
+            line += [{"translate":f'category_modifier.genesis.{category_modifier}',"color":rarity_text_color[item.rarity]}, {"text":" ","color":"white"}] #!
+        line.append({"translate":f'category.genesis.{main_category}',"color":rarity_text_color[item.rarity]})
+        item.lore = [line] + item.get("lore", [])
+
+    @transformer(component = "rarity")
+    def rarity_transformer(item, rarity):
+        if rarity not in rarities:
+            raise Exception(f'Rarity "{rarity}" is not a valid rarity')
+        if rarity in ["legendary","mythical","transcendent"]:
+            return "epic"
+        return rarity
+
+    @transformer(component = "item_name")
+    def item_name_transformer(item, item_name):
+        if type(item_name) != tuple or type(item_name[0]) != str or type(item_name[1]) != dict:
+            raise Exception(f'"{item_name}" is not a valid item name; has to be ("<name>", {{<style>}})')
+        trans_string = f'item.{item.namespace}.{item.id}'
+        add_translation(trans_string, item_name[0])
+        return {"translate":trans_string} | item_name[1]
+
+
+class StatItem:
+    @custom_component(component = "stats")
+    def custom_stats_component(item, stats):
+        line = []
+        for stat_name in stat_names:
+            if stat_name not in stats:
+                continue
+
+            color = "white"
+            if stats[stat_name] < 0:
+                color = "red"
+
+            value_length = len(str(stats[stat_name]))
+            wrapper_chars = stat_wrapper_characters[stat_name]
+            post_chars = (value_length * "+") + ((value_length - 1) * ("," + wrapper_chars["mid"])) + ("," + wrapper_chars["post"])
+            line += [{"text":wrapper_chars["pre"],"font":"genesis:stat","color":"white","italic":false},{"text":str(stats[stat_name]),"font":"genesis:stat","color":color},{"text":post_chars,"font":"genesis:stat"}]
+
+        item.merge("lore", [line,""])
+
+        #! add logic to add stats to custom data
+        #! add ability to limit to single slot (after implementing stat reading, that knowledge will help)
+
+    @custom_component(component = "passives")
+    def passives_handler(item, passives):
+        for passive in passives:
+            passive_name_id = camel_case_to_snake_case(passive[0])
+            trans_key = f'item.{item.namespace}.{item.id}.{passive_name_id}'
+            add_translation(trans_key, passive[0])
+            item.merge(
+                "lore",
+                [
+                    [{"text":"❂","color":rarity_text_color["transcendent"],"italic":false}," ",{"translate":trans_key,"color":"gold"}],
+                    {"translate":"text.genesis.passive_ability","color":"dark_gray"},
+                ] +
+                break_text_into_lines(
+                    passive[1],
+                    f'item.{item.namespace}.{item.id}.{passive_name_id}'
+                )
+            )
+
+
+@event_decorator
+def on_place(func, item):
+    path = f'{item.namespace}:bolt-item/item/{item.id}/on_place/{func.__name__}'
+    item.merge(
+        "custom_data",
+        {"genesis": {"placeable": {"command": f'function {path}'}}}
+    )
+    function path:
+        func()

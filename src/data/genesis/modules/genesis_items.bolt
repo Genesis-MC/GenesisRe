@@ -1,4 +1,4 @@
-from genesis:genesis_items_global import StatItem
+from genesis:item/global import StatItem
 from tungsten:decorators import on_equip, on_unequip
 from argon:decorators import on_attack, on_attacked
 from bolt_item:decorators import on_consume, on_tick
