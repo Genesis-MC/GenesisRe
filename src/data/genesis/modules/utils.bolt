@@ -13,28 +13,28 @@ def break_text_into_lines(text: str, trans_base: str):
     out = []
     line_index = 0
     line_length = char_width[text[0]]
-    passive_line = text[0]
+    line = text[0]
     for i in range(len(text)-1):
         if (line_length + char_width[text[i+1]]) > 200:
             overflow = ""
-            while passive_line[-1] is not ' ':
-                overflow = passive_line[-1] + overflow
-                passive_line = passive_line[:-1]
-            passive_line = passive_line[:-1]
+            while line[-1] is not ' ':
+                overflow = line[-1] + overflow
+                line = line[:-1]
+            line = line[:-1]
 
-            trans_key = f'{trans_base}.{line_index}'
-            add_translation(trans_key, passive_line)
-            out.append({"translate":trans_key,"color":"gray","italic":false})
+            trans_key1 = f'{trans_base}.{line_index}'
+            add_translation(trans_key1, line)
+            out.append({"translate":trans_key1,"color":"gray","italic":false})
             line_length = 0
             line_index += 1
-            passive_line = overflow
+            line = overflow
 
         line_length += char_width[text[i+1]]
-        passive_line += text[i+1]
-    if passive_line:
-        trans_key = f'{trans_base}.{line_index}'
-        add_translation(trans_key, passive_line)
-        out.append({"translate":trans_key,"color":"gray","italic":false})
+        line += text[i+1]
+    if line:
+        trans_key2 = f'{trans_base}.{line_index}'
+        add_translation(trans_key2, line)
+        out.append({"translate":trans_key2,"color":"gray","italic":false})
     return out
 
 

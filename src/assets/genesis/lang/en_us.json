@@ -23,6 +23,8 @@
     "category_modifiers.genesis.elemental": "Elemental",
 
     "icon.genesis.logo": "\u0041",
+    "icon.genesis.mana": "\u0049",
+    "icon.genesis.cooldown": "\u004A",
 
     "rarity.genesis.transcendent": "Transcendent",
     "rarity.genesis.mythical": "Mythical",
@@ -33,7 +35,7 @@
     "rarity.genesis.common": "Common",
 
     "text.genesis.passive_ability": "Passive Ability",
-    "text.genesis.activated_ability": "Activated Ability",
+    "text.genesis.active_ability": "Activated Ability",
 
     "":""
 }

@@ -3,20 +3,38 @@ from tungsten:decorators import on_equip, on_unequip
 from argon:decorators import on_attack, on_attacked
 from bolt_item:decorators import on_consume, on_tick
 from ps_beet_bolt.bolt_item import item
+from genesis:utils import add_loot_table
 
+
+@add_loot_table
 @item
 class EtherealChestplate(StatItem):
     item_name = ("Ethereal Chestplate", {"color":"dark_aqua"})
     item_model = "diamond_chestplate"
-    unbreakable = {}
     equippable = {"slot":"chest"}
     stats = {"armor":80,"armor_toughness":10,"artifact_power":5}
-    category = "chest"
+    category = ["chestplate"]
     rarity = "epic"
-    passives = [
-        ("Steadfast", "Every 12 seconds, after taking damage, gain +100 Knockback Resistance for 5 seconds.")
-    ]
+    actives = [{
+        "name": "Test",
+        "description": "No Test",
+        "mana": 12,
+        "cooldown": 5,
+    },{
+        "name": "Test2 - Electric Boogaloooooo",
+        "description": "No Tes222t this is test2 but it needs a longer descriptuion so that i can see how it looks in full, u know?",
+        "mana": 12,
+        "cooldown": 5,
+    }]
+    passives = [{
+        "name": "Steadfast",
+        "description": "Every 12 seconds, after taking damage, gain +100 Knockback Resistance for 5 seconds.",
+    },{
+        "name": "Steadfast2",
+        "description": "YEP, THIS IS FEDINITELDLY DIFFERENT!!! Every 12 seconds, after taking damage, gain +100 Knockback Resistance for 5 seconds.",
+    }]
 
     @on_attacked(full_slot = 'armor.chest')
     def gain_knockback_resistance():
         say gaining knockbackresistance for 5 seconds
+

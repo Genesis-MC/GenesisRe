@@ -1,12 +1,30 @@
 {
     "providers": [
-	{
+        {
             "type": "bitmap",
             "file": "genesis:font/icon/logo.png",
             "height": 16,
             "ascent": 8,
             "chars": [
                 "\u0041"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "genesis:font/icon/mana.png",
+            "height": 16,
+            "ascent": 8,
+            "chars": [
+                "\u0049"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "genesis:font/icon/cooldown.png",
+            "height": 16,
+            "ascent": 8,
+            "chars": [
+                "\u004A"
             ]
         }
     ]

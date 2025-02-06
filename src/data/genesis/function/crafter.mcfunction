@@ -90,9 +90,7 @@ function ~/tick:
                     raw f'item replace block ~ ~-1 ~ container.{i} with white_stained_glass_pane[tooltip_display={{hide_tooltip:true}},custom_data={{genesis:{{crafter:{{placeholder:1b}}}}}}]'
             clear @a white_stained_glass_pane[custom_data~{genesis:{crafter:{placeholder:1b}}}]
             as @e[type=minecraft:item,distance=..3] if items entity @s contents white_stained_glass_pane[custom_data~{genesis:{crafter:{placeholder:1b}}}] kill @s
-            if data storage genesis:crafter regive.item say REGIVE
             if data storage genesis:crafter regive.item function ~/../regive_item with storage genesis:crafter regive:
-                say REGIVINGGGG
                 $summon item ~ ~.1 ~ {Item:$(item),Motion:[0.0d,0.2d,0.0d]}
         store result score .new genesis.crafter.item_count if items block ~ ~-1 ~ container.* *
         if score .new genesis.crafter.item_count = @s genesis.crafter.item_count return 0

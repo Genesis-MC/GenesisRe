@@ -43,7 +43,7 @@ class GenesisItem:
         return {"translate":trans_string} | item_name[1]
 
 
-class StatItem:
+class StatItem(GenesisItem):
     @custom_component(component = "stats")
     def custom_stats_component(item, stats):
         line = []
@@ -60,28 +60,60 @@ class StatItem:
             post_chars = (value_length * "+") + ((value_length - 1) * ("," + wrapper_chars["mid"])) + ("," + wrapper_chars["post"])
             line += [{"text":wrapper_chars["pre"],"font":"genesis:stat","color":"white","italic":false},{"text":str(stats[stat_name]),"font":"genesis:stat","color":color},{"text":post_chars,"font":"genesis:stat"}]
 
-        item.merge("lore", [line,""])
+        item.merge("lore", [line,{"text":"","color":"white"}]) #! fix after mc fixes bug
 
         #! add logic to add stats to custom data
         #! add ability to limit to single slot (after implementing stat reading, that knowledge will help)
 
-    @custom_component(component = "passives")
-    def passives_handler(item, passives):
-        for passive in passives:
-            passive_name_id = camel_case_to_snake_case(passive[0])
-            trans_key = f'item.{item.namespace}.{item.id}.{passive_name_id}'
-            add_translation(trans_key, passive[0])
+    @custom_component(component = "actives")
+    def actives_handler(item, actives):
+        pre_line = []
+        for active in actives:
+            active_name_id = camel_case_to_snake_case(active["name"])
+            trans_key = f'item.{item.namespace}.{item.id}.{active_name_id}'
+            add_translation(trans_key, active["name"])
             item.merge(
                 "lore",
+                pre_line +
                 [
-                    [{"text":"❂","color":rarity_text_color["transcendent"],"italic":false}," ",{"translate":trans_key,"color":"gold"}],
+                    [{"text":"❂","color":rarity_text_color["transcendent"],"italic":false},{"text":" ","color":"white"},{"translate":trans_key,"color":"gold"}], #! fix after mc fixes bug
+                    [
+                        {"translate":"text.genesis.active_ability","color":"dark_gray"},{"text":" [","italic":false},
+                        {"translate":"icon.genesis.mana","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(active['mana']),"italic":false,"color":rarity_text_color["rare"]},
+                        {"text":" | ","color":"dark_gray"},
+                        {"translate":"icon.genesis.cooldown","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(active['cooldown'])+"s","italic":false,"color":rarity_text_color["uncommon"]},
+                        {"text":"]","italic":false},
+                    ],
+                ] +
+                break_text_into_lines(
+                    active["description"],
+                    f'item.{item.namespace}.{item.id}.{active_name_id}'
+                )
+            )
+            pre_line = [{"text":"","color":"white"}] #! fix when fix
+        if item.get("passives"):
+            item.merge("lore", [{"text":"","color":"white"}]) #! fix after mc fixes bug
+
+    @custom_component(component = "passives")
+    def passives_handler(item, passives):
+        pre_line = []
+        for passive in passives:
+            passive_name_id = camel_case_to_snake_case(passive["name"])
+            trans_key = f'item.{item.namespace}.{item.id}.{passive_name_id}'
+            add_translation(trans_key, passive["name"])
+            item.merge(
+                "lore",
+                pre_line +
+                [
+                    [{"text":"❂","color":rarity_text_color["transcendent"],"italic":false},{"text":" ","color":"white"},{"translate":trans_key,"color":"gold"}], #! fix after mc fixes bug
                     {"translate":"text.genesis.passive_ability","color":"dark_gray"},
                 ] +
                 break_text_into_lines(
-                    passive[1],
+                    passive["description"],
                     f'item.{item.namespace}.{item.id}.{passive_name_id}'
                 )
             )
+            pre_line = [{"text":"","color":"white"}] #! fix when fix
 
 
 @event_decorator
