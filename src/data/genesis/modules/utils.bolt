@@ -70,3 +70,13 @@ def add_custom_recipe(recipe: list[list], output):
         command += f'run return run loot replace block ~ ~-1 ~ container.15 loot {loot_table}'
     prepend function genesis:crafter/recipes:
         raw command
+
+
+constants = []
+def constant(n):
+    global constants
+    if n not in constants:
+        constants.append(n)
+        append function genesis:load:
+            scoreboard players set f'#{n}' genesis n
+    return f'#{n}'

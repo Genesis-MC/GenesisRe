@@ -1,9 +1,10 @@
-from genesis:item/global import StatItem
+from genesis:item/global import StatItem, GenesisItem, right_click_ability
 from tungsten:decorators import on_equip, on_unequip
 from argon:decorators import on_attack, on_attacked
 from bolt_item:decorators import on_consume, on_tick
 from ps_beet_bolt.bolt_item import item
 from genesis:utils import add_loot_table
+from genesis:mapping import item_display_uuid
 
 
 @add_loot_table
@@ -38,3 +39,19 @@ class EtherealChestplate(StatItem):
     def gain_knockback_resistance():
         say gaining knockbackresistance for 5 seconds
 
+
+@add_loot_table
+@item
+class FunnyItem(GenesisItem):
+    category = ["food"]
+    item_name = ("Funny Item", {})
+    rarity = "mythical"
+
+    @right_click_ability(
+        name = "Peter",
+        description = "Click so that Peter gets happy or something, how should I know what this does?",
+        mana = 12,
+        cooldown = 10,
+    )
+    def greet_peter():
+        say HEY PETER :3
