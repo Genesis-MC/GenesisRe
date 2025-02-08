@@ -1,10 +1,11 @@
-from ps_beet_bolt.bolt_item import transformer, custom_component, event_decorator, camel_case_to_snake_case
+from ps_beet_bolt.bolt_item import transformer, custom_component, event_decorator, camel_case_to_snake_case, before_all, after_all
 from genesis:mapping import stat_wrapper_characters, rarity_text_color, categories, rarities, stat_names, category_modifiers
 from genesis:utils import add_translation, break_text_into_lines
 from tungsten:decorators import _add_tungsten_base, _add_tungsten_components
 
 
 class GenesisItem:
+    @before_all
     @custom_component(component = "category")
     def category_handler(item, category):
         category_modifier = None
@@ -27,6 +28,7 @@ class GenesisItem:
         line.append({"translate":f'category.genesis.{main_category}',"color":rarity_text_color[item.rarity]})
         item.lore = [line] + item.get("lore", [])
 
+    @after_all
     @transformer(component = "rarity")
     def rarity_transformer(item, rarity):
         if rarity not in rarities:
@@ -43,60 +45,11 @@ class GenesisItem:
         add_translation(trans_string, item_name[0])
         return {"translate":trans_string} | item_name[1]
 
-
-class StatItem(GenesisItem):
-    @custom_component(component = "stats")
-    def custom_stats_component(item, stats):
-        line = []
-        for stat_name in stat_names:
-            if stat_name not in stats:
-                continue
-
-            color = "white"
-            if stats[stat_name] < 0:
-                color = "red"
-
-            value_length = len(str(stats[stat_name]))
-            wrapper_chars = stat_wrapper_characters[stat_name]
-            post_chars = (value_length * "+") + ((value_length - 1) * ("," + wrapper_chars["mid"])) + ("," + wrapper_chars["post"])
-            line += [{"text":wrapper_chars["pre"],"font":"genesis:stat","color":"white","italic":false},{"text":str(stats[stat_name]),"font":"genesis:stat","color":color},{"text":post_chars,"font":"genesis:stat"}]
-
-        item.merge("lore", [line,{"text":"","color":"white"}]) #! fix after mc fixes bug
-
-        #! add logic to add stats to custom data
-        #! add ability to limit to single slot (after implementing stat reading, that knowledge will help)
-
-    @custom_component(component = "actives")
-    def actives_handler(item, actives):
-        pre_line = []
-        for active in actives:
-            active_name_id = camel_case_to_snake_case(active["name"])
-            trans_key = f'item.{item.namespace}.{item.id}.{active_name_id}'
-            add_translation(trans_key, active["name"])
-            item.merge(
-                "lore",
-                pre_line +
-                [
-                    [{"text":"❂","color":rarity_text_color["transcendent"],"italic":false},{"text":" ","color":"white"},{"translate":trans_key,"color":"gold"}], #! fix after mc fixes bug
-                    [
-                        {"translate":"text.genesis.active_ability","color":"dark_gray"},{"text":" [","italic":false},
-                        {"translate":"icon.genesis.mana","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(active['mana']),"italic":false,"color":rarity_text_color["rare"]},
-                        {"text":" | ","color":"dark_gray"},
-                        {"translate":"icon.genesis.cooldown","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(active['cooldown'])+"s","italic":false,"color":rarity_text_color["uncommon"]},
-                        {"text":"]","italic":false},
-                    ],
-                ] +
-                break_text_into_lines(
-                    active["description"],
-                    f'item.{item.namespace}.{item.id}.{active_name_id}'
-                )
-            )
-            pre_line = [{"text":"","color":"white"}] #! fix when fix
-        if item.get("passives"):
-            item.merge("lore", [{"text":"","color":"white"}]) #! fix after mc fixes bug
-
+    @after_all
     @custom_component(component = "passives")
     def passives_handler(item, passives):
+        if not passives:
+            return
         pre_line = []
         for passive in passives:
             passive_name_id = camel_case_to_snake_case(passive["name"])
@@ -116,70 +69,25 @@ class StatItem(GenesisItem):
             )
             pre_line = [{"text":"","color":"white"}] #! fix when fix
 
+    @custom_component(component = "stats")
+    def custom_stats_component(item, stats):
+        if not stats:
+            return
+        line = []
+        for stat_name in stat_names:
+            if stat_name not in stats:
+                continue
 
-@event_decorator
-def on_place(func, item):
-    path = f'{item.namespace}:bolt-item/item/{item.id}/on_place/{func.__name__}'
-    item.merge(
-        "custom_data",
-        {"genesis": {"placeable": {"command": f'function {path}'}}}
-    )
-    function path:
-        func()
+            color = "white"
+            if stats[stat_name] < 0:
+                color = "red"
 
+            value_length = len(str(stats[stat_name]))
+            wrapper_chars = stat_wrapper_characters[stat_name]
+            post_chars = (value_length * "+") + ((value_length - 1) * ("," + wrapper_chars["mid"])) + ("," + wrapper_chars["post"])
+            line += [{"text":wrapper_chars["pre"],"font":"genesis:stat","color":"white","italic":false},{"text":str(stats[stat_name]),"font":"genesis:stat","color":color},{"text":post_chars,"font":"genesis:stat"}]
 
-def right_click_ability(name: str, description: str, mana: float, cooldown: float, charge_time = 0.05, charge_sound = {sound_id:""}, charge_animation = "none"):
-    @event_decorator
-    def decorator(func, item):
-        # Add ability description to lore
-        active_name_id = camel_case_to_snake_case(name)
-        trans_key = f'item.{item.namespace}.{item.id}.{active_name_id}'
-        add_translation(trans_key, name)
+        item.merge("lore", [line,{"text":"","color":"white"}]) #! fix after mc fixes bug
 
-        item.merge("lore",
-            [
-                [{"text":"❂","color":rarity_text_color["transcendent"],"italic":false},{"text":" ","color":"white"},{"translate":trans_key,"color":"gold"}], #! fix after mc fixes bug
-                [
-                    {"translate":"text.genesis.active_ability","color":"dark_gray"},{"text":" [","italic":false},
-                    {"translate":"icon.genesis.mana","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(mana),"italic":false,"color":rarity_text_color["rare"]},
-                    {"text":" | ","color":"dark_gray"},
-                    {"translate":"icon.genesis.cooldown","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(cooldown)+"s","italic":false,"color":rarity_text_color["uncommon"]},
-                    {"text":"]","italic":false},
-                ],
-            ] +
-            break_text_into_lines(
-                description,
-                f'item.{item.namespace}.{item.id}.{active_name_id}'
-            )
-        )
-
-        # Add consumable and use_cooldown components
-        item.consumable = {"consume_seconds":charge_time,"animation":charge_animation,"has_consume_particles":false,"sound":charge_sound}
-        item.use_cooldown = {"seconds":cooldown,"cooldown_group":f'{item.namespace}:right_click_ability/{item.id}'}
-
-        # Add original cooldown to custom data
-        item.merge("custom_data", {"genesis": {"right_click_ability": {"cooldown": cooldown}}})
-
-        # Add tungsten components
-        _add_tungsten_base()
-        _add_tungsten_components(item, "mainhand")
-        _add_tungsten_components(item, "offhand")
-
-        # Add function to be ran on consume
-        consume_path = f'{item.namespace}:bolt-item/item/{item.id}/right_click_ability/{func.__name__}'
-
-        advancement consume_path {"criteria": { "criteria": {
-            "trigger": "minecraft:consume_item", "conditions": {
-            "item": { "predicates": { "minecraft:custom_data": {
-                "bolt-item": { "id": f'{item.namespace}:{item.id}' }
-            }}}}}},
-            "rewards": { "function": consume_path }
-        }
-
-        function consume_path:
-            advancement revoke @s only consume_path
-            #! add mana cost logic here once mana ... exists :D
-            unless items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_offhand
-            if items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_mainhand
-            func()
-    return decorator
+        #! add logic to add stats to custom data
+        #! add ability to limit to single slot (after implementing stat reading, that knowledge will help)

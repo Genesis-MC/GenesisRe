@@ -1,32 +1,22 @@
-from genesis:item/global import StatItem, GenesisItem, right_click_ability
+from ps_beet_bolt.bolt_item import bolt_item
+from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
-from argon:decorators import on_attack, on_attacked
 from bolt_item:decorators import on_consume, on_tick
-from ps_beet_bolt.bolt_item import item
-from genesis:utils import add_loot_table
+from argon:decorators import on_attack, on_attacked
 from genesis:mapping import item_display_uuid
+from genesis:item/global import GenesisItem
+from genesis:utils import add_loot_table
 
 
 @add_loot_table
-@item
-class EtherealChestplate(StatItem):
+@bolt_item
+class EtherealChestplate(GenesisItem):
     item_name = ("Ethereal Chestplate", {"color":"dark_aqua"})
     item_model = "diamond_chestplate"
     equippable = {"slot":"chest"}
     stats = {"armor":80,"armor_toughness":10,"artifact_power":5}
     category = ["chestplate"]
     rarity = "epic"
-    actives = [{
-        "name": "Test",
-        "description": "No Test",
-        "mana": 12,
-        "cooldown": 5,
-    },{
-        "name": "Test2 - Electric Boogaloooooo",
-        "description": "No Tes222t this is test2 but it needs a longer descriptuion so that i can see how it looks in full, u know?",
-        "mana": 12,
-        "cooldown": 5,
-    }]
     passives = [{
         "name": "Steadfast",
         "description": "Every 12 seconds, after taking damage, gain +100 Knockback Resistance for 5 seconds.",
@@ -41,11 +31,15 @@ class EtherealChestplate(StatItem):
 
 
 @add_loot_table
-@item
+@bolt_item
 class FunnyItem(GenesisItem):
     category = ["food"]
     item_name = ("Funny Item", {})
     rarity = "mythical"
+    passives = [{
+        "name": "Yep",
+        "description": "Mhm, stuff and things be boomin"
+    }]
 
     @right_click_ability(
         name = "Peter",

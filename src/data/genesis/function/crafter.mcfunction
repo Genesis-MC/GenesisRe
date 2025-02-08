@@ -1,10 +1,11 @@
-from ps_beet_bolt.bolt_item import item
-from genesis:item/global import GenesisItem, on_place
+from ps_beet_bolt.bolt_item import bolt_item
+from genesis:item/global import GenesisItem
+from genesis:placeable import on_place
 from genesis:utils import add_loot_table
 
 
 @add_loot_table
-@item
+@bolt_item
 class Crafter(GenesisItem):
     item_name = ("Genesis Crafter", {})
     item_model = "crafting_table"

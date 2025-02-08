@@ -1,3 +1,17 @@
+from ps_beet_bolt.bolt_item import event_decorator
+
+
+@event_decorator
+def on_place(func, item):
+    path = f'{item.namespace}:bolt-item/item/{item.id}/on_place/{func.__name__}'
+    item.merge(
+        "custom_data",
+        {"genesis": {"placeable": {"command": f'function {path}'}}}
+    )
+    function path:
+        func()
+
+
 advancement ~/place {
     "criteria": {
         "requirement": {
