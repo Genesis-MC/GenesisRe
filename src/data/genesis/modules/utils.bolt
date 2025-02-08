@@ -46,6 +46,7 @@ def add_loot_table(item):
             "functions": [{"function": "minecraft:set_components","components": item.components}]
         }]}]
     }
+    return item
 
 
 def add_custom_recipe(recipe: list[list], output):

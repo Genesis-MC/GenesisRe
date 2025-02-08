@@ -1,6 +1,7 @@
 from ps_beet_bolt.bolt_item import transformer, custom_component, event_decorator, camel_case_to_snake_case
 from genesis:mapping import stat_wrapper_characters, rarity_text_color, categories, rarities, stat_names, category_modifiers
 from genesis:utils import add_translation, break_text_into_lines
+from tungsten:decorators import _add_tungsten_base, _add_tungsten_components
 
 
 class GenesisItem:
@@ -127,12 +128,9 @@ def on_place(func, item):
         func()
 
 
-def right_click_ability(name: str, description: str, mana: float, cooldown: float, charge_time: float = 0, sound = "entity.experience_orb.pickup", charge_animation = "none"):
-    if not charge_time or charge_time < 0.05:
-        charge_time = 0.05
+def right_click_ability(name: str, description: str, mana: float, cooldown: float, charge_time = 0.05, charge_sound = {sound_id:""}, charge_animation = "none"):
     @event_decorator
     def decorator(func, item):
-
         # Add ability description to lore
         active_name_id = camel_case_to_snake_case(name)
         trans_key = f'item.{item.namespace}.{item.id}.{active_name_id}'
@@ -156,13 +154,16 @@ def right_click_ability(name: str, description: str, mana: float, cooldown: floa
         )
 
         # Add consumable and use_cooldown components
-        item.consumable = {"consume_seconds":0.05,"animation":"none","has_consume_particles":false,"sound":sound}
+        item.consumable = {"consume_seconds":charge_time,"animation":charge_animation,"has_consume_particles":false,"sound":charge_sound}
         item.use_cooldown = {"seconds":cooldown,"cooldown_group":f'{item.namespace}:right_click_ability/{item.id}'}
 
         # Add original cooldown to custom data
-        item.merge("custom_data", {
-            "genesis": {"right_click_ability": {"cooldown": cooldown}}
-        })
+        item.merge("custom_data", {"genesis": {"right_click_ability": {"cooldown": cooldown}}})
+
+        # Add tungsten components
+        _add_tungsten_base()
+        _add_tungsten_components(item, "mainhand")
+        _add_tungsten_components(item, "offhand")
 
         # Add function to be ran on consume
         consume_path = f'{item.namespace}:bolt-item/item/{item.id}/right_click_ability/{func.__name__}'
@@ -177,7 +178,8 @@ def right_click_ability(name: str, description: str, mana: float, cooldown: floa
 
         function consume_path:
             advancement revoke @s only consume_path
-            unless items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:utils/regive_offhand
-            if items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:utils/regive_mainhand
+            #! add mana cost logic here once mana ... exists :D
+            unless items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_offhand
+            if items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_mainhand
             func()
     return decorator

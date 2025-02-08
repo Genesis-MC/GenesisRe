@@ -3,6 +3,7 @@ from genesis:item/global import GenesisItem, on_place
 from genesis:utils import add_loot_table
 
 
+@add_loot_table
 @item
 class Crafter(GenesisItem):
     item_name = ("Genesis Crafter", {})
@@ -36,9 +37,6 @@ recipe genesis:item/crafting_station/crafter {
         "components": Crafter.components
     }
 }
-
-
-add_loot_table(Crafter)
 
 
 input_slots = [2,3,4,11,12,13,20,21,22]
@@ -77,20 +75,20 @@ function ~/tick:
             if block ~ ~-2 ~ hopper[facing=south] setblock ~ ~-2 ~ hopper[facing=south,enabled=false] replace
         store result score .placeholders genesis.crafter.item_count if items block ~ ~-1 ~ container.* white_stained_glass_pane[custom_data~{genesis:{crafter:{placeholder:1b}}}]
         unless score .placeholders genesis.crafter.item_count matches 18 function ~/../fix_placeholders:
-            data remove storage genesis:crafter regive.item
+            data remove storage genesis:temp crafter.regive.item
             for i in range(27):
                 if i in input_slots:
                     continue
                 if i == output_slot:
-                    unless items block ~ ~-1 ~ f'container.{i}' *[custom_data~{genesis:{crafter:{placeholder:1b}}}] if items block ~ ~-1 ~ f'container.{i}' * data modify storage genesis:crafter regive.item set from block ~ ~-1 ~ f'Items[{{Slot:{i}b}}]'
+                    unless items block ~ ~-1 ~ f'container.{i}' *[custom_data~{genesis:{crafter:{placeholder:1b}}}] if items block ~ ~-1 ~ f'container.{i}' * data modify storage genesis:temp crafter.regive.item set from block ~ ~-1 ~ f'Items[{{Slot:{i}b}}]'
                     if entity @s[tag=genesis.crafter.has_output] unless items block ~ ~-1 ~ f'container.{i}' *[custom_data~{genesis:{crafter:{placeholder:1b}}}] function ~/../result_has_been_removed
                     raw f'execute unless items block ~ ~-1 ~ container.{i} *[custom_data~{{genesis:{{crafter:{{placeholder:1b}}}}}}] run item replace block ~ ~-1 ~ container.{i} with white_stained_glass_pane[item_model=red_stained_glass_pane,tooltip_display={{hide_tooltip:true}},custom_data={{genesis:{{crafter:{{placeholder:1b}}}}}}]'
                 else:
-                    unless items block ~ ~-1 ~ f'container.{i}' white_stained_glass_pane[custom_data~{genesis:{crafter:{placeholder:1b}}}] if items block ~ ~-1 ~ f'container.{i}' * data modify storage genesis:crafter regive.item set from block ~ ~-1 ~ f'Items[{{Slot:{i}b}}]'
+                    unless items block ~ ~-1 ~ f'container.{i}' white_stained_glass_pane[custom_data~{genesis:{crafter:{placeholder:1b}}}] if items block ~ ~-1 ~ f'container.{i}' * data modify storage genesis:temp crafter.regive.item set from block ~ ~-1 ~ f'Items[{{Slot:{i}b}}]'
                     raw f'item replace block ~ ~-1 ~ container.{i} with white_stained_glass_pane[tooltip_display={{hide_tooltip:true}},custom_data={{genesis:{{crafter:{{placeholder:1b}}}}}}]'
             clear @a white_stained_glass_pane[custom_data~{genesis:{crafter:{placeholder:1b}}}]
             as @e[type=minecraft:item,distance=..3] if items entity @s contents white_stained_glass_pane[custom_data~{genesis:{crafter:{placeholder:1b}}}] kill @s
-            if data storage genesis:crafter regive.item function ~/../regive_item with storage genesis:crafter regive:
+            if data storage genesis:temp crafter.regive.item function ~/../regive_item with storage genesis:temp crafter.regive:
                 $summon item ~ ~.1 ~ {Item:$(item),Motion:[0.0d,0.2d,0.0d]}
         store result score .new genesis.crafter.item_count if items block ~ ~-1 ~ container.* *
         if score .new genesis.crafter.item_count = @s genesis.crafter.item_count return 0
@@ -123,5 +121,5 @@ item_modifier ~/reduce_amount_by_1 {
 }
 
 
-append function ~/recipes: # using append so order or exection while compiling won't matter
+append function ~/recipes: # using append so order of exection while compiling won't matter
     return 0
