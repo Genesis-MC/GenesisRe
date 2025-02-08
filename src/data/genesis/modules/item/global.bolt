@@ -6,6 +6,34 @@ from tungsten:decorators import _add_tungsten_base, _add_tungsten_components
 
 class GenesisItem:
     @before_all
+    @custom_component(component = "stats")
+    def stats_handler(item, stats):
+        if not stats:
+            return
+        for stat in stats:
+            if stat not in stat_names:
+                raise Exception(f'"{stat}" is not a valid stat')
+
+        line = []
+        for stat_name in stat_names:
+            if stat_name not in stats:
+                continue
+
+            color = "white"
+            if stats[stat_name] < 0:
+                color = "dark_red"
+
+            value_length = len(str(stats[stat_name]))
+            wrapper_chars = stat_wrapper_characters[stat_name]
+            post_chars = (value_length * "+") + ((value_length - 1) * ("," + wrapper_chars["mid"])) + ("," + wrapper_chars["post"])
+            line += [{"text":wrapper_chars["pre"],"font":"genesis:stat","color":"white","italic":false},{"text":str(stats[stat_name]),"font":"genesis:stat","color":color},{"text":post_chars,"font":"genesis:stat"}]
+
+        item.lore = [line,{"text":"","color":"white"}] + item.get('lore', []) #! fix after mc fixes bug
+
+        #! add logic to add stats to custom data
+        #! add ability to limit to single slot (after implementing stat reading, that knowledge will help)
+
+    @before_all
     @custom_component(component = "category")
     def category_handler(item, category):
         category_modifier = None
@@ -68,26 +96,3 @@ class GenesisItem:
                 )
             )
             pre_line = [{"text":"","color":"white"}] #! fix when fix
-
-    @custom_component(component = "stats")
-    def custom_stats_component(item, stats):
-        if not stats:
-            return
-        line = []
-        for stat_name in stat_names:
-            if stat_name not in stats:
-                continue
-
-            color = "white"
-            if stats[stat_name] < 0:
-                color = "red"
-
-            value_length = len(str(stats[stat_name]))
-            wrapper_chars = stat_wrapper_characters[stat_name]
-            post_chars = (value_length * "+") + ((value_length - 1) * ("," + wrapper_chars["mid"])) + ("," + wrapper_chars["post"])
-            line += [{"text":wrapper_chars["pre"],"font":"genesis:stat","color":"white","italic":false},{"text":str(stats[stat_name]),"font":"genesis:stat","color":color},{"text":post_chars,"font":"genesis:stat"}]
-
-        item.merge("lore", [line,{"text":"","color":"white"}]) #! fix after mc fixes bug
-
-        #! add logic to add stats to custom data
-        #! add ability to limit to single slot (after implementing stat reading, that knowledge will help)

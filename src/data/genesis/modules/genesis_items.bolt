@@ -40,6 +40,8 @@ class FunnyItem(GenesisItem):
         "name": "Yep",
         "description": "Mhm, stuff and things be boomin"
     }]
+    stats = {"physical_power":157}
+    lore = [{"text":"Some really awesome lore, u know?","color":"dark_gray"},{"text":"","color":"white"}]
 
     @right_click_ability(
         name = "Peter",
