@@ -1,5 +1,5 @@
 from ps_beet_bolt.bolt_item import transformer, custom_component, event_decorator, camel_case_to_snake_case, before_all, after_all
-from genesis:mapping import stat_wrapper_characters, rarity_text_color, categories, rarities, stat_names, category_modifiers
+from genesis:mapping import stat_wrapper_characters, rarity_text_color, categories, rarities, stat_names, category_modifiers, slots, stat_attribute_to_score
 from genesis:utils import add_translation, break_text_into_lines
 from tungsten:decorators import _add_tungsten_base, _add_tungsten_components
 
@@ -10,15 +10,31 @@ class GenesisItem:
     def stats_handler(item, stats):
         if not stats:
             return
+        slot = stats[0]
+        if slot not in slots:
+            raise Exception(f'"{slot}" is not a valid slot')
+        stats = stats[1]
         for stat in stats:
             if stat not in stat_names:
                 raise Exception(f'"{stat}" is not a valid stat')
 
         line = []
+        # Go through all stats in order and add lore and attributes if they are included
         for stat_name in stat_names:
             if stat_name not in stats:
                 continue
 
+            # Add attribute modifiers
+            if stat_name in stat_attribute_to_score:
+                item.merge("attribute_modifiers", [{
+                    "type": (stat_attribute_to_score[stat_name]["attribute"]),
+                    "id": "item:item/item",
+                    "amount": (stats[stat_name] / stat_attribute_to_score[stat_name]["ratio"]),
+                    "operation": "add_value",
+                    "slot": slot,
+                }])
+
+            # Add to lore line
             color = "white"
             if stats[stat_name] < 0:
                 color = "dark_red"
@@ -30,8 +46,8 @@ class GenesisItem:
 
         item.lore = [line,{"text":"","color":"white"}] + item.get('lore', []) #! fix after mc fixes bug
 
-        #! add logic to add stats to custom data
-        #! add ability to limit to single slot (after implementing stat reading, that knowledge will help)
+        # Add stats to custom data
+        item.merge("custom_data", {"genesis": {"stats": {slot: stats}}})
 
     @before_all
     @custom_component(component = "category")
@@ -52,7 +68,7 @@ class GenesisItem:
             {"text":" ","color":"white"}, #! "color" is added to avoid "optimization". The optimization causes a bug in the macro. This can likely be removed if the bug gets fixed.
         ]
         if category_modifier:
-            line += [{"translate":f'category_modifier.genesis.{category_modifier}',"color":rarity_text_color[item.rarity]}, {"text":" ","color":"white"}] #!
+            line += [{"translate":f'category_modifier.genesis.{category_modifier}',"color":rarity_text_color[item.rarity]},{"text":" ","color":"white"}] #!
         line.append({"translate":f'category.genesis.{main_category}',"color":rarity_text_color[item.rarity]})
         item.lore = [line] + item.get("lore", [])
 
