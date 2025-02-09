@@ -19,8 +19,8 @@
     "category.genesis.confectionery": "Confectionery",
     "category.genesis.crop": "Crop",
 
-    "category_modifiers.genesis.void": "Void",
-    "category_modifiers.genesis.elemental": "Elemental",
+    "category_modifier.genesis.void": "Void",
+    "category_modifier.genesis.elemental": "Elemental",
 
     "icon.genesis.logo": "\u0041",
     "icon.genesis.mana": "\u0049",

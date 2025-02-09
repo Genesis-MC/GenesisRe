@@ -15,7 +15,7 @@ class EtherealChestplate(GenesisItem):
     item_model = "diamond_chestplate"
     equippable = {"slot":"chest"}
     stats = ("chest", {"armor":80,"armor_toughness":10,"artifact_power":5})
-    category = ["chestplate"]
+    category = ["anything,really", "void", "chestplate"]
     rarity = "epic"
     passives = [{
         "name": "Steadfast",
@@ -40,7 +40,7 @@ class FunnyItem(GenesisItem):
         "name": "Yep",
         "description": "Mhm, stuff and things be boomin"
     }]
-    stats = ("mainhand", {"physical_power":157})
+    stats = ("mainhand", {"physical_power":157,"attack_speed":100,"knockback_resistance":50})
     lore = [{"text":"Some really awesome lore, u know?","color":"dark_gray"},{"text":"","color":"white"}]
 
     @right_click_ability(

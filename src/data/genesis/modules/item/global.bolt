@@ -28,7 +28,7 @@ class GenesisItem:
             if stat_name in stat_attribute_to_score:
                 item.merge("attribute_modifiers", [{
                     "type": (stat_attribute_to_score[stat_name]["attribute"]),
-                    "id": "item:item/item",
+                    "id": f'{item.namespace}:{slot}/{item.id}',
                     "amount": (stats[stat_name] / stat_attribute_to_score[stat_name]["ratio"]),
                     "operation": "add_value",
                     "slot": slot,
@@ -46,6 +46,10 @@ class GenesisItem:
 
         item.lore = [line,{"text":"","color":"white"}] + item.get('lore', []) #! fix after mc fixes bug
 
+        # Add tungsten components
+        _add_tungsten_base()
+        _add_tungsten_components(item, slot)
+
         # Add stats to custom data
         item.merge("custom_data", {"genesis": {"stats": {slot: stats}}})
 
@@ -55,7 +59,7 @@ class GenesisItem:
         category_modifier = None
         if len(category) > 1:
             category_modifier = category[-2]
-            if category_modifier not in category_modifiers:
+            if category_modifier and category_modifier not in category_modifiers:
                 raise Exception(f'"{category_modifier}" is not a valid category modifier')
         main_category = category[-1]
         if main_category not in categories:
@@ -71,6 +75,13 @@ class GenesisItem:
             line += [{"translate":f'category_modifier.genesis.{category_modifier}',"color":rarity_text_color[item.rarity]},{"text":" ","color":"white"}] #!
         line.append({"translate":f'category.genesis.{main_category}',"color":rarity_text_color[item.rarity]})
         item.lore = [line] + item.get("lore", [])
+
+        clean_categories = [main_category]
+        if category_modifier:
+            clean_categories.append(category_modifier)
+        if len(category) > 2:
+            clean_categories += category[:-2]
+        item.merge("custom_data", {"genesis": {"categories": clean_categories}})
 
     @after_all
     @transformer(component = "rarity")
