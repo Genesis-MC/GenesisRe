@@ -69,39 +69,31 @@ def right_click_ability(name: str, description: str, mana: float, cooldown: floa
 
 append function_tag tungsten:swap/mainhand {"values":["genesis:right_click_ability/set_reduced_cooldown_mainhand"]}
 append function_tag tungsten:swap/offhand {"values":["genesis:right_click_ability/set_reduced_cooldown_offhand"]}
-#! also have this run when the "ability haste" stat changes, this can only be implemented once the stat exists :)
+append function_tag genesis:stat/update/ability_haste {"values":["genesis:right_click_ability/set_reduced_cooldown_mainhand","genesis:right_click_ability/set_reduced_cooldown_offhand"]}
 
 
-function ~/set_reduced_cooldown_mainhand:
-    unless items entity @s weapon.mainhand *[custom_data~{genesis:{'right_click_ability':{}}}] return 0
+for slot, nbt_path in [("mainhand","SelectedItem"),("offhand","equipment.offhand")]:
+    function ~/set_reduced_cooldown_{slot}:
+        unless items entity @s f'weapon.{slot}' *[custom_data~{genesis:{'right_click_ability':{}}}] return 0
 
-    store result score .cooldown genesis data get entity @s SelectedItem.components.minecraft:custom_data.genesis.right_click_ability.cooldown 1000
-    store result score .previously_reduced_cooldown genesis data get entity @s SelectedItem.components.minecraft:use_cooldown.seconds 1000
+        store result score .cooldown genesis data get entity @s f'{nbt_path}.components."minecraft:custom_data".genesis.right_click_ability.cooldown' 4000
+        store result score .previously_reduced_cooldown genesis data get entity @s f'{nbt_path}.components."minecraft:use_cooldown".seconds' 20
 
-    scoreboard players operation .cooldown genesis /= constant(2) genesis
+        # Calculate original cooldown reduced by ability haste
+        # new = ( cooldown * 100 ) / ( 100 + haste )
+        scoreboard players set #denominator genesis 100
+        scoreboard players operation #denominator genesis += @s genesis.stat.ability_haste
+        store result score #temp genesis scoreboard players operation .cooldown genesis /= #denominator genesis
+        scoreboard players operation .cooldown genesis /= constant(2) genesis
+        scoreboard players operation #temp genesis %= constant(2) genesis
+        scoreboard players operation .cooldown genesis += #temp genesis
 
-    if score .cooldown genesis = .previously_reduced_cooldown genesis return 0
+        if score .cooldown genesis = .previously_reduced_cooldown genesis return 0
 
-    data modify storage genesis:temp 'right_click_ability'.use_cooldown set from entity @s SelectedItem.components.minecraft:use_cooldown
-    store result storage genesis:temp 'right_click_ability'.use_cooldown.seconds float 0.001 scoreboard players get .cooldown genesis
-    execute function ~/../modify_mainhand with storage genesis:temp 'right_click_ability':
-        $item modify entity @s weapon.mainhand {"function":"minecraft:set_components","components":{"minecraft:use_cooldown":$(use_cooldown)}}
-
-
-function ~/set_reduced_cooldown_offhand:
-    unless items entity @s weapon.offhand *[custom_data~{genesis:{'right_click_ability':{}}}] return 0
-
-    store result score .cooldown genesis data get entity @s equipment.offhand.components.minecraft:custom_data.genesis.right_click_ability.cooldown 1000
-    store result score .previously_reduced_cooldown genesis data get entity @s equipment.offhand.components.minecraft:use_cooldown.seconds 1000
-
-    scoreboard players operation .cooldown genesis /= constant(2) genesis
-
-    if score .cooldown genesis = .previously_reduced_cooldown genesis return 0
-
-    data modify storage genesis:temp 'right_click_ability'.use_cooldown set from entity @s equipment.offhand.components.minecraft:use_cooldown
-    store result storage genesis:temp 'right_click_ability'.use_cooldown.seconds float 0.001 scoreboard players get .cooldown genesis
-    execute function ~/../modify_offhand with storage genesis:temp 'right_click_ability':
-        $item modify entity @s weapon.offhand {"function":"minecraft:set_components","components":{"minecraft:use_cooldown":$(use_cooldown)}}
+        data modify storage genesis:temp 'right_click_ability'.use_cooldown set from entity @s f'{slot}.components."minecraft:use_cooldown"'
+        store result storage genesis:temp 'right_click_ability'.use_cooldown.seconds float 0.05 scoreboard players get .cooldown genesis
+        execute function ~/../modify_{slot} with storage genesis:temp 'right_click_ability':
+            raw (f'$item modify entity @s weapon.{slot} {{"function":"minecraft:set_components","components":{{"minecraft:use_cooldown":$(use_cooldown)}}}}')
 
 
 function ~/regive_mainhand:
