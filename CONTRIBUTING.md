@@ -86,9 +86,11 @@ Generally it's better to commit/push often so merge conflicts (multiple people m
 - Source Files: `src/[data|assets]/<genesis>/<file_type>/<module>`
     - ex. `src/data/function/right_click_ability.mcfunction`, `src/data/function/stat.mcfunction`
     - Use `src/data/modules/<module>.bolt` for stuff that is mostly python
-    - Use `src/data/function/<module>.bolt` for stuff that is mostly actual functions
+    - Use `src/data/function/<module>.mcfunction` for stuff that is mostly actual functions
     - If you need more than a single file per module, create a subfolder
 - Generated Files: `build/...`
     - Every generated file has an explicit, descriptive name
         - :white_check_mark: `as @a if score x y matches 12 function ~/../score_matches_12:`
         - :x: `as @a if score x y matches 12:`
+    - If this is not explicitly done, bolt generates names like `nested_execute_0`
+    - To make sure, just look at the `build` folder from time to time
