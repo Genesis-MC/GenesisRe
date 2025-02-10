@@ -26,10 +26,14 @@ class GenesisItem:
 
             # Add attribute modifiers
             if stat_name in stat_attribute_to_score:
+                amount = (stats[stat_name] / stat_attribute_to_score[stat_name]["ratio"])
+                if stat_name == "physical_power" and slot == "mainhand":
+                    amount -= 1 # Reduce damage attribute by fist damage
+
                 item.merge("attribute_modifiers", [{
                     "type": (stat_attribute_to_score[stat_name]["attribute"]),
                     "id": f'{item.namespace}:{slot}/{item.id}',
-                    "amount": (stats[stat_name] / stat_attribute_to_score[stat_name]["ratio"]),
+                    "amount": amount,
                     "operation": "add_value",
                     "slot": slot,
                 }])
