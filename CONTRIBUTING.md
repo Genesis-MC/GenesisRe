@@ -44,3 +44,51 @@ If you have changed anything and want to upload it, you generally follow these s
     - If pushing fails, make sure you have all remote changes using `git pull`
 
 Generally it's better to commit/push often so merge conflicts (multiple people modfying the same file) is less common.
+
+## (Naming-) Conventions
+
+- Choose a longer name if it's more descriptive:
+    - :white_check_mark: `genesis.crafter`, `.entity_is_found`
+    - :x: `gen.crftr`, `.bool`
+- Namespace: `genesis`
+    - Anything related to genesis uses the `genesis` namespace
+    - The `minecraft` namespace is only used when necessary (`#minecraft:load`)
+    - Other namespaces may be used by libraries
+- Load/tick functions: `genesis:load`,`genesis:tick`
+    - If you want to add something to the load function (like a new objective), use the following in your module:
+        ```mcfunction
+        append function genesis:load:
+            scoreboard objectives add ...
+        ```
+    - Same with the 20hz tick function:
+        ```mcfunction
+        append function genesis:tick:
+            as @e[type=...,tag=...] function genesis:<module>/tick
+        ```
+- Scoreboards: `genesis.<module>.<name>`
+    - ex. `genesis.stat.attack_speed.mainhand`, `genesis.mana.current`
+    - Temporary scores can use `genesis`
+- Fake Players: `.<name>` or `#<name>`
+    - ex. `.cooldown`, `.new`, `#denominator`
+    - Use `#` to prefix temporary scores, like when calculating
+    - Constants use `constant(<constant>)` from `genesis:utils` module
+        ```mcfunction
+        from genesis:utils import constant
+        scoreboard players operation @s scoreboard /= constant(123) genesis
+        ```
+- Tags: `genesis.<module>.<name>`
+    - ex. `genesis.crafter`
+- Language Keys: `<category>.genesis.<name>`
+    - ex. `category_modifier.genesis.void`, `item.genesis.ethereal_chestplate.steadfast.0`
+    - For translations that don't really have a category, use `text` as the category
+    - If language keys are directly linked to each other, simply extend them:
+        - `<category>.genesis.<name>.<passive_name>.<line>` -> `item.genesis.ethereal_chestplate.steadfast.0`
+- Source Files: `src/[data|assets]/<genesis>/<file_type>/<module>`
+    - ex. `src/data/function/right_click_ability.mcfunction`, `src/data/function/stat.mcfunction`
+    - Use `src/data/modules/<module>.bolt` for stuff that is mostly python
+    - Use `src/data/function/<module>.bolt` for stuff that is mostly actual functions
+    - If you need more than a single file per module, create a subfolder
+- Generated Files: `build/...`
+    - Every generated file has an explicit, descriptive name
+        - :white_check_mark: `as @a if score x y matches 12 function ~/../score_matches_12:`
+        - :x: `as @a if score x y matches 12:`
