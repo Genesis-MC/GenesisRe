@@ -2,6 +2,7 @@ from ps_beet_bolt.bolt_item import event_decorator, camel_case_to_snake_case
 from tungsten:decorators import _add_tungsten_base, _add_tungsten_components
 from genesis:utils import add_translation, break_text_into_lines
 from genesis:mapping import item_display_uuid, rarity_text_color
+from genesis:mana import reduce_mana_or_return
 from genesis:utils import constant
 
 
@@ -60,7 +61,7 @@ def right_click_ability(name: str, description: str, mana: float, cooldown: floa
 
         function consume_path:
             advancement revoke @s only consume_path
-            #! add mana cost logic here once mana ... exists :D
+            reduce_mana_or_return(mana * 20) #! add a way for the item to not go on full cooldown if mana isn't enough
             unless items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_offhand
             if items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_mainhand
             func()

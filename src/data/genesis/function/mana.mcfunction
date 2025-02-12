@@ -1,3 +1,5 @@
+from genesis:player import with_self_storage
+
 
 append function genesis:load:
     scoreboard objectives add genesis.mana.current dummy
@@ -9,6 +11,9 @@ function ~/calculate_max_mana:
     scoreboard players set @s genesis.mana.max 20
     scoreboard players operation @s genesis.mana.max *= @s genesis.stat.mana_pool
     scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
+    unless score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
+    function #genesis:mana/changed
+    function genesis:mana/update_hud
 
 
 append function genesis:tick:
@@ -16,15 +21,31 @@ append function genesis:tick:
 function ~/tick:
     scoreboard players operation @s genesis.mana.current += @s genesis.stat.mana_regen
     scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
+    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players remove @s genesis.hud.display 1
+    function #genesis:mana/changed
+    function genesis:mana/update_hud
 
 
-def reduce_mana_or_return(amount: int): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
+function ~/update_hud:
+    @with_self_storage
+    def update_hud_self():
+        data modify storage genesis:player self.hud[0] set value [{text:"Manabar"}]
+        #! TODO - actually implement the mana bar lol
+
+
+def reduce_mana_or_return(amount: int, update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
     if score @s genesis.mana.current matches (None, amount - 1) return 0
+    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
     scoreboard players remove @s genesis.mana.current (amount)
-    #! possibly add a #genesis:mana/changed event or something
+    if update:
+        function #genesis:mana/changed
+        function genesis:mana/update_hud
 
 
-def reduce_mana_by_score_or_return(name: str, objective: str): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
+def reduce_mana_by_score_or_return(name: str, objective: str, update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
     raw (f'execute if score {name} {objective} > @s genesis.mana.current run return 0')
+    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
     raw (f'scoreboard players operation @s genesis.mana.current -= {name} {objective}')
-    #! possibly add a #genesis:mana/changed event or something
+    if update:
+        function #genesis:mana/changed
+        function genesis:mana/update_hud
