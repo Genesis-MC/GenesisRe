@@ -9,3 +9,4 @@ unless entity item_display_uuid["hex"] run summon item_display ~ -500 ~ {Tags: [
 function genesis:tick
 prepend function genesis:tick: # prepend so that order of compiling doesn't matter
     schedule function ~/ 1t
+    store result score .gametime genesis time query gametime

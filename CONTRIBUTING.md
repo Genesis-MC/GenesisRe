@@ -45,7 +45,7 @@ If you have changed anything and want to upload it, you generally follow these s
 
 Generally it's better to commit/push often so merge conflicts (multiple people modfying the same file) is less common.
 
-## (Naming-) Conventions
+## Conventions
 
 - Choose a longer name if it's more descriptive:
     - :white_check_mark: `genesis.crafter`, `.entity_is_found`
@@ -88,9 +88,22 @@ Generally it's better to commit/push often so merge conflicts (multiple people m
     - Use `src/data/modules/<module>.bolt` for stuff that is mostly python
     - Use `src/data/function/<module>.mcfunction` for stuff that is mostly actual functions
     - If you need more than a single file per module, create a subfolder
+    - Use the `zzz` module for anything the helps development but shouldn't be in the final pack
 - Generated Files: `build/...`
     - Every generated file has an explicit, descriptive name
         - :white_check_mark: `as @a if score x y matches 12 function ~/../score_matches_12:`
         - :x: `as @a if score x y matches 12:`
     - If this is not explicitly done, bolt generates names like `nested_execute_0`
     - To make sure, just look at the `build` folder from time to time
+- Comments: `# <comment>`, `#! <comment>`, `#> <comment>`, `"""<docstring>"""`
+    - All comments start with a `#` and a whitespace afterwarts
+    - ex. `# The following code does xyz`
+    - Things that are todo, so not finished yet use `#! <comment>`
+    - ex. `#! This can be removed when mojang fixes the bug`, `#! This can be done when module xyz is finished`
+    - Headlines, file descriptions or other permanent notices can use `#>` and caps
+    - These comments get highlighted/colored if you use the mcfunction-syntax extension
+    - ex. `#> THIS FILE IS MEANT FOR XYZ`, `#> HEADLINE`
+    - Feel free to use docstrings for python functions and classes `"""What the function or class does"""`
+- New lines:
+    - All files should end with trailing new line
+    - Feel free to use 2 new lines between functions/imports/things to visually separate them
