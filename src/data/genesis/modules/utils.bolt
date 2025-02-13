@@ -49,30 +49,6 @@ def add_loot_table(item):
     return item
 
 
-def add_custom_recipe(recipe: list[list], output):
-    command = "execute "
-    slot = 2
-    for line in recipe:
-        for item in line:
-            if item == None:
-                command += f'unless items block ~ ~-1 ~ container.{slot} * '
-            elif type(item) == str:
-                command += f'if items block ~ ~-1 ~ container.{slot} {item} '
-            else:
-                # assume item is bolt-item
-                command += f'if items block ~ ~-1 ~ container.{slot} {item.base_item}[custom_data~{{bolt-item:{{id:"{item.namespace}:{item.id}"}}}}] '
-            slot += 1
-        slot += 6
-    if type(output) == str:
-        command += f'run return run item replace block ~ ~-1 ~ container.15 with {output}'
-    else:
-        # assume item is bolt-item
-        loot_table = {"pools": [{"rolls": 1,"entries": [{"type": "minecraft:item","name": f'minecraft:{output.base_item}',"functions": [{"function": "minecraft:set_components","components": output.components}]}]}]}
-        command += f'run return run loot replace block ~ ~-1 ~ container.15 loot {loot_table}'
-    prepend function genesis:crafter/recipes:
-        raw command
-
-
 constants = []
 def constant(n):
     global constants

@@ -1,24 +1,19 @@
 #> THIS FUNCTION WILL NOT BE A FUNCTION IN THE END AND IS USED TO DEFINE CUSTOM CRAFTING RECIPES
+#! evaluate if we even need this, this would only be used to add crafting recipes requiring each other or crafting recipes resulting in a non-genesis item
 
 
-from genesis:utils import add_custom_recipe
-from genesis:crafter import Crafter
+from genesis:crafter import add_custom_recipe
 
-
-add_custom_recipe([
-    ["#logs","#logs","#logs"],
-    ["#logs",None   ,"#logs"],
-    ["#logs","#logs","#logs"],
-], Crafter)
-
-add_custom_recipe([
-    [None,"#logs",None],
-    [None,Crafter,None],
-    [None,"#logs",None],
-], Crafter)
 
 add_custom_recipe([
     [None,None   ,None],
     [None,"glass",None],
     [None,None   ,None],
-], "apple")
+])("apple")
+
+
+add_custom_recipe([
+    ["iron_sword",None,None],
+    ["apple",     None,None],
+    [ None,       None,None],
+], True)("melon_slice")

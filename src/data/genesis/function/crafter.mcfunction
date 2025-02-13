@@ -4,42 +4,6 @@ from genesis:placeable import on_place
 from genesis:utils import add_loot_table
 
 
-@add_loot_table
-@bolt_item
-class Crafter(GenesisItem):
-    item_name = ("Genesis Crafter", {})
-    item_model = "crafting_table"
-    rarity = "common"
-    category = ["crafting_station"]
-
-    base_item = "player_head"
-    removed_components = ["equippable"]
-
-    @on_place
-    def place_crafter():
-        setblock ~ ~ ~ barrel[]{CustomName:{"text":"Genesis Crafter"}}
-        align xyz positioned ~.5 ~1 ~.5 summon item_display:
-            tag @s add genesis.crafter
-
-
-recipe genesis:item/crafting_station/crafter {
-    "type": "minecraft:crafting_shaped",
-    "category": "misc",
-    "pattern": [
-        "lll",
-        "l l",
-        "lll"
-    ],
-    "key": {
-        "l": "#logs"
-    },
-    "result": {
-        "id": Crafter.base_item,
-        "components": Crafter.components
-    }
-}
-
-
 input_slots = [2,3,4,11,12,13,20,21,22]
 output_slot = 15
 player_slots = ["player.cursor","weapon.offhand","hotbar.0","hotbar.1","hotbar.2","hotbar.3","hotbar.4","hotbar.5","hotbar.6","hotbar.7","hotbar.8","inventory.0","inventory.1","inventory.2","inventory.3","inventory.4","inventory.5","inventory.6","inventory.7","inventory.8","inventory.9","inventory.10","inventory.11","inventory.12","inventory.13","inventory.14","inventory.15","inventory.16","inventory.17","inventory.18","inventory.19","inventory.20","inventory.21","inventory.22","inventory.23","inventory.24","inventory.25","inventory.26"]
@@ -112,7 +76,13 @@ function ~/result_has_been_removed:
             if items entity @s slot *[custom_data~{genesis:{crafter:{placeholder:1b}}}] item replace entity @s slot from block ~ ~-1 ~ container.15
     as @e[type=minecraft:item,distance=..10] if items entity @s contents *[custom_data~{genesis:{crafter:{placeholder:1b}}}] item replace entity @s contents from block ~ ~-1 ~ container.15
     raw ("item replace block ~ ~-1 ~ container.15 with white_stained_glass_pane[item_model=red_stained_glass_pane,tooltip_display={hide_tooltip:true},custom_data={genesis:{crafter:{placeholder:1b}}}]")
-    tag @s remove genesis.has_output
+    tag @s remove genesis.crafter.has_output
+    if entity @s[tag=genesis.crafter.reduce_durability_on_craft] return run function ~/../reduce_durability_on_craft:
+        tag @s remove genesis.crafter.reduce_durability_on_craft
+        for slot in input_slots:
+            if items block ~ ~-1 ~ f'container.{slot}' *[damage] store result block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' int -1 data get block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' -1.0000000001
+            if items block ~ ~-1 ~ f'container.{slot}' *[damage] unless data block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' data modify block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' set value 1 # Needed because default components are not on the item and execute store doesnt work
+            unless items block ~ ~-1 ~ f'container.{slot}' *[damage] item modify block ~ ~-1 ~ f'container.{slot}' ~/../reduce_amount_by_1
     for slot in input_slots:
         item modify block ~ ~-1 ~ f'container.{slot}' ~/../reduce_amount_by_1
 
@@ -126,3 +96,73 @@ item_modifier ~/reduce_amount_by_1 {
 
 append function ~/recipes: # using append so order of exection while compiling won't matter
     return 0
+
+
+def add_custom_recipe(recipe: list[list[str|type|None]], reduce_durability_instead = False):
+    def decorator(output):
+        command = "execute "
+        slot = 2
+        for line in recipe:
+            for item in line:
+                if item == None:
+                    command += f'unless items block ~ ~-1 ~ container.{slot} * '
+                elif type(item) == str:
+                    command += f'if items block ~ ~-1 ~ container.{slot} {item} '
+                else: # assume item is bolt-item
+                    command += f'if items block ~ ~-1 ~ container.{slot} {item.base_item}[custom_data~{{bolt-item:{{id:"{item.namespace}:{item.id}"}}}}] '
+                slot += 1
+            slot += 6
+        if type(output) == str:
+            command += f'run return run item replace block ~ ~-1 ~ container.15 with {output}'
+        else: # assume item is bolt-item
+            loot_table = {"pools": [{"rolls": 1,"entries": [{"type": "minecraft:item","name": f'minecraft:{output.base_item}',"functions": [{"function": "minecraft:set_components","components": output.components}]}]}]}
+            command += f'run return run loot replace block ~ ~-1 ~ container.15 loot {loot_table}'
+        prepend function genesis:crafter/recipes:
+            if reduce_durability_instead:
+                tag @s add genesis.crafter.reduce_durability_on_craft
+            raw command
+            if reduce_durability_instead:
+                tag @s remove genesis.crafter.reduce_durability_on_craft # Done before and after so the ordering doesn't matter and we don't need to check the items twice
+        return output
+    return decorator
+
+
+@add_custom_recipe(recipe=[
+    ['#logs','#logs','#logs'],
+    ['#logs', None  ,'#logs'],
+    ['#logs','#logs','#logs'],
+])
+@add_loot_table
+@bolt_item
+class Crafter(GenesisItem):
+    item_name = ("Genesis Crafter", {})
+    item_model = "crafting_table"
+    rarity = "common"
+    category = ["crafting_station"]
+
+    base_item = "player_head"
+    removed_components = ["equippable"]
+
+    @on_place
+    def place_crafter():
+        setblock ~ ~ ~ barrel[]{CustomName:{"text":"Genesis Crafter"}}
+        align xyz positioned ~.5 ~1 ~.5 summon item_display:
+            tag @s add genesis.crafter
+
+
+recipe genesis:item/crafting_station/crafter {
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "lll",
+        "l l",
+        "lll"
+    ],
+    "key": {
+        "l": "#logs"
+    },
+    "result": {
+        "id": Crafter.base_item,
+        "components": Crafter.components
+    }
+}
