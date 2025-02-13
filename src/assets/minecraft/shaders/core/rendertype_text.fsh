@@ -8,8 +8,8 @@ uniform vec4 ColorModulator;
 uniform float FogStart;
 uniform float FogEnd;
 uniform vec4 FogColor;
-uniform vec2 ScreenSize; // genesis
-uniform float GameTime; // genesis
+// uniform vec2 ScreenSize; // genesis //! DISABLED UNTIL VANILLA SHADER PIPELINE IS FIXED
+// uniform float GameTime; // genesis //! DISABLED UNTIL VANILLA SHADER PIPELINE IS FIXED
 
 in float vertexDistance;
 in vec4 vertexColor;
@@ -69,15 +69,16 @@ void main() {
             color.rgb = height < 0.5 ? mix(botBlue, midBlue, height*2) : mix(midBlue, topBlue, height*2-1);
             if (int(isShadow+0.5) == 1) color.rgb = color.rgb/4;
             break;
-        case 3: // special rainbow
-            float scrollSpeed = 600; float rainbowWidth = 0.2; float angle = 7;
-            color.rgb = hueShift(vec3(1,0.4,0.4), fract(
-                gl_FragCoord.x / (ScreenSize.x * rainbowWidth) + // Left/Right offset
-                GameTime * scrollSpeed + // Time offset
-                height / angle // Up/Down offset
-                )*13/2);
-            if (int(isShadow+0.5) == 1) { color.rgb = color.rgb/4; }
-            break;
+//! DISABLED UNTIL VANILLA SHADER PIPELINE IS FIXED
+//         case 3: // special rainbow
+//             float scrollSpeed = 600; float rainbowWidth = 0.2; float angle = 7;
+//             color.rgb = hueShift(vec3(1,0.4,0.4), fract(
+//                 gl_FragCoord.x / (ScreenSize.x * rainbowWidth) + // Left/Right offset
+//                 GameTime * scrollSpeed + // Time offset
+//                 height / angle // Up/Down offset
+//                 )*13/2);
+//             if (int(isShadow+0.5) == 1) { color.rgb = color.rgb/4; }
+//             break;
     }
     // vanilla
     fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
