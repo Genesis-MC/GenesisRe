@@ -7,9 +7,10 @@ def add_translation(key: str, value: str):
     lang = ctx.assets.languages.get("genesis:en_us", {data:{}}).data
     lang[key] = value
     ctx.assets.languages["genesis:en_us"] = Language(lang)
+    return key
 
 
-def break_text_into_lines(text: str, trans_base: str):
+def break_text_into_lines(text: str, trans_base: str, italic = False, color = "gray"):
     out = []
     line_index = 0
     line_length = char_width[text[0]]
@@ -24,7 +25,7 @@ def break_text_into_lines(text: str, trans_base: str):
 
             trans_key1 = f'{trans_base}.{line_index}'
             add_translation(trans_key1, line)
-            out.append({"translate":trans_key1,"color":"gray","italic":false})
+            out.append({"translate":trans_key1,"color":color,"italic":italic})
             line_length = 0
             line_index += 1
             line = overflow
@@ -34,7 +35,7 @@ def break_text_into_lines(text: str, trans_base: str):
     if line:
         trans_key2 = f'{trans_base}.{line_index}'
         add_translation(trans_key2, line)
-        out.append({"translate":trans_key2,"color":"gray","italic":false})
+        out.append({"translate":trans_key2,"color":color,"italic":italic})
     return out
 
 

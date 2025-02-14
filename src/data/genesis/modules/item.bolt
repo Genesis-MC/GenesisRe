@@ -53,6 +53,7 @@ class GenesisItem:
         # Add tungsten components
         _add_tungsten_base()
         _add_tungsten_components(item, slot)
+        item.max_stack_size = 1
 
         # Add stats to custom data
         item.merge("custom_data", {"genesis": {"stats": {slot: stats}}})

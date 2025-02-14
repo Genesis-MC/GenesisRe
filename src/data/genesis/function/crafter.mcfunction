@@ -1,5 +1,5 @@
 from ps_beet_bolt.bolt_item import bolt_item
-from genesis:item/global import GenesisItem
+from genesis:item import GenesisItem
 from genesis:placeable import on_place
 from genesis:utils import add_loot_table
 
