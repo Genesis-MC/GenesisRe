@@ -35,9 +35,10 @@ function ~/storage/save_self_macro:
     $data modify storage genesis:player players[$(id)] set from storage genesis:player self
 
 
-def with_self_storage(func):
-    store result storage genesis:temp player.id int 1 scoreboard players get @s genesis.player.id
-    function genesis:player/storage/get_self_macro with storage genesis:temp player
-    func()
-    function genesis:player/storage/save_self_macro with storage genesis:temp player
-    return func
+class PerPlayerStorage():
+    def __enter__(self):
+        store result storage genesis:temp player.id int 1 scoreboard players get @s genesis.player.id
+        function genesis:player/storage/get_self_macro with storage genesis:temp player
+
+    def __exit__(self, *args):
+        function genesis:player/storage/save_self_macro with storage genesis:temp player

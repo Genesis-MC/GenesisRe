@@ -1,4 +1,4 @@
-from genesis:player import with_self_storage
+from genesis:player import PerPlayerStorage
 
 
 append function genesis:load:
@@ -27,8 +27,7 @@ function ~/tick:
 
 
 function ~/update_hud:
-    @with_self_storage
-    def update_hud_self():
+    with PerPlayerStorage():
         data modify storage genesis:player self.hud[0] set value [{text:"Manabar"}]
         #! TODO - actually implement the mana bar lol
 
