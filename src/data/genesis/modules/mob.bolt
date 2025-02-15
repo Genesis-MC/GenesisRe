@@ -1,0 +1,217 @@
+from beet import Equipment, Texture, Model, ItemModel, Function
+from PIL import Image
+
+def modifies_entity_data(func):
+    func.modifies_entity_data = True
+    return func
+
+def uses_entity_data(func):
+    func.uses_entity_data = True
+    return func
+
+def before_all(func):
+    func.before_all = True
+    return func
+
+def after_all(func):
+    func.after_all = True
+    return func
+
+def genesis_mob(cls: type):
+    cls.id = camel_case_to_snake_case(cls.__name__)
+    cls.namespace = cls.__module__.split(":")[0]
+    components, callables = _get_components_and_callables_from_parents(cls)
+    _run_callables(cls, components, callables["before_all"])
+    components, _ = _get_components_and_callables_from_parents(cls)
+    _run_callables(cls, components, callables["regular"])
+    components, _ = _get_components_and_callables_from_parents(cls)
+    _run_callables(cls, components, callables["after_all"])
+    return cls
+
+
+class GenesisMob:
+    @after_all
+    @uses_entity_data
+    def generate_summon_command(mob, entity_data):
+        print(entity_data)
+        function f"{mob.namespace}:mob/summon/{mob.id}":
+            summon mob.base_entity ~ ~ ~ entity_data
+
+def add_equipment(mob, equipment):
+    if "equipment" not in mob.__dict__:
+        mob.equipment = {}
+    mob.equipment.update(equipment)
+
+def add_tag(mob, tag):
+    if "Tags" not in mob.__dict__:
+        mob.Tags = []
+    if tag not in mob.Tags:
+        mob.Tags.append(tag)
+        mob.Tags.sort()
+
+class TexturedZombieVariant(GenesisMob):
+    """
+    A zombie-like mob with a custom texture rendered by equipped items.
+    """
+
+    hurt_detection = {}
+    hurt_tint = {}
+    
+    base_entity = "minecraft:zombie"
+
+    def generate_assets(mob):
+        texture_id = f"{mob.namespace}:entity/{mob.id}"
+        if texture_id not in ctx.assets.textures:
+            raise LookupError(f"Missing texture: {texture_id}")
+        
+        # pants texture & model
+        img = ctx.assets.textures[texture_id].image
+        img = img.crop((0,0,img.width, img.height//2))
+        ctx.assets[f"{mob.namespace}:entity/equipment/humanoid_leggings/_mob/{mob.id}"] = Texture(img)
+        ctx.assets[f"{mob.namespace}:_mob/{mob.id}"] = Equipment({
+            "layers": {
+                "humanoid_leggings": [
+                    {
+                        "texture": f"{mob.namespace}:_mob/{mob.id}"
+                    }
+                ]
+            }
+        })
+        
+        # arms and head models
+        ctx.assets.textures[f"{mob.namespace}:item/_mob/{mob.id}"] = ctx.assets.textures[texture_id]
+        for side in ["left","right"]:
+            ctx.assets[f"{mob.namespace}:item/_mob/{mob.id}/{side}_arm"] = Model({
+                "parent": f"{mob.namespace}:item/_mob/textured_zombie_variant/{side}_arm",
+                "textures": {
+                    "0": f"{mob.namespace}:item/_mob/{mob.id}"
+                }
+            })
+        ctx.assets[f"{mob.namespace}:item/_mob/{mob.id}/head"] = Model({
+            "parent": f"{mob.namespace}:item/_mob/textured_zombie_variant/head",
+            "textures": {
+                "0": f"{mob.namespace}:item/_mob/{mob.id}"
+            }
+        })
+        ctx.assets[f"{mob.namespace}:_mob/{mob.id}/skin"] = ItemModel({
+            "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:display_context",
+                "cases": [
+                    {
+                        "when": "thirdperson_righthand",
+                        "model": {
+                            "type": "minecraft:model",
+                            "model": f"{mob.namespace}:item/_mob/{mob.id}/right_arm"
+                        }
+                    },
+                    {
+                        "when": "thirdperson_lefthand",
+                        "model": {
+                            "type": "minecraft:model",
+                            "model": f"{mob.namespace}:item/_mob/{mob.id}/left_arm"
+                        }
+                    }
+                ],
+                "fallback": {
+                    "type": "minecraft:model",
+                    "model": f"{mob.namespace}:item/_mob/{mob.id}/head"
+                }
+            }
+        })
+        skin_item = {
+            "id": "minecraft:poisonous_potato",
+            "count": 1,
+            "components": {
+                "minecraft:item_model": f"{mob.namespace}:_mob/{mob.id}/skin",
+                "minecraft:equippable": {
+                    "slot": "legs",
+                    "asset_id": f"{mob.namespace}:_mob/{mob.id}"
+                }
+            }
+        }
+        add_equipment(mob, {
+            "mainhand": skin_item,
+            "offhand": skin_item,
+            "head": skin_item,
+            "legs": skin_item
+        })
+
+
+class CustomComponents:
+    @modifies_entity_data
+    def hurt_detection(mob, entity_data, component):
+        add_tag(mob, "genesis.mob.component.hurt_detection")
+        return entity_data
+
+
+vanilla_components = [
+    "equipment",
+    "Tags"
+]
+component_names = vanilla_components.copy()
+for k in CustomComponents.__dict__.keys():
+    if not k.startswith("__"):
+        component_names.append(k)
+
+
+def _get_components_and_callables_from_parents(cls):
+    components = {}
+    callables = {
+        "before_all": [],
+        "regular": [],
+        "after_all": [],
+    }
+    # get info of parent classes recursively
+    for parent in reversed(cls.__bases__):
+        if parent != object:
+            cmp, cal = _get_components_and_callables_from_parents(parent)
+            for ck, cv in cmp.items():
+                components[ck] = cv
+            callables["before_all"] += cal["before_all"]
+            callables["after_all"] += cal["after_all"]
+            callables["regular"] += cal["regular"]
+    # get info of this class
+    for k, v in cls.__dict__.items():
+        if (
+            k in component_names or k in components
+        ):  #! custom components are currently ignored
+            components[k] = v
+        if callable(v):
+            if "custom_component" in v.__dict__:
+                components[v.custom_component] = getattr(cls, v.custom_component, None)
+            if getattr(v, "before_all", False):
+                callables["before_all"].append(v)
+            elif getattr(v, "after_all", False):
+                callables["after_all"].append(v)
+            else:
+                callables["regular"].append(v)
+    return (components, callables)
+
+
+def _run_callables(cls, components, callables):
+    entity_data = dict()
+    for k, v in components.items(): 
+        if k in vanilla_components:
+            entity_data[k] = v
+        else:
+            component = CustomComponents.__dict__[k]
+            if 'modifies_entity_data' in component.__dict__:
+                entity_data = component(cls, entity_data, v)
+    for c in callables:
+        if 'uses_entity_data' in c.__dict__:
+            c(cls, entity_data)
+        elif 'modifies_entity_data' in c.__dict__:
+            entity_data = c(cls, entity_data)
+        else:
+            c(cls)
+
+
+def camel_case_to_snake_case(name: str) -> str:
+    out_id = name[0].lower()
+    for c in name[1:]:
+        if c.isupper():
+            out_id += "_" + c.lower()
+        else:
+            out_id += c
+    return out_id
