@@ -58,3 +58,25 @@ def constant(n):
         append function genesis:load:
             scoreboard players set f'#{n}' genesis n
     return f'#{n}'
+
+
+def texture_path_to_item_model(path: str, is_handheld = False) -> str:
+    if not ':item/' in path:
+        raise Exception(f'"{path}" is not valid, it has to be in the "item" subfolder')
+    truncated_path = path.replace(':item/',':')
+
+    parent = "minecraft:item/generated"
+    if is_handheld:
+        parent = "minecraft:item/handheld"
+
+    model path {
+        "parent": parent,
+        "textures": {"layer0": path}
+    }
+
+    item_model truncated_path { "model": {
+        "type": "minecraft:model",
+        "model": path
+    }}
+
+    return truncated_path

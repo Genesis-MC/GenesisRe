@@ -6,7 +6,7 @@ from genesis:mana import reduce_mana_or_return
 from genesis:utils import constant
 
 
-def right_click_ability(name: str, description: str, mana: float, cooldown: float, charge_time = 0.05, charge_sound = {sound_id:""}, charge_animation = "none"):
+def right_click_ability(name: str, description: str, cooldown: float, mana = 0, charge_time = 0.05, charge_sound = {sound_id:""}, charge_animation = "none"):
     @event_decorator
     def decorator(func, item):
         # Add ability description to lore
@@ -18,17 +18,23 @@ def right_click_ability(name: str, description: str, mana: float, cooldown: floa
         if item.get("passives"):
             trailing_new_line = [{"text":"","color":"white"}] #! fix when fix
 
+        active_ability_cost_line = [{"translate":"text.genesis.active_ability","color":"dark_gray"},{"text":" [","italic":false}]
+
+        if mana:
+            active_ability_cost_line += [{"translate":"icon.genesis.mana","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(mana),"italic":false,"color":rarity_text_color["rare"]}]
+
+        if cooldown:
+            if mana:
+                active_ability_cost_line += [{"text":" | ","color":"dark_gray"}]
+            active_ability_cost_line += [{"translate":"icon.genesis.cooldown","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(cooldown)+"s","italic":false,"color":rarity_text_color["uncommon"]}]
+
+        active_ability_cost_line += [{"text":"]","italic":false}]
+
         item.merge("lore",
             [
                 [{"text":"❂","color":rarity_text_color["transcendent"],"italic":false},{"text":" ","color":"white"},{"translate":trans_key,"color":"gold"}], #! fix after mc fixes bug
-                [
-                    {"translate":"text.genesis.active_ability","color":"dark_gray"},{"text":" [","italic":false},
-                    {"translate":"icon.genesis.mana","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(mana),"italic":false,"color":rarity_text_color["rare"]},
-                    {"text":" | ","color":"dark_gray"},
-                    {"translate":"icon.genesis.cooldown","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(cooldown)+"s","italic":false,"color":rarity_text_color["uncommon"]},
-                    {"text":"]","italic":false},
-                ],
             ] +
+            [active_ability_cost_line] +
             break_text_into_lines(
                 description,
                 f'item.{item.namespace}.{item.id}.{active_name_id}'
@@ -61,7 +67,8 @@ def right_click_ability(name: str, description: str, mana: float, cooldown: floa
 
         function consume_path:
             advancement revoke @s only consume_path
-            reduce_mana_or_return(mana * 20) #! add a way for the item to not go on full cooldown if mana isn't enough
+            if mana:
+                reduce_mana_or_return(mana * 20) #! add a way for the item to not go on full cooldown if mana isn't enough
             unless items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_offhand
             if items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_mainhand
             func()
