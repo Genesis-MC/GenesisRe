@@ -1,11 +1,11 @@
 from ps_beet_bolt.bolt_item import bolt_item
+from genesis:utils import add_loot_table, texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
 from bolt_item:decorators import on_consume, on_tick
 from argon:decorators import on_attack, on_attacked
 from genesis:mapping import item_display_uuid
 from genesis:crafter import add_custom_recipe
-from genesis:utils import add_loot_table
 from genesis:item import GenesisItem
 
 
@@ -24,7 +24,7 @@ class IronDagger(GenesisItem):
     rarity = "common"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":35,"attack_speed":100})
-    item_model = "iron_sword" #! change to custom texture
+    item_model = texture_path_to_item_model("genesis:item/dagger/iron_dagger", True)
 
 
 @add_custom_recipe([
@@ -39,7 +39,7 @@ class ShadedDagger(GenesisItem):
     rarity = "uncommon"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":40,"attack_speed":100,"speed":15})
-    item_model = "netherite_sword" #! change to custom texture
+    item_model = texture_path_to_item_model("genesis:item/dagger/shaded_dagger", True)
 
 
 @add_custom_recipe([
@@ -54,7 +54,7 @@ class Visharp(GenesisItem):
     rarity = "legendary"
     category = ["void", "dagger"]
     stats = ("mainhand", {"physical_power":60,"attack_speed":110})
-    item_model = "netherite_sword" #! replace with custom texture
+    item_model = texture_path_to_item_model("genesis:item/dagger/visharp", True)
 
     @right_click_ability(
         name = "Voidrend",
