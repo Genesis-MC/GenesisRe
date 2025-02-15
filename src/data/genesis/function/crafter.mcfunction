@@ -75,8 +75,9 @@ function ~/result_has_been_removed:
         for slot in player_slots:
             if items entity @s slot *[custom_data~{genesis:{crafter:{placeholder:1b}}}] item replace entity @s slot from block ~ ~-1 ~ container.15
     as @e[type=minecraft:item,distance=..10] if items entity @s contents *[custom_data~{genesis:{crafter:{placeholder:1b}}}] item replace entity @s contents from block ~ ~-1 ~ container.15
-    raw ("item replace block ~ ~-1 ~ container.15 with white_stained_glass_pane[item_model=red_stained_glass_pane,tooltip_display={hide_tooltip:true},custom_data={genesis:{crafter:{placeholder:1b}}}]")
     tag @s remove genesis.crafter.has_output
+    unless items block ~ ~-1 ~ container.15 * return 0
+    raw ("item replace block ~ ~-1 ~ container.15 with white_stained_glass_pane[item_model=red_stained_glass_pane,tooltip_display={hide_tooltip:true},custom_data={genesis:{crafter:{placeholder:1b}}}]")
     if entity @s[tag=genesis.crafter.reduce_durability_on_craft] return run function ~/../reduce_durability_on_craft:
         tag @s remove genesis.crafter.reduce_durability_on_craft
         for slot in input_slots:
