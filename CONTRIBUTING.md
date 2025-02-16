@@ -7,7 +7,7 @@ Since this project is using beet/bolt, you need to install a few things:
 2. Open any terminal, to do this you can press `windows key` + `r` and type `cmd`
     - In the terminal type the following to install the required packages:
     ```
-    pip install --upgrade beet mecha bolt ps_beet_bolt
+    pip install --upgrade beet mecha bolt ps_beet_bolt pillow
     ```
 
 ## Set up the project
