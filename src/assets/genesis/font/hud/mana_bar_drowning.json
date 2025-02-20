@@ -1,0 +1,31 @@
+{
+    "providers": [
+        {
+            "type": "bitmap",
+            "file": "genesis:font/hud/mana_bar_border.png",
+            "height": 7,
+            "ascent": -7,
+            "chars": [
+                "b"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "genesis:font/hud/mana_bar_fill.png",
+            "height": 4,
+            "ascent": -8,
+            "chars": [
+                "lrnRN"
+            ]
+        },
+        {
+            "type": "space",
+            "advances": {
+                "-": -92,
+                "B": -80,
+                "|": -1,
+                "+": 11
+            }
+        }
+    ]
+}

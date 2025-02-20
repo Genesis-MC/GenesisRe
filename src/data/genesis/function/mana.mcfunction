@@ -29,21 +29,34 @@ function ~/tick:
 
 
 function ~/update_hud:
-    #> CALCULATE IF RERENDER IS NECESSARY
-    # (cm * mp) / mm = filled pixel amount
-    scoreboard players set #new genesis.mana.filled_pixels 79
-    scoreboard players operation #new genesis.mana.filled_pixels *= @s genesis.mana.current
-    scoreboard players operation #new genesis.mana.filled_pixels /= @s genesis.mana.max
-    execute if score #new genesis.mana.filled_pixels = @s genesis.mana.filled_pixels return 0
+    function ~/../should_display:
+        #> CALCULATE FILLED PIXEL AMOUNT
+        # (cm * mp) / mm = filled pixel amount
+        scoreboard players set #new genesis.mana.filled_pixels 79
+        scoreboard players operation #new genesis.mana.filled_pixels *= @s genesis.mana.current
+        scoreboard players operation #new genesis.mana.filled_pixels /= @s genesis.mana.max
+        #> CHECK IF IS_DROWNING CHANGED
+        if entity @s[tag=genesis.mana.is_drowning] at @s anchored eyes positioned ^ ^ ^ unless predicate genesis:mana/is_drowning if data entity @s {Air:300s} return run tag @s remove genesis.mana.is_drowning
+        if entity @s[tag=!genesis.mana.is_drowning] at @s anchored eyes positioned ^ ^ ^ if predicate genesis:mana/is_drowning return run tag @s add genesis.mana.is_drowning
+
+        execute if score #new genesis.mana.filled_pixels = @s genesis.mana.filled_pixels return 0
+        return 1
+
+    unless function ~/../should_display return 0
     scoreboard players operation @s genesis.mana.filled_pixels = #new genesis.mana.filled_pixels
     #> MODIFY PLAYER HUD STORAGE
     with PerPlayerStorage():
         execute function ~/../update_hud_wrapped:
             #> RETURN EARLY IF MANA IS FULL => HIDE HUD
             if score @s genesis.mana.current = @s genesis.mana.max return run data modify storage genesis:player self.hud[0] set value [""]
-            data modify storage genesis:player self.hud[0] set value [{
+            if entity @s[tag=!genesis.mana.is_drowning] data modify storage genesis:player self.hud[0] set value [{
                 text: "+",
                 font: "genesis:hud/mana_bar",
+                shadow_color: 0,
+            }]
+            if entity @s[tag=genesis.mana.is_drowning] data modify storage genesis:player self.hud[0] set value [{
+                text: "+",
+                font: "genesis:hud/mana_bar_drowning",
                 shadow_color: 0,
             }]
             #> SET UP VALUES FOR PLACING THE NOTCHES CORRECTLY
@@ -64,6 +77,12 @@ function ~/update_hud:
                 if score #is_notch genesis <= #next_notch genesis scoreboard players remove #next_notch genesis 39500
                 scoreboard players operation #is_notch genesis -= @s genesis.mana.max
             data modify storage genesis:player self.hud[0] append value {text:"Bb-"}
+
+
+predicate ~/is_drowning {
+    "condition": "minecraft:location_check",
+    "predicate": {"fluid": {"fluids": "#minecraft:water"}}
+}
 
 
 def reduce_mana_or_return(amount: int, update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
