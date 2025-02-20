@@ -1,6 +1,6 @@
-from ps_beet_bolt.bolt_item import event_decorator, camel_case_to_snake_case
+from ps_beet_bolt.bolt_item import event_decorator
+from genesis:utils import add_translation, break_text_into_lines, camel_case_to_snake_case
 from tungsten:decorators import _add_tungsten_base, _add_tungsten_components
-from genesis:utils import add_translation, break_text_into_lines
 from genesis:mapping import item_display_uuid, rarity_text_color
 from genesis:mana import reduce_mana_or_return
 from genesis:utils import constant

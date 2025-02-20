@@ -1,6 +1,6 @@
-from ps_beet_bolt.bolt_item import transformer, custom_component, event_decorator, camel_case_to_snake_case, before_all, after_all
+from ps_beet_bolt.bolt_item import transformer, custom_component, event_decorator, before_all, after_all
 from genesis:mapping import stat_wrapper_characters, rarity_text_color, categories, rarities, stat_names, category_modifiers, slots, stat_attribute_to_score
-from genesis:utils import add_translation, break_text_into_lines
+from genesis:utils import add_translation, break_text_into_lines, camel_case_to_snake_case
 from tungsten:decorators import _add_tungsten_base, _add_tungsten_components
 
 
