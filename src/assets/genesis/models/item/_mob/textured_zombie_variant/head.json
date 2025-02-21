@@ -1,5 +1,8 @@
 {
 	"credit": "Made with Blockbench",
+	"textures": {
+		"particle": "entity/zombie/zombie"
+	},
 	"elements": [
 		{
 			"from": [3.5, 3.5, 3.5],
@@ -12,6 +15,19 @@
 				"west": {"uv": [2, 2, 0, 4], "texture": "#0", "tintindex": 0},
 				"up": {"uv": [2, 2, 4, 0], "texture": "#0", "tintindex": 0},
 				"down": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"from": [3, 3, 3],
+			"to": [13, 13, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6, 0, 6]},
+			"faces": {
+				"north": {"uv": [12, 2, 10, 4], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [14, 2, 12, 4], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [16, 2, 14, 4], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [10, 2, 8, 4], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [10, 2, 12, 0], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [12, 0, 14, 2], "texture": "#0", "tintindex": 0}
 			}
 		}
 	],

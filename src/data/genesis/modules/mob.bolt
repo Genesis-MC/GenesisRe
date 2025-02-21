@@ -85,6 +85,9 @@ class TexturedZombieVariant(GenesisMob):
     hurt_detection = {}
     hurt_tint = {}
     burn_in_daylight = True
+
+    lefthand_extra_item_model = None
+    righthand_extra_item_model = None
     
     base_entity = "minecraft:zombie"
 
@@ -125,14 +128,8 @@ class TexturedZombieVariant(GenesisMob):
                 "0": f"{mob.namespace}:item/_mob/{mob.id}"
             }
         })
-        ctx.assets[f"{mob.namespace}:_mob/{mob.id}/skin"] = ItemModel({
-            "model": {
-                "type": "minecraft:select",
-                "property": "minecraft:display_context",
-                "cases": [
-                    {
-                        "when": "thirdperson_righthand",
-                        "model": {
+
+        righthand_model = {
                             "type": "minecraft:model",
                             "model": f"{mob.namespace}:item/_mob/{mob.id}/right_arm",
                             "tints": [
@@ -142,10 +139,16 @@ class TexturedZombieVariant(GenesisMob):
                                 }
                             ]
                         }
-                    },
-                    {
-                        "when": "thirdperson_lefthand",
-                        "model": {
+        if mob.righthand_extra_item_model is not None:
+            righthand_model = {
+                "type": "minecraft:composite",
+                "models": [
+                    righthand_model,
+                    mob.righthand_extra_item_model
+                ]
+            }
+
+        lefthand_model = {
                             "type": "minecraft:model",
                             "model": f"{mob.namespace}:item/_mob/{mob.id}/left_arm",
                             "tints": [
@@ -155,6 +158,27 @@ class TexturedZombieVariant(GenesisMob):
                                 }
                             ]
                         }
+        if mob.lefthand_extra_item_model is not None:
+            lefthand_model = {
+                "type": "minecraft:composite",
+                "models": [
+                    lefthand_model,
+                    mob.lefthand_extra_item_model
+                ]
+            }
+
+        ctx.assets[f"{mob.namespace}:_mob/{mob.id}/skin"] = ItemModel({
+            "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:display_context",
+                "cases": [
+                    {
+                        "when": "thirdperson_righthand",
+                        "model": righthand_model
+                    },
+                    {
+                        "when": "thirdperson_lefthand",
+                        "model": lefthand_model
                     }
                 ],
                 "fallback": {
