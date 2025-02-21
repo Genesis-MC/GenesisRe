@@ -1,6 +1,18 @@
 from beet import Equipment, Texture, Model, ItemModel, Function
 from PIL import Image
 
+append function genesis:tick:
+    function genesis:mob/tick
+
+append function genesis:load:
+    function genesis:mob/load
+
+class classproperty:
+    def __init__(self, func):
+        self.fget = func
+    def __get__(self, instance, owner):
+        return self.fget(owner)
+
 def modifies_entity_data(func):
     func.modifies_entity_data = True
     return func
@@ -21,33 +33,41 @@ def genesis_mob(cls: type):
     cls.id = camel_case_to_snake_case(cls.__name__)
     cls.namespace = cls.__module__.split(":")[0]
     components, callables = _get_components_and_callables_from_parents(cls)
-    _run_callables(cls, components, callables["before_all"])
-    components, _ = _get_components_and_callables_from_parents(cls)
-    _run_callables(cls, components, callables["regular"])
-    components, _ = _get_components_and_callables_from_parents(cls)
-    _run_callables(cls, components, callables["after_all"])
+    _run_callables(cls, callables["before_all"])
+    _run_callables(cls, callables["regular"])
+    for k, v in components.items(): 
+        if k not in vanilla_components:
+            component = CustomComponents.__dict__[k]
+            component(cls, v)
+    _run_callables(cls, callables["after_all"])
+
     return cls
 
 
 class GenesisMob:
+    tags = set(["genesis.mob"])
+    equipment = dict()
+    attributes = []
+    active_effects = []
+
     @after_all
-    @uses_entity_data
-    def generate_summon_command(mob, entity_data):
-        print(entity_data)
+    def generate_summon_command(mob):
         function f"{mob.namespace}:mob/summon/{mob.id}":
-            summon mob.base_entity ~ ~ ~ entity_data
+            summon mob.base_entity ~ ~ ~ mob.entity_data
+    
+    @classproperty
+    def entity_data(cls):
+        data = {}
+        components, _ = _get_components_and_callables_from_parents(cls)
+        for k, v in components.items(): 
+            if k in vanilla_components:
+                component = VanillaComponents.__dict__[k]
+                serialised = component(cls, v)
+                if serialised is not None:
+                    nk, nv = serialised
+                    data[nk] = nv
+        return data
 
-def add_equipment(mob, equipment):
-    if "equipment" not in mob.__dict__:
-        mob.equipment = {}
-    mob.equipment.update(equipment)
-
-def add_tag(mob, tag):
-    if "Tags" not in mob.__dict__:
-        mob.Tags = []
-    if tag not in mob.Tags:
-        mob.Tags.append(tag)
-        mob.Tags.sort()
 
 class TexturedZombieVariant(GenesisMob):
     """
@@ -72,7 +92,10 @@ class TexturedZombieVariant(GenesisMob):
             "layers": {
                 "humanoid_leggings": [
                     {
-                        "texture": f"{mob.namespace}:_mob/{mob.id}"
+                        "texture": f"{mob.namespace}:_mob/{mob.id}",
+                        "dyeable": {
+                            "color_when_undyed": 16383998
+                        }
                     }
                 ]
             }
@@ -102,20 +125,38 @@ class TexturedZombieVariant(GenesisMob):
                         "when": "thirdperson_righthand",
                         "model": {
                             "type": "minecraft:model",
-                            "model": f"{mob.namespace}:item/_mob/{mob.id}/right_arm"
+                            "model": f"{mob.namespace}:item/_mob/{mob.id}/right_arm",
+                            "tints": [
+                                {
+                                    "type": "minecraft:dye",
+                                    "default": [1,1,1]
+                                }
+                            ]
                         }
                     },
                     {
                         "when": "thirdperson_lefthand",
                         "model": {
                             "type": "minecraft:model",
-                            "model": f"{mob.namespace}:item/_mob/{mob.id}/left_arm"
+                            "model": f"{mob.namespace}:item/_mob/{mob.id}/left_arm",
+                            "tints": [
+                                {
+                                    "type": "minecraft:dye",
+                                    "default": [1,1,1]
+                                }
+                            ]
                         }
                     }
                 ],
                 "fallback": {
                     "type": "minecraft:model",
-                    "model": f"{mob.namespace}:item/_mob/{mob.id}/head"
+                    "model": f"{mob.namespace}:item/_mob/{mob.id}/head",
+                    "tints": [
+                        {
+                            "type": "minecraft:dye",
+                            "default": [1,1,1]
+                        }
+                    ]
                 }
             }
         })
@@ -130,7 +171,7 @@ class TexturedZombieVariant(GenesisMob):
                 }
             }
         }
-        add_equipment(mob, {
+        mob.equipment.update({
             "mainhand": skin_item,
             "offhand": skin_item,
             "head": skin_item,
@@ -139,16 +180,39 @@ class TexturedZombieVariant(GenesisMob):
 
 
 class CustomComponents:
-    @modifies_entity_data
-    def hurt_detection(mob, entity_data, component):
-        add_tag(mob, "genesis.mob.component.hurt_detection")
-        return entity_data
+    def hurt_detection(mob, component):
+        mob.tags.add("genesis.mob.component.hurt_detection")
+        mob.attributes.append({"id":"minecraft:max_absorption","base":-3.999999999999999})
+        mob.active_effects.append({"id":"minecraft:absorption","duration":-1,"show_particles":False,"show_icon":False})
 
+    def hurt_tint(mob, component):
+        mob.tags.add("genesis.mob.component.hurt_tint")
 
-vanilla_components = [
-    "equipment",
-    "Tags"
-]
+class VanillaComponents:
+    def tags(mob, component):
+        if len(component) == 0:
+            return None
+        return ("Tags", list(component))
+    
+    def equipment(mob, component):
+        if len(component.keys()) == 0:
+            return None
+        return ("equipment", component)
+    
+    def active_effects(mob, component):
+        if len(component) == 0:
+            return None
+        return ("active_effects", component)
+    
+    def attributes(mob, component):
+        if len(component) == 0:
+            return None
+        return ("attributes", component)
+
+vanilla_components = []
+for k in VanillaComponents.__dict__.keys():
+    if not k.startswith("__"):
+        vanilla_components.append(k)
 component_names = vanilla_components.copy()
 for k in CustomComponents.__dict__.keys():
     if not k.startswith("__"):
@@ -187,24 +251,11 @@ def _get_components_and_callables_from_parents(cls):
             else:
                 callables["regular"].append(v)
     return (components, callables)
+    
 
-
-def _run_callables(cls, components, callables):
-    entity_data = dict()
-    for k, v in components.items(): 
-        if k in vanilla_components:
-            entity_data[k] = v
-        else:
-            component = CustomComponents.__dict__[k]
-            if 'modifies_entity_data' in component.__dict__:
-                entity_data = component(cls, entity_data, v)
+def _run_callables(cls, callables):
     for c in callables:
-        if 'uses_entity_data' in c.__dict__:
-            c(cls, entity_data)
-        elif 'modifies_entity_data' in c.__dict__:
-            entity_data = c(cls, entity_data)
-        else:
-            c(cls)
+        c(cls)
 
 
 def camel_case_to_snake_case(name: str) -> str:
