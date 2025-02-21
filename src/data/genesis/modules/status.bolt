@@ -1,0 +1,132 @@
+from ps_beet_bolt.bolt_item import _int_hash
+from genesis:utils import camel_case_to_snake_case
+
+
+added_slots = []
+added_slots_remove_next = []
+added_categories = []
+
+
+append function genesis:load:
+    scoreboard objectives add genesis.status.remove_next dummy
+
+
+append function genesis:tick:
+    as @a if score .gametime genesis >= @s genesis.status.remove_next function genesis:status/remove_next:
+        scoreboard players set @s genesis.status.remove_next 2147483647
+
+
+append function genesis:player/join:
+    scoreboard players set @s genesis.status.remove_next 2147483647
+
+
+def genesis_status(cls):
+    cls.id = camel_case_to_snake_case(cls.__name__)
+    cls.hash = _int_hash('status' + cls.id)
+    cls.tag = f'genesis.status.has.{cls.id}'
+
+    #> REGISTER SCOREBOARDS
+    global added_slots
+    append function genesis:load:
+        if cls.slot == None:
+            scoreboard objectives add f'genesis.status.unique.{cls.id}.until' dummy
+            scoreboard objectives add f'genesis.status.unique.{cls.id}.value' dummy
+        elif cls.slot not in added_slots:
+            added_slots.append(cls.slot)
+            scoreboard objectives add f'genesis.status.slot.{cls.slot}.id' dummy
+            scoreboard objectives add f'genesis.status.slot.{cls.slot}.until' dummy
+            scoreboard objectives add f'genesis.status.slot.{cls.slot}.value' dummy
+
+    #> SET UP STUFF FOR TIMING OUT
+    prepend function genesis:status/remove_next:
+        if cls.slot == None:
+            if score .gametime genesis >= @s f'genesis.status.unique.{cls.id}.until' function f'genesis:status/remove/{cls.id}'
+        else:
+            if score @s f'genesis.status.slot.{cls.slot}.id' matches cls.hash if score .gametime genesis >= @s f'genesis.status.slot.{cls.slot}.until' function f'genesis:status/remove/{cls.id}'
+
+    global added_slots_remove_next
+    append function genesis:status/remove_next:
+        if cls.slot == None:
+            if score @s f'genesis.status.unique.{cls.id}.until' matches 1.. scoreboard players operation @s genesis.status.remove_next < @s f'genesis.status.unique.{cls.id}.until'
+        elif cls.slot not in added_slots_remove_next:
+            added_slots_remove_next.append(cls.slot)
+            if score @s f'genesis.status.slot.{cls.slot}.until' matches 1.. scoreboard players operation @s genesis.status.remove_next < @s f'genesis.status.slot.{cls.slot}.until'
+
+    #> SET UP APPLY "METHOD"
+    def apply(time: int, value = 0):
+        if cls.slot == None:
+            for k, v in cls.__dict__.items():
+                if callable(v) and getattr(v, '__on_remove_status__', False):
+                    v(cls)
+
+            scoreboard players set @s f'genesis.status.unique.{cls.id}.until' time
+            scoreboard players operation @s f'genesis.status.unique.{cls.id}.until' += .gametime genesis
+            scoreboard players operation @s genesis.status.remove_next < @s f'genesis.status.unique.{cls.id}.until'
+            scoreboard players set @s f'genesis.status.unique.{cls.id}.value' value
+        else:
+            function f'genesis:status/slot/{cls.slot}/remove_current'
+
+            scoreboard players set @s f'genesis.status.slot.{cls.slot}.id' cls.hash
+            scoreboard players set @s f'genesis.status.slot.{cls.slot}.until' time
+            scoreboard players operation @s f'genesis.status.slot.{cls.slot}.until' += .gametime genesis
+            scoreboard players operation @s genesis.status.remove_next < @s f'genesis.status.slot.{cls.slot}.until'
+            scoreboard players set @s f'genesis.status.slot.{cls.slot}.value' value
+
+        tag @s add cls.tag
+
+        for category in getattr(cls, 'category', []):
+            tag @s add f'genesis.status.category.{category}'
+
+        for k, v in cls.__dict__.items():
+            if callable(v) and getattr(v, '__on_apply_status__', False):
+                v(cls)
+    cls.apply = apply
+
+    #> SET UP REMOVE "METHOD"
+    function f'genesis:status/remove/{cls.id}':
+        if cls.slot == None:
+            scoreboard players reset @s f'genesis.status.unique.{cls.id}.until'
+            scoreboard players reset @s f'genesis.status.unique.{cls.id}.value'
+        else:
+            scoreboard players reset @s f'genesis.status.slot.{cls.slot}.id'
+            scoreboard players reset @s f'genesis.status.slot.{cls.slot}.until'
+            scoreboard players reset @s f'genesis.status.slot.{cls.slot}.value'
+
+        tag @s remove cls.tag
+
+        for category in getattr(cls, 'category', []):
+            function f'genesis:status/category/{category}/refresh'
+
+        for k, v in cls.__dict__.items():
+            if callable(v) and getattr(v, '__on_remove_status__', False):
+                v(cls)
+
+    def remove():
+        function f'genesis:status/remove/{cls.id}'
+    cls.remove = remove
+
+    #> APPEND TO FUNCTION TO REMOVE/REFRESH WHOLE CATEGORY
+    global added_categories
+    for category in getattr(cls, 'category', []):
+        if category not in added_categories:
+            added_categories.append(category)
+            function f'genesis:status/category/{category}/remove':
+                tag @s remove f'genesis.status.category.{category}'
+            function f'genesis:status/category/{category}/refresh':
+                tag @s remove f'genesis.status.category.{category}'
+
+        append function f'genesis:status/category/{category}/remove':
+            if entity @s[tag=cls.tag] function f'genesis:status/remove/{cls.id}'
+        append function f'genesis:status/category/{category}/refresh':
+            if entity @s[tag=cls.tag] return run tag @s add f'genesis.status.category.{category}'
+
+    return cls
+
+
+def on_apply_status(func):
+    func.__on_apply_status__ = True
+    return func
+
+def on_remove_status(func):
+    func.__on_remove_status__ = True
+    return func
