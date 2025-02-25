@@ -1,5 +1,13 @@
-from beet import Equipment, Texture, Model, ItemModel, Function
+from beet import Equipment, Texture, Model, ItemModel, Function, SoundConfig
 from PIL import Image
+
+def register_sounds(key, sounds):
+    ctx.assets["genesis"].sound_config.merge(SoundConfig({
+        key: {
+            "sounds": sounds,
+            "subtitle": f"genesis.{key}"
+        }
+    }))
 
 append function genesis:tick:
     function genesis:mob/tick
@@ -32,6 +40,7 @@ def after_all(func):
 def genesis_mob(cls: type):
     cls.id = camel_case_to_snake_case(cls.__name__)
     cls.namespace = cls.__module__.split(":")[0]
+    cls.init_vanilla_components(cls)
     components, callables = _get_components_and_callables_from_parents(cls)
     _run_callables(cls, callables["before_all"])
     _run_callables(cls, callables["regular"])
@@ -45,12 +54,13 @@ def genesis_mob(cls: type):
 
 
 class GenesisMob:
-    tags = set(["genesis.mob"])
-    equipment = dict()
-    drop_chances = dict()
-    attributes = []
-    active_effects = []
-    enchantments = dict()
+    def init_vanilla_components(cls):
+        cls.tags = set()
+        cls.equipment = dict()
+        cls.drop_chances = dict()
+        cls.attributes = []
+        cls.active_effects = []
+        cls.enchantments = dict()
 
     @after_all
     def generate_summon_command(mob):
@@ -59,6 +69,8 @@ class GenesisMob:
     
     @classproperty
     def entity_data(cls):
+        cls.tags.add("genesis.mob")
+        cls.tags.add(f"genesis.mob.{cls.id}")
         data = {}
         components, _ = _get_components_and_callables_from_parents(cls)
         for k, v in components.items(): 
@@ -77,19 +89,16 @@ class GenesisMob:
         return data
 
 
-class TexturedZombieVariant(GenesisMob):
+class TexturedHumanoid(GenesisMob):
     """
-    A zombie-like mob with a custom texture rendered by equipped items.
+    A humanoid shaped mob which can wear armour. 
+    Renders a custom texture by equipped items.
     """
 
     hurt_detection = {}
     hurt_tint = {}
-    burn_in_daylight = True
-
     lefthand_extra_item_model = None
     righthand_extra_item_model = None
-    
-    base_entity = "minecraft:zombie"
 
     def generate_assets(mob):
         texture_id = f"{mob.namespace}:entity/{mob.id}"
@@ -217,12 +226,41 @@ class TexturedZombieVariant(GenesisMob):
             "legs": 0
         })
 
+class TexturedZombieVariant(TexturedHumanoid):
+    """
+    A zombie-like mob with a custom texture rendered by equipped items.
+    Can only use meelee attacks.
+    """
+
+    burn_in_daylight = True
+
+    base_entity = "minecraft:zombie"
+
+
+class PlayerLike(TexturedHumanoid):
+    """
+    A human-shaped mob which holds its arms down.
+    Can only use meelee attacks.
+    """
+
+    base_entity = "minecraft:piglin_brute"
+    invisible = True
+
+    is_immune_to_zombification = True
+
+    custom_sounds = {
+        "hurt": "minecraft:entity.enderman.hurt",
+        "death": "minecraft:entity.enderman.death",
+        "ambient": "minecraft:entity.enderman.ambient"
+    }
+
 
 class CustomComponents:
     def hurt_detection(mob, component):
         mob.tags.add("genesis.mob.component.hurt_detection")
         mob.attributes.append({"id":"minecraft:max_absorption","base":-3.999999999999999})
         mob.active_effects.append({"id":"minecraft:absorption","duration":-1,"show_particles":False,"show_icon":False})
+        mob.enchantments.update({"genesis:mob/component/hurt_detection": 1})
 
     def hurt_tint(mob, component):
         mob.tags.add("genesis.mob.component.hurt_tint")
@@ -234,6 +272,24 @@ class CustomComponents:
 
     def enchantments(mob, component):
         pass
+
+    def invisible(mob, component):
+        if component:
+            mob.tags.add("genesis.mob.component.invisible")
+            mob.active_effects.append({"id":"minecraft:invisibility","duration":-1,"show_particles":False,"show_icon":False})
+
+    def custom_sounds(mob, component):
+        mob.silent = True
+        mob.tags.add("genesis.mob.component.custom_sounds")
+        if "death" in component:
+            append function genesis:mob/component/custom_sounds/death:
+                execute if entity @s[tag=f"genesis.mob.{mob.id}"] run playsound component["death"] hostile @a[distance=..16] ~ ~ ~
+        if "hurt" in component:
+            append function genesis:mob/component/custom_sounds/hurt:
+                execute if entity @s[tag=f"genesis.mob.{mob.id}"] run playsound component["hurt"] hostile @a[distance=..16] ~ ~ ~
+        if "ambient" in component:
+            append function genesis:mob/component/custom_sounds/ambient:
+                execute if entity @s[tag=f"genesis.mob.{mob.id}"] run playsound component["ambient"] hostile @a[distance=..16] ~ ~ ~
 
 class VanillaComponents:
     def tags(mob, component):
@@ -260,6 +316,12 @@ class VanillaComponents:
         if len(component) == 0:
             return None
         return ("attributes", component)
+    
+    def is_immune_to_zombification(mob, component):
+        return ("IsImmuneToZombification", component)
+    
+    def silent(mob, component):
+        return ("Silent", component)
 
 vanilla_components = []
 for k in VanillaComponents.__dict__.keys():
@@ -300,7 +362,7 @@ def _get_components_and_callables_from_parents(cls):
                 callables["before_all"].append(v)
             elif getattr(v, "after_all", False):
                 callables["after_all"].append(v)
-            else:
+            elif not (v.__name__ == 'init_vanilla_components'):
                 callables["regular"].append(v)
     return (components, callables)
     
