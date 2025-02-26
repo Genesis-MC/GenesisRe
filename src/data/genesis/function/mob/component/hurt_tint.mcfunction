@@ -2,7 +2,7 @@ function ~/activate:
   item_modifier ~/ {
     "function": "minecraft:set_components",
     "components": {
-      "minecraft:dyed_color": 15371403
+      "minecraft:dyed_color": 16733537
     }
   }
   item modify entity @s armor.head ~/
