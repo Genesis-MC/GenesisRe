@@ -2,6 +2,42 @@ from genesis:player import PerPlayerStorage
 from genesis:utils import constant
 
 
+def reduce_mana_or_return(amount: int, update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
+    if score @s genesis.mana.current matches (None, amount - 1) return 0
+    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
+    scoreboard players remove @s genesis.mana.current (amount)
+    if update:
+        function #genesis:mana/changed
+        function genesis:mana/update_hud
+
+
+def reduce_mana_by_score_or_return(name: str, objective: str, update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
+    raw (f'execute if score {name} {objective} > @s genesis.mana.current run return 0')
+    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
+    raw (f'scoreboard players operation @s genesis.mana.current -= {name} {objective}')
+    if update:
+        function #genesis:mana/changed
+        function genesis:mana/update_hud
+
+
+def add_mana(amount: int, update = True):
+    scoreboard players add @s genesis.mana.current (amount)
+    scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
+    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players remove @s genesis.hud.display 1
+    if update:
+        function #genesis:mana/changed
+        function genesis:mana/update_hud
+
+
+def add_mana_by_score(name: str, objective: str, update = True):
+    raw (f'scoreboard players operation @s genesis.mana.current += {name} {objective}')
+    scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
+    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players remove @s genesis.hud.display 1
+    if update:
+        function #genesis:mana/changed
+        function genesis:mana/update_hud
+
+
 append function genesis:load:
     scoreboard objectives add genesis.mana.current dummy
     scoreboard objectives add genesis.mana.max dummy
@@ -18,14 +54,30 @@ function ~/calculate_max_mana:
     function genesis:mana/update_hud
 
 
+predicate ~/is_full {
+    "condition": "minecraft:entity_scores",
+    "entity": "this",
+    "scores": {
+        "genesis.mana.current": {
+            "min": {
+                "type": "minecraft:score",
+                "target": "this",
+                "score": "genesis.mana.max"
+            },
+            "max": {
+                "type": "minecraft:score",
+                "target": "this",
+                "score": "genesis.mana.max"
+            }
+        }
+    }
+}
+
+
 append function genesis:tick:
-    as @a unless score @s genesis.mana.current = @s genesis.mana.max function genesis:mana/tick
+    as @a[predicate=!genesis:mana/is_full] function genesis:mana/tick
 function ~/tick:
-    scoreboard players operation @s genesis.mana.current += @s genesis.stat.mana_regen
-    scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
-    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players remove @s genesis.hud.display 1
-    function #genesis:mana/changed
-    function genesis:mana/update_hud
+    add_mana_by_score('@s', 'genesis.stat.mana_regen')
 
 
 function ~/update_hud:
@@ -68,11 +120,11 @@ function ~/update_hud:
             #> GO THROUGH EACH PIXEL OF THE BAR AND ADD THE CORRECT KIND TO STORAGE
             for i in range(79):
                 ri = 79 - i
-                if score @s genesis.mana.filled_pixels matches (ri)                                                           data modify storage genesis:player self.hud[0] append value {text:"l|"}
-                if score @s genesis.mana.filled_pixels matches (ri+1, None) if score #is_notch genesis >  #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"r|"}
-                if score @s genesis.mana.filled_pixels matches (ri+1, None) if score #is_notch genesis <= #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"n|"}
-                if score @s genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis >  #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"R|"}
-                if score @s genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis <= #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"N|"}
+                if score #new genesis.mana.filled_pixels matches (ri)                                                           data modify storage genesis:player self.hud[0] append value {text:"l|"}
+                if score #new genesis.mana.filled_pixels matches (ri+1, None) if score #is_notch genesis >  #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"r|"}
+                if score #new genesis.mana.filled_pixels matches (ri+1, None) if score #is_notch genesis <= #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"n|"}
+                if score #new genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis >  #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"R|"}
+                if score #new genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis <= #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"N|"}
 
                 if score #is_notch genesis <= #next_notch genesis scoreboard players remove #next_notch genesis 39500
                 scoreboard players operation #is_notch genesis -= @s genesis.mana.max
@@ -83,21 +135,3 @@ predicate ~/is_drowning {
     "condition": "minecraft:location_check",
     "predicate": {"fluid": {"fluids": "#minecraft:water"}}
 }
-
-
-def reduce_mana_or_return(amount: int, update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
-    if score @s genesis.mana.current matches (None, amount - 1) return 0
-    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
-    scoreboard players remove @s genesis.mana.current (amount)
-    if update:
-        function #genesis:mana/changed
-        function genesis:mana/update_hud
-
-
-def reduce_mana_by_score_or_return(name: str, objective: str, update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
-    raw (f'execute if score {name} {objective} > @s genesis.mana.current run return 0')
-    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
-    raw (f'scoreboard players operation @s genesis.mana.current -= {name} {objective}')
-    if update:
-        function #genesis:mana/changed
-        function genesis:mana/update_hud
