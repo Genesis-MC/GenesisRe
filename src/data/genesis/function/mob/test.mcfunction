@@ -1,9 +1,11 @@
-from genesis:mob import genesis_mob, TexturedZombieVariant, PlayerLike, register_sounds
+from genesis:mob import genesis_mob, TexturedZombieVariant, PlayerLike, register_sounds, on_init
 
 
 @genesis_mob
 class VerdantZombie(TexturedZombieVariant):
-  pass
+  @on_init()
+  def say_hi():
+    say Hello, I'm a Verdant Zombie!
 
 @genesis_mob
 class UndeadMiner(TexturedZombieVariant):
@@ -19,6 +21,10 @@ class Pirate(PlayerLike):
       "death": "genesis:mob.pirate.death",
       "ambient": "genesis:mob.pirate.ambient"
   }
+
+  @on_init()
+  def init():
+    function genesis:mob/component/init/set_home_memory
 
   def add_sounds(mob):
     register_sounds("mob.pirate.death", ["genesis:mob/pirate/death0","genesis:mob/pirate/death1"])

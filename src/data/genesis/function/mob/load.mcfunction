@@ -1,1 +1,0 @@
-scoreboard objectives add genesis.mob.hurt_tint dummy

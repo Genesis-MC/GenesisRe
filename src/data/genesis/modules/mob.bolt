@@ -1,5 +1,7 @@
 from beet import Equipment, Texture, Model, ItemModel, Function, SoundConfig
 from PIL import Image
+from copy import deepcopy
+from operator import itemgetter
 
 def register_sounds(key, sounds):
     ctx.assets["genesis"].sound_config.merge(SoundConfig({
@@ -9,25 +11,11 @@ def register_sounds(key, sounds):
         }
     }))
 
-append function genesis:tick:
-    function genesis:mob/tick
-
-append function genesis:load:
-    function genesis:mob/load
-
 class classproperty:
     def __init__(self, func):
         self.fget = func
     def __get__(self, instance, owner):
         return self.fget(owner)
-
-def modifies_entity_data(func):
-    func.modifies_entity_data = True
-    return func
-
-def uses_entity_data(func):
-    func.uses_entity_data = True
-    return func
 
 def before_all(func):
     func.before_all = True
@@ -41,17 +29,33 @@ def genesis_mob(cls: type):
     cls.id = camel_case_to_snake_case(cls.__name__)
     cls.namespace = cls.__module__.split(":")[0]
     cls.init_vanilla_components(cls)
-    components, callables = _get_components_and_callables_from_parents(cls)
+    _, callables = _get_components_and_callables_from_parents(cls)
     _run_callables(cls, callables["before_all"])
     _run_callables(cls, callables["regular"])
-    for k, v in components.items(): 
+    components, _ = _get_components_and_callables_from_parents(cls)
+    for k, v in components.items():
         if k not in vanilla_components:
             component = CustomComponents.__dict__[k]
             component(cls, v)
     _run_callables(cls, callables["after_all"])
-
     return cls
 
+def event_decorator(func):
+    def decorator(bolt_func):
+        def run_it(p):
+            func(bolt_func, p)
+        run_it.decorator = True
+        return run_it
+    return decorator
+
+def on_init(order: int = 0):
+    @event_decorator
+    def decorator(func, mob):
+        if "on_init_funcs" in mob.__dict__:
+            mob.on_init_funcs = mob.on_init_funcs + [(func, order)]
+        else:
+            mob.on_init_funcs = [(func, order)]
+    return decorator
 
 class GenesisMob:
     def init_vanilla_components(cls):
@@ -97,6 +101,7 @@ class TexturedHumanoid(GenesisMob):
 
     hurt_detection = {}
     hurt_tint = {}
+    can_pick_up_loot = False
     lefthand_extra_item_model = None
     righthand_extra_item_model = None
 
@@ -206,18 +211,25 @@ class TexturedHumanoid(GenesisMob):
             "id": "minecraft:poisonous_potato",
             "count": 1,
             "components": {
-                "minecraft:item_model": f"{mob.namespace}:_mob/{mob.id}/skin",
+                "minecraft:item_model": f"{mob.namespace}:_mob/{mob.id}/skin"
+            }
+        }
+        pants = {
+            "id": "minecraft:poisonous_potato",
+            "count": 1,
+            "components": {
                 "minecraft:equippable": {
                     "slot": "legs",
-                    "asset_id": f"{mob.namespace}:_mob/{mob.id}"
+                    "asset_id": f"{mob.namespace}:_mob/{mob.id}",
+                    "equip_sound": {"sound_id":"none"}
                 }
             }
         }
         mob.equipment.update({
-            "mainhand": skin_item,
-            "offhand": skin_item,
-            "head": skin_item,
-            "legs": skin_item
+            "mainhand": deepcopy(skin_item),
+            "offhand": deepcopy(skin_item),
+            "head": deepcopy(skin_item),
+            "legs": pants
         })
         mob.drop_chances.update({
             "mainhand": 0,
@@ -277,6 +289,19 @@ class CustomComponents:
         if component:
             mob.tags.add("genesis.mob.component.invisible")
             mob.active_effects.append({"id":"minecraft:invisibility","duration":-1,"show_particles":False,"show_icon":False})
+    
+    def on_init_funcs(mob, component):
+        mob.enchantments.update({"genesis:mob/component/init_tick": 1})
+        component.sort(key=itemgetter(1))
+
+        path = f'{mob.namespace}:mob/mob/{mob.id}/on_init'
+
+        function path:
+            for func, _ in component:
+                func()
+        
+        append function genesis:mob/component/init/tick:
+            execute if entity @s[tag=f"genesis.mob.{mob.id}"] run function path
 
     def custom_sounds(mob, component):
         mob.silent = True
@@ -319,6 +344,9 @@ class VanillaComponents:
     
     def is_immune_to_zombification(mob, component):
         return ("IsImmuneToZombification", component)
+    
+    def can_pick_up_loot(mob, component):
+        return ("CanPickUpLoot", component)
     
     def silent(mob, component):
         return ("Silent", component)
