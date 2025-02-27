@@ -16,7 +16,7 @@ def right_click_ability(name: str, description: str, cooldown: float, mana = 0, 
 
         trailing_new_line = []
         if item.get("passives"):
-            trailing_new_line = [{"text":"","color":"white"}] #! fix when fix
+            trailing_new_line = [""]
 
         active_ability_cost_line = [{"translate":"text.genesis.active_ability","color":"dark_gray"},{"text":" [","italic":false}]
 
@@ -32,7 +32,7 @@ def right_click_ability(name: str, description: str, cooldown: float, mana = 0, 
 
         item.merge("lore",
             [
-                [{"text":"❂","color":rarity_text_color["transcendent"],"italic":false},{"text":" ","color":"white"},{"translate":trans_key,"color":"gold"}], #! fix after mc fixes bug
+                [{"text":"❂","color":rarity_text_color["transcendent"],"italic":false}," ",{"translate":trans_key,"color":"gold"}],
             ] +
             [active_ability_cost_line] +
             break_text_into_lines(
