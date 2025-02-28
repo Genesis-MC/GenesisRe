@@ -41,14 +41,6 @@ class Pirate(PlayerLike):
   @on_init()
   def init():
     function genesis:mob/component/init/set_home_memory
-  
-  @on_hurt()
-  def ow():
-    say Ouch
-  
-  @on_death()
-  def die():
-    summon skeleton
 
   def add_sounds(mob):
     register_sounds("mob.pirate.death", ["genesis:mob/pirate/death0","genesis:mob/pirate/death1"])

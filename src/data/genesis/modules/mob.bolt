@@ -1,4 +1,5 @@
 from beet import Equipment, Texture, Model, ItemModel, Function, SoundConfig, Structure
+from beet.contrib.worldgen import WorldgenTemplatePool
 from PIL import Image
 from copy import deepcopy
 from operator import itemgetter
@@ -7,10 +8,49 @@ from nbtlib import String
 
 # print(ctx.data["genesis"].structures["zombie"].data)
 
+def add_template_pool(mob: type):
+    path = f"{mob.namespace}:mob/{mob.id}"
+    ctx.data[path] = WorldgenTemplatePool({
+        "elements": [
+            {
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": path,
+                "processors": {
+                    "processors": []
+                },
+                "projection": "rigid"
+            },
+            "weight": 1
+            }
+        ],
+        "fallback": "minecraft:empty"
+    })
+
+
 def add_structure(mob: type):
     path = f"{mob.namespace}:mob/{mob.id}"
-    data = mob.entity_data.copy()
-    data["id"] = mob.base_entity
+    data = {
+        "id": "minecraft:armor_stand",
+        "NoGravity": True,
+        "Small": True,
+        "Marker": True,
+        "Invisible": True,
+        "Invulnerable": True,
+        "equipment": {
+            "feet": {
+                "id": "minecraft:poisonous_potato",
+                "components": {
+                    "minecraft:enchantments": {"genesis:worldgen/run_command": 1},
+                    "minecraft:custom_data": {
+                        "command": f"function {mob.namespace}:mob/summon/{mob.id}"
+                    }
+                }
+            }
+        }
+    }
+    # data = mob.entity_data.copy()
+    # data["id"] = mob.base_entity
     ctx.data[path] = Structure(to_nbt({
         "size":[1,1,1],
         "entities": [
@@ -140,6 +180,7 @@ class GenesisMob:
             summon mob.base_entity ~ ~ ~ mob.entity_data
 
         add_structure(mob)
+        add_template_pool(mob)
     
     @classproperty
     def entity_data(cls):
