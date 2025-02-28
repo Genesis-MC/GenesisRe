@@ -1,5 +1,6 @@
 from genesis:mapping import char_width
 from beet import Language
+from nbtlib import String, Int, Byte, Double, List, Compound
 
 
 def add_translation(key: str, value: str):
@@ -93,3 +94,29 @@ def camel_case_to_snake_case(s: str):
     while '__' in out:
         out = out.replace('__','_')
     return out
+
+def to_nbt(obj):
+    def r(v):
+        t = type(v)
+        if t == dict:
+            o = {}
+            for k, dv in v.items():
+                o[k] = r(dv)
+            return Compound(o)
+        if t == list:
+            l = []
+            for li in v:
+                l.append(r(li))
+            return List[type(l[0])](l)
+        if t == str:
+            return String(v)
+        if t == int:
+            return Int(v)
+        if t == float:
+            return Double(v)
+        if t == bool:
+            if v:
+                return Byte(1)
+            return Byte(0)
+        raise RuntimeError(f"Type '{t}' is not supported")
+    return r(obj)

@@ -1,4 +1,4 @@
-from genesis:mob import genesis_mob, TexturedZombieVariant, PlayerLike, register_sounds, on_init
+from genesis:mob import genesis_mob, TexturedZombieVariant, PlayerLike, register_sounds, on_init, on_hurt, on_death
 
 
 @genesis_mob
@@ -17,14 +17,38 @@ class UndeadMiner(TexturedZombieVariant):
 @genesis_mob
 class Pirate(PlayerLike):
   custom_sounds = {
-      "hurt": "genesis:mob.pirate.hurt",
-      "death": "genesis:mob.pirate.death",
-      "ambient": "genesis:mob.pirate.ambient"
+    "hurt": "genesis:mob.pirate.hurt",
+    "death": "genesis:mob.pirate.death",
+    "ambient": "genesis:mob.pirate.ambient"
+  }
+
+  name = "Pirate"
+
+  loot_table = {
+    "pools": [
+      {
+        "rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "name": "minecraft:gold_ingot"
+          }
+        ]
+      }
+    ]
   }
 
   @on_init()
   def init():
     function genesis:mob/component/init/set_home_memory
+  
+  @on_hurt()
+  def ow():
+    say Ouch
+  
+  @on_death()
+  def die():
+    summon skeleton
 
   def add_sounds(mob):
     register_sounds("mob.pirate.death", ["genesis:mob/pirate/death0","genesis:mob/pirate/death1"])
