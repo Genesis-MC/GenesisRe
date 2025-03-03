@@ -8,11 +8,25 @@ from genesis:mapping import item_display_uuid
 from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
+# IronGreatsword
+@add_custom_recipe([
+    ["air", "iron_ingot", "air"],
+    ["iron_ingot", "iron_ingot", "iron_ingot"],
+    ["air", "stick", "air"],
+])
 
-@add_custom_recipe([ #! not the correct recipe, ingredients are still missing
-    [ None       ,"iron_ingot", None       ],
-    ["iron_ingot","iron_ingot","iron_ingot"],
-    [ None       ,"stick"     , None       ],
+# OvergrownGreatsword
+@add_custom_recipe([
+    ["air", VerdantTwig, "air"],
+    [VerdantTwig, "iron_block", VerdantTwig],
+    ["air", SteelHilt, "air"],
+])
+
+# Zweihander
+@add_custom_recipe([
+    ["air", MetalAlloy, "air"],
+    [MetalAlloy, MetalAlloy, MetalAlloy],
+    ["air", SteelHilt, "air"],
 ])
 @add_loot_table
 @bolt_item
@@ -30,3 +44,10 @@ class Zweihander(GenesisItem):
     )
     def stance_swap_onslaught():
         say swapping stance #! TODO: Implement
+
+# EverfrostTitanblade
+@add_custom_recipe([
+    [HarbingerOfWinter, EverfrostCore, HarbingerOfWinter],
+    [HarbingerOfWinter, EverfrostCore, HarbingerOfWinter],
+    ["air", BejeweledHilt, "air"],
+])

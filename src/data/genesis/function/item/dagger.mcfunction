@@ -12,25 +12,60 @@ from genesis:item import GenesisItem
 from genesis:item/ingredient import ShadeFlux
 
 
+# IronDagger
 @add_custom_recipe([
-    [ None  , None       ,"iron_ingot"],
-    [ None  ,"iron_ingot", None       ],
-    ["stick", None       , None       ],
+    ["iron_ingot", "air", "air"],
+    ["air", "iron_ingot", "air"],
+    ["air", "air", "stick"],
+])
+# IronDagger
+@add_custom_recipe([
+    ["air", "air", "iron_ingot"],
+    ["air", "iron_ingot", "air"],
+    ["stick", "air", "air"],
 ])
 @add_loot_table
 @bolt_item
 class IronDagger(GenesisItem):
-    item_name = ("Iron Dagger", {})
+    item_name = ("Iron Dagger", {"color":"white"})
     rarity = "common"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":35,"attack_speed":100})
     item_model = texture_path_to_item_model("genesis:item/dagger/iron_dagger", True)
 
-
+# ObsidianBlade
 @add_custom_recipe([
-    [ShadeFlux,ShadeFlux ,ShadeFlux],
-    [ShadeFlux,IronDagger,ShadeFlux],
-    [ShadeFlux,ShadeFlux ,ShadeFlux],
+    ["air", "air", "obsidian"],
+    ["air", "obsidian", "air"],
+    [SteelHilt, "air", "air"],
+])
+
+# FadingDusk
+@add_custom_recipe([
+    [ShadeFlux, ShadeFlux, ShadeFlux],
+    ["obsidian", ObsidianBlade, "obsidian"],
+    [ShadeFlux, ShadeFlux, ShadeFlux],
+])
+
+# Frostfang
+@add_custom_recipe([
+    [BlizzardTear, BlizzardTear, BlizzardTear],
+    [BlizzardTear, WolfFang, BlizzardTear],
+    [BlizzardTear, BlizzardTear, BlizzardTear],
+])
+
+# HarbingerOfWinter
+@add_custom_recipe([
+    ["air", "air", Frostfang],
+    ["air", Frostfang, "air"],
+    [SteelHilt, "air", "air"],
+])
+
+# ShadedDagger
+@add_custom_recipe([
+    [ShadeFlux, ShadeFlux, ShadeFlux],
+    [ShadeFlux, IronDagger, ShadeFlux],
+    [ShadeFlux, ShadeFlux, ShadeFlux],
 ])
 @add_loot_table
 @bolt_item
@@ -41,11 +76,32 @@ class ShadedDagger(GenesisItem):
     stats = ("mainhand", {"physical_power":40,"attack_speed":100,"speed":15})
     item_model = texture_path_to_item_model("genesis:item/dagger/shaded_dagger", True)
 
-
+# VoidRazor
 @add_custom_recipe([
-    ["echo_shard" ,"snowball"   ,"echo_shard" ],
-    ["ender_pearl", ShadedDagger,"ender_pearl"],
-    ["echo_shard" ,"snowball"   ,"echo_shard" ],
+    [VoidedFragment, "crying_obsidian", VoidedFragment],
+    [ShadedEnderPearl, ShadedDagger, ShadedEnderPearl],
+    [VoidedFragment, "crying_obsidian", VoidedFragment],
+])
+
+# Vorpol
+@add_custom_recipe([
+    [ShardOfTheCrimsonAbyss, PyroclasticCore, ShardOfTheWarpedEmpyrean],
+    [VoidedEnderPearl, VoidRazor, VoidedEnderPearl],
+    [ShardOfTheWarpedEmpyrean, PyroclasticCore, ShardOfTheCrimsonAbyss],
+])
+
+# Vescherum
+@add_custom_recipe([
+    [ShardOfTheCrimsonAbyss, LivingwoodCore, ShardOfTheCrimsonAbyss],
+    [VoidedEnderPearl, VoidRazor, VoidedEnderPearl],
+    [ShardOfTheCrimsonAbyss, LivingwoodCore, ShardOfTheCrimsonAbyss],
+])
+
+# Visharp
+@add_custom_recipe([
+    [ShardOfTheWarpedEmpyrean, EverfrostCore, ShardOfTheWarpedEmpyrean],
+    [VoidedEnderPearl, VoidRazor, VoidedEnderPearl],
+    [ShardOfTheWarpedEmpyrean, EverfrostCore, ShardOfTheWarpedEmpyrean],
 ])
 @add_loot_table
 @bolt_item
@@ -55,7 +111,6 @@ class Visharp(GenesisItem):
     category = ["void", "dagger"]
     stats = ("mainhand", {"physical_power":60,"attack_speed":110})
     item_model = texture_path_to_item_model("genesis:item/dagger/visharp", True)
-
     @right_click_ability(
         name = "Voidrend",
         description = "Teleport up to 5 blocks ahead of you and deal 40% Physical Power to opponents in a 3-block radius from your initial position",
