@@ -8,13 +8,23 @@ from genesis:mapping import item_display_uuid
 from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
+#! add passives and imports
 
 # HunterVest
-#@add_custom_recipe([
-#    [Tag:["#minecraft:woo, Tag:["#minecraft:woo, Tag:["#minecraft:woo],
-#    [Tag:["#minecraft:woo, "leather_chestplate", Tag:["#minecraft:woo],
-#    [Tag:["#minecraft:woo, Tag:["#minecraft:woo, Tag:["#minecraft:woo],
-#])
+@add_custom_recipe([
+    ["#wool", "#wool", "#wool"],
+    ["#wool", "leather_chestplate", "#wool"],
+    ["#wool", "#wool", "#wool"],
+])
+@add_loot_table
+@bolt_item
+class HuntersVest(GenesisItem):
+    item_name = ("Hunters Vest", {"color":"white"})
+    rarity = "common"
+    category = ["chestplate"]
+    stats = ("chest", {"armor":50,"speed":10})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/hunters_vest", True)
+    equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # RangerVest
 @add_custom_recipe([
@@ -22,6 +32,15 @@ from genesis:item import GenesisItem
     [BoarHide, HunterVest, BoarHide],
     [BoarHide, BoarHide, BoarHide],
 ])
+@add_loot_table
+@bolt_item
+class RangersVest(GenesisItem):
+    item_name = ("Rangers Vest", {"color":"white"})
+    rarity = "uncommon"
+    category = ["chestplate"]
+    stats = ("chest", {"armor":60,"speed":15})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/rangers_vest", True)
+    equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # PlainstreaderBoots
 @add_custom_recipe([
@@ -29,6 +48,15 @@ from genesis:item import GenesisItem
     ["short_grass", "leather_boots", "short_grass"],
     ["short_grass", "short_grass", "short_grass"],
 ])
+@add_loot_table
+@bolt_item
+class PlainstreaderBoots(GenesisItem):
+    item_name = ("Plainstreader Boots", {"color":"white"})
+    rarity = "common"
+    category = ["boots"]
+    stats = ("feet", {"armor":5,"speed":5})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/plainstreaderboots", True)
+    equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # ForesttreaderBoots
 @add_custom_recipe([
@@ -36,6 +64,15 @@ from genesis:item import GenesisItem
     [VerdantTwig, PlainstreaderBoots, VerdantTwig],
     [VerdantTwig, VerdantTwig, VerdantTwig],
 ])
+@add_loot_table
+@bolt_item
+class ForesttreaderBoots(GenesisItem):
+    item_name = ("Foresttreader Boots", {"color":"green"})
+    rarity = "uncommon"
+    category = ["boots"]
+    stats = ("feet", {"armor":10,"speed":30})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/foresttreaderboots", True)
+    equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # MountaintreaderBoots
 @add_custom_recipe([
@@ -43,6 +80,15 @@ from genesis:item import GenesisItem
     [BlizzardTear, ForesttreaderBoots, BlizzardTear],
     [BlizzardTear, BlizzardTear, BlizzardTear],
 ])
+@add_loot_table
+@bolt_item
+class MountaintreaderBoots(GenesisItem):
+    item_name = ("Mountaintreader Boots", {"color":"gray"})
+    rarity = "rare"
+    category = ["boots"]
+    stats = ("feet", {"armor":15,"speed":90})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/mountaintreaderboots", True)
+    equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # PhantomtreaderBoots
 @add_custom_recipe([
@@ -50,6 +96,15 @@ from genesis:item import GenesisItem
     [VoidedFragment, MountaintreaderBoots, VoidedFragment],
     [VoidedFragment, VoidedFragment, VoidedFragment],
 ])
+@add_loot_table
+@bolt_item
+class PhantomtreaderBoots(GenesisItem):
+    item_name = ("Phantomtreader Boots", {"color":"dark_purple"})
+    rarity = "epic"
+    category = ["boots"]
+    stats = ("feet", {"armor":20,"speed":150})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/phantomtreaderboots", True)
+    equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # CloudtreaderBoots
 @add_custom_recipe([
@@ -57,6 +112,15 @@ from genesis:item import GenesisItem
     [CrystalScale, PhantomtreaderBoots, CrystalScale],
     [CrystalScale, CrystalScale, CrystalScale],
 ])
+@add_loot_table
+@bolt_item
+class CloudtreaderBoots(GenesisItem):
+    item_name = ("Cloudtreader Boots", {"color":"white"})
+    rarity = "legendary"
+    category = ["boots"]
+    stats = ("feet", {"armor":25,"speed":200})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/cloudtreaderboots", True)
+    equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # TerratreaderBoots
 @add_custom_recipe([
@@ -64,6 +128,15 @@ from genesis:item import GenesisItem
     [TerraclodPearl, CloudtreaderBoots, TerraclodPearl],
     [TerraclodPearl, TerraclodPearl, TerraclodPearl],
 ])
+@add_loot_table
+@bolt_item
+class TerratreaderBoots(GenesisItem):
+    item_name = ("Terratreader Boots", {"color":"gold"})
+    rarity = "mythical"
+    category = ["boots"]
+    stats = ("feet", {"armor":25,"speed":250})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/terratreaderboots", True)
+    equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # HelmetOfTheLancerKnight
 @add_custom_recipe([
@@ -71,6 +144,15 @@ from genesis:item import GenesisItem
     ["gold_ingot", PriarieGuardsHelmet, "gold_ingot"],
     ["air", MetalAlloy, "air"],
 ])
+@add_loot_table
+@bolt_item
+class HelmetOfTheLancerKnight(GenesisItem):
+    item_name = ("Helmet Of The Lancer Knight", {"color":"white"})
+    rarity = "rare"
+    category = ["helmet"]
+    stats = ("head", {"armor_toughness":70})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/helmet_of_the_lancer_knight", True)
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # WitchsRobe
 @add_custom_recipe([
@@ -78,6 +160,15 @@ from genesis:item import GenesisItem
     [Cloth, "black_dye", Cloth],
     [Cloth, ArcaneCloth, Cloth],
 ])
+@add_loot_table
+@bolt_item
+class WitchsRobe(GenesisItem):
+    item_name = ("Witch's Robe", {"color":"dark_purple"})
+    rarity = "rare"
+    category = ["chestplate"]
+    stats = ("chest", {"physical_power":-20,"armor":40,"mana_pool":20,"mana_regen":10})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/witchs_robe", True)
+    equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # CrystalCirclet
 @add_custom_recipe([
@@ -85,6 +176,15 @@ from genesis:item import GenesisItem
     [CrystalScale, "diamond_helmet", CrystalScale],
     ["air", CrystalScale, "air"],
 ])
+@add_loot_table
+@bolt_item
+class CrystalCirclet(GenesisItem):
+    item_name = ("Crystal Circlet", {"color":"aqua"})
+    rarity = "epic"
+    category = ["helmet"]
+    stats = ("head", {"magic_power":25,"attack_speed":10,"armor":30,"armor_toughness":10})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/crystal_circlet", True)
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # GhastlyChestplate
 @add_custom_recipe([
@@ -92,6 +192,15 @@ from genesis:item import GenesisItem
     ["ghast_tear", MetalAlloy, "ghast_tear"],
     ["ghast_tear", "ghast_tear", "ghast_tear"],
 ])
+@add_loot_table
+@bolt_item
+class GhastlyChestplate(GenesisItem):
+    item_name = ("Ghastly Chestplate", {"color":"white"})
+    rarity = "rare"
+    category = ["chestplate"]
+    stats = ("chest", {"armor":65})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/ghastly_chestplate", True)
+    equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # EtherealChestplate
 @add_custom_recipe([
@@ -103,11 +212,11 @@ from genesis:item import GenesisItem
 @bolt_item
 class EtherealChestplate(GenesisItem):
     item_name = ("Ethereal Chestplate", {"color":"dark_aqua"})
-    item_model = "diamond_chestplate" #! use custom texture instead
-    equippable = {"slot":"chest","asset_id":"minecraft:diamond"} #! use custom texture instead
-    stats = ("chest", {"armor":80,"armor_toughness":10})
-    category = ["chestplate"]
     rarity = "epic"
+    category = ["chestplate"]
+    stats = ("chest", {"armor":80,"armor_toughness":10})
+    item_model = "diamond_chestplate"
+    equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
     passives = [{
         "name": "Steadfast",
         "description": "Every 12 seconds, after taking damage, gain +100 Knockback Resistance for 5 seconds.",
@@ -116,3 +225,179 @@ class EtherealChestplate(GenesisItem):
     @on_attacked(full_slot = 'armor.chest')
     def gain_knockback_resistance():
         say NOT IMPLEMENTED YET #! can be added when passive cooldown is a thing
+
+# BlackMarketBoots
+@add_loot_table
+@bolt_item
+class BlackMarketBoots(GenesisItem):
+    item_name = ("Black Market Boots", {"color":"white"})
+    rarity = "uncommon"
+    category = ["boots"]
+    stats = ("feet", {"armor":5,"speed":-50,"luck":10})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/black_market_boots", True)
+    equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
+
+# PriarieGuardsHelmet
+@add_loot_table
+@bolt_item
+class PriarieGuardsHelmet(GenesisItem):
+    item_name = ("Priarie Guards Helmet", {"color":"white"})
+    rarity = "uncommon"
+    category = ["helmet"]
+    stats = ("head", {"armor_toughness":35})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/priarie_guards_helmet", True)
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
+
+# NomadicShawl
+@add_loot_table
+@bolt_item
+class NomadicShawl(GenesisItem):
+    item_name = ("Nomadic Shawl", {"color":"white"})
+    rarity = "common"
+    category = ["chestplate"]
+    stats = ("chest", {"armor":30,"armor_toughness":-10,"speed":25})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/nomadic_shawl", True)
+    equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
+
+# PatchedTrousers
+@add_loot_table
+@bolt_item
+class PatchedTrousers(GenesisItem):
+    item_name = ("Patched Trousers", {"color":"white"})
+    rarity = "common"
+    category = ["leggings"]
+    stats = ("leg", {"armor":30})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/patched_trousers", True)
+    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+
+# IgneousHelmet
+@add_loot_table
+@bolt_item
+class IgneousHelmet(GenesisItem):
+    item_name = ("Igneous Helmet", {"color":"gray"})
+    rarity = "rare"
+    category = ["helmet"]
+    stats = ("head", {"armor":40,"armor_toughness":20,"knockback_resistance":20,"speed":-20})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/igneous_helmet", True)
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
+
+# Heartguard
+@add_loot_table
+@bolt_item
+class Heartguard(GenesisItem):
+    item_name = ("Heartguard", {"color":"red"})
+    rarity = "epic"
+    category = ["chestplate"]
+    stats = ("chest", {"health":200})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/heartguard", True)
+    equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
+
+# BlueSpaceHelmet
+@add_loot_table
+@bolt_item
+class BlueSpacehelmet(GenesisItem):
+    item_name = ("Blue Spacehelmet", {"color":"blue"})
+    rarity = "rare"
+    category = ["helmet"]
+    stats = ("head", {"armor":30,"armor_toughness":10})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/blue_spacehelmet", True)
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
+
+# GreenSpaceHelmet
+@add_loot_table
+@bolt_item
+class GreenSpacehelmet(GenesisItem):
+    item_name = ("Green Spacehelmet", {"color":"green"})
+    rarity = "rare"
+    category = ["helmet"]
+    stats = ("head", {"armor":30,"armor_toughness":10})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/green_spacehelmet", True)
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
+
+# PinkSpaceHelmet
+@add_loot_table
+@bolt_item
+class PinkSpacehelmet(GenesisItem):
+    item_name = ("Pink Spacehelmet", {"color":"light_purple"})
+    rarity = "rare"
+    category = ["helmet"]
+    stats = ("head", {"armor":30,"armor_toughness":10})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/pink_spacehelmet", True)
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
+
+# RedSpaceHelmet
+@add_loot_table
+@bolt_item
+class RedSpacehelmet(GenesisItem):
+    item_name = ("Red Spacehelmet", {"color":"red"})
+    rarity = "rare"
+    category = ["helmet"]
+    stats = ("head", {"armor":30,"armor_toughness":10})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/red_spacehelmet", True)
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
+
+# YellowSpaceHelmet
+@add_loot_table
+@bolt_item
+class YellowSpacehelmet(GenesisItem):
+    item_name = ("Yellow Spacehelmet", {"color":"yellow"})
+    rarity = "rare"
+    category = ["helmet"]
+    stats = ("head", {"armor":30,"armor_toughness":10})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/yellow_spacehelmet", True)
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
+
+# TreantTrousers
+@add_loot_table
+@bolt_item
+class TreantTrousers(GenesisItem):
+    item_name = ("Treant Trousers", {"color":"green"})
+    rarity = "rare"
+    category = ["leggings"]
+    stats = ("leg", {"attack_speed":-8,"armor":50,"armor_toughness":10,"knockback_resistance":15})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/treant_trousers", True)
+    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+
+# PerfectStrategy
+@add_loot_table
+@bolt_item
+class PerfectStrategy(GenesisItem):
+    item_name = ("Perfect Strategy", {"color":"white"})
+    rarity = "epic"
+    category = ["chestplate"]
+    stats = ("chest", {"health":200,"armor":-500})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/Perfect Strategy", True)
+    equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
+
+# Dunestride
+@add_loot_table
+@bolt_item
+class Dunestride(GenesisItem):
+    item_name = ("Dunestride", {"color":"gold"})
+    rarity = "rare"
+    category = ["leggings","elemental"]
+    stats = ("leg", {"magic_power":20,"armor":50,"armor_toughness":20,"mana_pool":30})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/dunestride", True)
+    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+
+# Atmosphere
+@add_loot_table
+@bolt_item
+class Atmosphere(GenesisItem):
+    item_name = ("Atmosphere", {"color":"aqua"})
+    rarity = "epic"
+    category = ["helmet","elemental"]
+    stats = ("head", {"armor":20,"mana_pool":60,"ability_haste":5})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/atmosphere", True)
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
+
+# CowlOfTheOverseer
+@add_loot_table
+@bolt_item
+class CowlOfTheOverseer(GenesisItem):
+    item_name = ("CowlOfTheOverseer", {"color":"dark_red"})
+    rarity = "legendary"
+    category = ["helmet"]
+    stats = ("head", {"armor":30,"mana_pool":70,"ability_haste":10})
+    item_model = texture_path_to_item_model("genesis:item/armorpiece/cowl_of_the_overseer", True)
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}

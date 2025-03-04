@@ -14,12 +14,6 @@ from genesis:item/ingredient import ShadeFlux
 
 # IronDagger
 @add_custom_recipe([
-    ["iron_ingot", "air", "air"],
-    ["air", "iron_ingot", "air"],
-    ["air", "air", "stick"],
-])
-# IronDagger
-@add_custom_recipe([
     ["air", "air", "iron_ingot"],
     ["air", "iron_ingot", "air"],
     ["stick", "air", "air"],
@@ -33,26 +27,20 @@ class IronDagger(GenesisItem):
     stats = ("mainhand", {"physical_power":35,"attack_speed":100})
     item_model = texture_path_to_item_model("genesis:item/dagger/iron_dagger", True)
 
-# ObsidianBlade
-@add_custom_recipe([
-    ["air", "air", "obsidian"],
-    ["air", "obsidian", "air"],
-    [SteelHilt, "air", "air"],
-])
-
-# FadingDusk
-@add_custom_recipe([
-    [ShadeFlux, ShadeFlux, ShadeFlux],
-    ["obsidian", ObsidianBlade, "obsidian"],
-    [ShadeFlux, ShadeFlux, ShadeFlux],
-])
-
 # Frostfang
 @add_custom_recipe([
     [BlizzardTear, BlizzardTear, BlizzardTear],
     [BlizzardTear, WolfFang, BlizzardTear],
     [BlizzardTear, BlizzardTear, BlizzardTear],
 ])
+@add_loot_table
+@bolt_item
+class Frostfang(GenesisItem):
+    item_name = ("Frostfang", {"color":"aqua"})
+    rarity = "uncommon"
+    category = ["dagger"]
+    stats = ("mainhand", {"physical_power":25,"attack_speed":100})
+    item_model = texture_path_to_item_model("genesis:item/dagger/frostfang", True)
 
 # HarbingerOfWinter
 @add_custom_recipe([
@@ -60,6 +48,14 @@ class IronDagger(GenesisItem):
     ["air", Frostfang, "air"],
     [SteelHilt, "air", "air"],
 ])
+@add_loot_table
+@bolt_item
+class HarbingerOfWinter(GenesisItem):
+    item_name = ("Harbinger Of Winter", {"color":"aqua"})
+    rarity = "rare"
+    category = ["dagger"]
+    stats = ("mainhand", {"physical_power":30,"attack_speed":120,"speed":30})
+    item_model = texture_path_to_item_model("genesis:item/dagger/harbinger_of_winter", True)
 
 # ShadedDagger
 @add_custom_recipe([
@@ -82,6 +78,14 @@ class ShadedDagger(GenesisItem):
     [ShadedEnderPearl, ShadedDagger, ShadedEnderPearl],
     [VoidedFragment, "crying_obsidian", VoidedFragment],
 ])
+@add_loot_table
+@bolt_item
+class VoidRazor(GenesisItem):
+    item_name = ("Void Razor", {"color":"dark_purple"})
+    rarity = "epic"
+    category = ["void", "dagger"]
+    stats = ("mainhand", {"physical_power":45,"attack_speed":110,"speed":25})
+    item_model = texture_path_to_item_model("genesis:item/dagger/void_razor", True)
 
 # Vorpol
 @add_custom_recipe([
@@ -89,6 +93,21 @@ class ShadedDagger(GenesisItem):
     [VoidedEnderPearl, VoidRazor, VoidedEnderPearl],
     [ShardOfTheWarpedEmpyrean, PyroclasticCore, ShardOfTheCrimsonAbyss],
 ])
+@add_loot_table
+@bolt_item
+class Vorpol(GenesisItem):
+    item_name = ("Vorpol", {"color":"light_purple"})
+    rarity = "legendary"
+    category = ["void", "dagger"]
+    stats = ("mainhand", {"physical_power":50,"attack_speed":100,"speed":100})
+    item_model = texture_path_to_item_model("genesis:item/dagger/vorpol", True)
+    @right_click_ability(
+        name = "blitzkrieg",
+        description = ,
+        mana = ,
+        cooldown = ,
+    )
+    def blitzkrieg():
 
 # Vescherum
 @add_custom_recipe([
@@ -96,6 +115,21 @@ class ShadedDagger(GenesisItem):
     [VoidedEnderPearl, VoidRazor, VoidedEnderPearl],
     [ShardOfTheCrimsonAbyss, LivingwoodCore, ShardOfTheCrimsonAbyss],
 ])
+@add_loot_table
+@bolt_item
+class Vescherum(GenesisItem):
+    item_name = ("Vescherum", {"color":"light_purple"})
+    rarity = "legendary"
+    category = ["void", "dagger"]
+    stats = ("mainhand", {"physical_power":50,"attack_speed":110,"armor_toughness":60,"speed":30})
+    item_model = texture_path_to_item_model("genesis:item/dagger/vescherum", True)
+    @right_click_ability(
+        name = "hallowed_field",
+        description = ,
+        mana = ,
+        cooldown = ,
+    )
+    def hallowed_field():
 
 # Visharp
 @add_custom_recipe([
@@ -124,3 +158,60 @@ class Visharp(GenesisItem):
             $execute as @e[distance=..3,tag=!genesis.caster] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
         tag @s remove genesis.caster
         tp ^ ^ ^5 #! This is obviously not final lol
+
+# Hook
+@add_loot_table
+@bolt_item
+class Hook(GenesisItem):
+    item_name = ("Hook", {"color":"white"})
+    rarity = "uncommon"
+    category = ["dagger"]
+    stats = ("mainhand", {"physical_power":35,"attack_speed":110,"luck":10})
+    item_model = texture_path_to_item_model("genesis:item/dagger/hook", True)
+
+# LadyLuck
+@add_loot_table
+@bolt_item
+class LadyLuck(GenesisItem):
+    item_name = ("LadyLuck", {"color":"gold"})
+    rarity = "mythical"
+    category = ["dagger"]
+    stats = ("mainhand", {"physical_power":30,"attack_speed":130,"luck":50})
+    item_model = texture_path_to_item_model("genesis:item/dagger/lady_luck", True)
+
+# VermillionGlove
+@add_loot_table
+@bolt_item
+class VermillionGlove(GenesisItem):
+    item_name = ("Vermillion Glove", {"color":"dark_red"})
+    rarity = "uncommon"
+    category = ["dagger"]
+    stats = ("mainhand", {"physical_power":45,"attack_speed":100})
+    item_model = texture_path_to_item_model("genesis:item/dagger/vermillion_glove", True)
+
+# CrystalMoon
+@add_loot_table
+@bolt_item
+class CrystalMoon(GenesisItem):
+    item_name = ("Crystal Moon", {"color":"white"})
+    rarity = "rare"
+    category = ["dagger"]
+    stats = ("mainhand", {"physical_power":30,"attack_speed":100,"armor_toughness":-20,"mana_regen":5})
+    item_model = texture_path_to_item_model("genesis:item/dagger/crystal_moon", True)
+
+# PrismDagger
+@add_loot_table
+@bolt_item
+class PrismDagger(GenesisItem):
+    item_name = ("Prism Dagger", {"color":"light_purple"})
+    rarity = "epic"
+    category = ["dagger"]
+    stats = ("mainhand", {"physical_power":50,"magic_power":100,"attack_speed":105,"mana_regen":10})
+    item_model = texture_path_to_item_model("genesis:item/dagger/prism_dagger", True)
+    @right_click_ability(
+        name = "prism_shatter",
+        description = ,
+        mana = ,
+        cooldown = ,
+    )
+    def prism_shatter():

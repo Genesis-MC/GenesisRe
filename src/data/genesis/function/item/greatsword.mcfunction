@@ -14,6 +14,14 @@ from genesis:item import GenesisItem
     ["iron_ingot", "iron_ingot", "iron_ingot"],
     ["air", "stick", "air"],
 ])
+@add_loot_table
+@bolt_item
+class IronGreatsword(GenesisItem):
+    item_name = ("Iron Greatsword", {"color":"white"})
+    rarity = "common"
+    category = ["greatsword"]
+    stats = ("mainhand", {"physical_power":110,"attack_speed":38})
+    item_model = texture_path_to_item_model("genesis:item/greatsword/iron_greatsword", True)
 
 # OvergrownGreatsword
 @add_custom_recipe([
@@ -21,6 +29,14 @@ from genesis:item import GenesisItem
     [VerdantTwig, "iron_block", VerdantTwig],
     ["air", SteelHilt, "air"],
 ])
+@add_loot_table
+@bolt_item
+class OvergrownGreatsword(GenesisItem):
+    item_name = ("OvergrownGreatsword", {"color":"green"})
+    rarity = "uncommon"
+    category = ["greatsword"]
+    stats = ("mainhand", {"physical_power":125,"attack_speed":40,"health":40})
+    item_model = texture_path_to_item_model("genesis:item/greatsword/overgrown_greatsword", True)
 
 # Zweihander
 @add_custom_recipe([
@@ -51,3 +67,55 @@ class Zweihander(GenesisItem):
     [HarbingerOfWinter, EverfrostCore, HarbingerOfWinter],
     ["air", BejeweledHilt, "air"],
 ])
+@add_loot_table
+@bolt_item
+class EverfrostTitanblade(GenesisItem):
+    item_name = ("Everfrost Titanblade", {"color":"aqua"})
+    rarity = "legendary"
+    category = ["greatsword"]
+    stats = ("mainhand", {"physical_power":150,"attack_speed":30,"mana_pool":20,"mana_regen":5,"speed":-50})
+    item_model = texture_path_to_item_model("genesis:item/greatsword/everfrost_titanblade", True)
+    @right_click_ability(
+        name = "polar_vortex",
+        description = ,
+        mana = ,
+        cooldown = ,
+    )
+    def polar_vortex():
+
+# SwashbucklersGlory
+@add_loot_table
+@bolt_item
+class SwashbucklersGlory(GenesisItem):
+    item_name = ("Swashbucklers Glory", {"color":"blue"})
+    rarity = "epic"
+    category = ["greatsword"]
+    stats = ("mainhand", {"physical_power":140,"attack_speed":35,"armor_toughness":30})
+    item_model = texture_path_to_item_model("genesis:item/greatsword/swashbucklers_glory", True)
+    @right_click_ability(
+        name = "cleave2",
+        description = ,
+        mana = ,
+        cooldown = ,
+    )
+    def cleave2():
+    
+# RoyalCleaver
+@add_loot_table
+@bolt_item
+class RoyalCleaver(GenesisItem):
+    item_name = ("Royal Cleaver", {"color":"gold"})
+    rarity = "epic"
+    category = ["greatsword"]
+    stats = ("mainhand", {"physical_power":150,"attack_speed":40,"armor":30,"knockback_resistance":30,"mana_regen":-10,"speed":-25})
+    item_model = texture_path_to_item_model("genesis:item/greatsword/royal_cleaver", True)
+
+# Exetol
+@add_loot_table
+@bolt_item
+class Exetol(GenesisItem):
+    item_name = ("Exetol", {"color":"red"})
+    rarity = "legendary"
+    category = ["greatsword"]
+    stats = ("mainhand", {"physical_power":150,"attack_speed":40})
+    item_model = texture_path_to_item_model("genesis:item/greatsword/exetol", True)
