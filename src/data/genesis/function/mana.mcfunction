@@ -112,23 +112,23 @@ function ~/update_hud:
                 shadow_color: 0,
             }]
             #> SET UP VALUES FOR PLACING THE NOTCHES CORRECTLY
-            scoreboard players set #is_notch genesis 79
-            scoreboard players operation #is_notch genesis *= @s genesis.mana.max
+            scoreboard players set #is_notch genesis 0
             scoreboard players set #next_notch genesis 79
             scoreboard players operation #next_notch genesis *= @s genesis.mana.max
-            scoreboard players remove #next_notch genesis 39500
+            scoreboard players operation #next_notch genesis %= constant(39500) genesis
             #> GO THROUGH EACH PIXEL OF THE BAR AND ADD THE CORRECT KIND TO STORAGE
             for i in range(79):
                 ri = 79 - i
-                if score #new genesis.mana.filled_pixels matches (ri)                                                           data modify storage genesis:player self.hud[0] append value {text:"l|"}
-                if score #new genesis.mana.filled_pixels matches (ri+1, None) if score #is_notch genesis >  #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"r|"}
-                if score #new genesis.mana.filled_pixels matches (ri+1, None) if score #is_notch genesis <= #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"n|"}
-                if score #new genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis >  #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"R|"}
-                if score #new genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis <= #next_notch genesis data modify storage genesis:player self.hud[0] append value {text:"N|"}
+                if score #new genesis.mana.filled_pixels matches (ri)                                                           data modify storage genesis:player self.hud[0] append value "l|"
+                if score #new genesis.mana.filled_pixels matches (ri+1, None) if score #is_notch genesis <= #next_notch genesis data modify storage genesis:player self.hud[0] append value "r|"
+                if score #new genesis.mana.filled_pixels matches (ri+1, None) if score #is_notch genesis >  #next_notch genesis data modify storage genesis:player self.hud[0] append value "n|"
+                if score #new genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis <= #next_notch genesis data modify storage genesis:player self.hud[0] append value "R|"
+                if score #new genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis >  #next_notch genesis data modify storage genesis:player self.hud[0] append value "N|"
 
-                if score #is_notch genesis <= #next_notch genesis scoreboard players remove #next_notch genesis 39500
-                scoreboard players operation #is_notch genesis -= @s genesis.mana.max
-            data modify storage genesis:player self.hud[0] append value {text:"Bb-"}
+                if score #is_notch genesis >= #next_notch genesis say (i)
+                if score #is_notch genesis >= #next_notch genesis scoreboard players add #next_notch genesis 39500
+                scoreboard players operation #is_notch genesis += @s genesis.mana.max
+            data modify storage genesis:player self.hud[0] append value "Bb-"
 
 
 predicate ~/is_drowning {
