@@ -1,6 +1,6 @@
 #> THIS FILE IS FOR EVERYTHING ONLY USED FOR DEVELOPMENT THAT SHOULD NOT BE IN THE FINAL RELEASE
 
-from genesis:status import genesis_status, on_apply_status, on_remove_status
+from genesis:status import genesis_status, on_apply_status, on_remove_status, before_value_change_status, after_value_change_status
 
 
 function ~/reset_player_join:
@@ -26,3 +26,27 @@ class FrederickTheStatus:
 
 function ~/test_apply_status:
     FrederickTheStatus.apply(200, 125)
+
+@genesis_status
+class UniqueStatus:
+    category = ["buff","regeneration","bad"]
+    icon = "genesis:font/status/poison_or_something"
+
+    @on_remove_status
+    def say_thjat_imr_removed(status):
+        say (status.id + " has been removed")
+
+    @before_value_change_status
+    def valcahngeee(status):
+        say (status.id + " will change")
+
+    @after_value_change_status
+    def valcahnge(status):
+        say (status.id + " changed")
+
+function ~/second_status_test:
+    UniqueStatus.apply(240, 765)
+
+function ~/increase_value_by_12:
+    unless entity @s[tag=(UniqueStatus.tag)] return run say I DONT HAVE THIS STATUS, SILLY
+    UniqueStatus.modify_value('+=', 12)

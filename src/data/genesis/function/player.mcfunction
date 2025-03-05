@@ -15,9 +15,11 @@ function ~/join:
     scoreboard players add .next_id genesis.player.id 1
     # Initialize player based storage, this can be accessed using `storage genesis:player players[$(id)]`
     data modify storage genesis:player players append value {
-        # hud is used for the hud, each array entry is for one module
-        # mana, status
-        hud:[[""],[""]],
+        hud: [
+            [""], # Mana bar
+            [""], # Status icons
+            [""], # Status cooldown
+        ],
     }
     # Set all initial stats
     scoreboard players set @s genesis.stat.mana_pool 100
