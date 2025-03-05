@@ -125,7 +125,6 @@ function ~/update_hud:
                 if score #new genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis <= #next_notch genesis data modify storage genesis:player self.hud[0] append value "R|"
                 if score #new genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis >  #next_notch genesis data modify storage genesis:player self.hud[0] append value "N|"
 
-                if score #is_notch genesis >= #next_notch genesis say (i)
                 if score #is_notch genesis >= #next_notch genesis scoreboard players add #next_notch genesis 39500
                 scoreboard players operation #is_notch genesis += @s genesis.mana.max
             data modify storage genesis:player self.hud[0] append value "Bb-"
