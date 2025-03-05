@@ -8,26 +8,28 @@ from genesis:mapping import item_display_uuid
 from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
+from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, BlizzardTear, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, HexedHailstone, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
+
 # IronSpear
 @add_custom_recipe([
-    ["air", "iron_ingot", "iron_ingot"],
-    ["air", "stick", "iron_ingot"],
-    ["stick", "air", "air"],
+    [None, "iron_ingot", "iron_ingot"],
+    [None, "stick", "iron_ingot"],
+    ["stick", None, None],
 ])
 @add_loot_table
 @bolt_item
 class IronSpear(GenesisItem):
     item_name = ("Iron Spear", {"color":"white"})
     rarity = "common"
-    category = ["spear"]
+    category = ["polearm"]
     stats = ("mainhand", {"physical_power":65,"attack_speed":80})
     item_model = texture_path_to_item_model("genesis:item/polearm/iron_spear", True)
 
 # Glaive
 @add_custom_recipe([
-    ["air", MetalAlloy, MetalAlloy],
-    ["air", SteelHilt, MetalAlloy],
-    [SteelHilt, "air", "air"],
+    [None, MetalAlloy, MetalAlloy],
+    [None, SteelHilt, MetalAlloy],
+    [SteelHilt, None, None],
 ])
 @add_loot_table
 @bolt_item
@@ -39,17 +41,18 @@ class Glaive(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/polearm/glaive", True)
     @right_click_ability(
         name = "stance_swap_onslaught",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def stance_swap_onslaught():
+        say WIP
 
 # Halycon
 @add_custom_recipe([
-    ["air", CrystalScale, "diamond_block"],
+    [None, CrystalScale, "diamond_block"],
     [CrystalScale, SteelHilt, CrystalScale],
-    [SteelHilt, CrystalScale, "air"],
+    [SteelHilt, CrystalScale, None],
 ])
 @add_loot_table
 @bolt_item
@@ -61,21 +64,40 @@ class Halycon(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/polearm/halycon", True)
     @right_click_ability(
         name = "windcharmer",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def windcharmer():
+        say WIP
+
+# HelixSpear
+@add_loot_table
+@bolt_item
+class HelixSpear(GenesisItem):
+    item_name = ("Helix Spear", {"color":"white"})
+    rarity = "rare"
+    category = ["polearm"]
+    stats = ("mainhand", {"physical_power":85,"magic_power":60,"attack_speed":70})
+    item_model = texture_path_to_item_model("genesis:item/polearm/helix_spear", True)
+    @right_click_ability(
+        name = "piercing_light",
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
+    )
+    def piercing_light():
+        say WIP
 
 # HeavensThorn
 @add_custom_recipe([
-    ["air", "gold_block", "air"],
+    [None, "gold_block", None],
     [HelixSpear, "quartz", HelixSpear],
-    ["air", GildedHilt, "air"],
+    [None, GildedHilt, None],
 ])
 @add_loot_table
 @bolt_item
-class Heavens Thorn(GenesisItem):
+class HeavensThorn(GenesisItem):
     item_name = ("Heavens Thorn", {"color":"gold"})
     rarity = "epic"
     category = ["polearm"]
@@ -83,17 +105,18 @@ class Heavens Thorn(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/polearm/heavens_thorn", True)
     @right_click_ability(
         name = "piercing_light",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def piercing_light():
+        say WIP
 
 # VerdantStaff
 @add_custom_recipe([
-    ["air", "air", VerdantGem],
-    ["air", VerdantTwig, "air"],
-    [VerdantTwig, "air", "air"],
+    [None, None, VerdantGem],
+    [None, VerdantTwig, None],
+    [VerdantTwig, None, None],
 ])
 @add_loot_table
 @bolt_item
@@ -105,11 +128,12 @@ class VerdantStaff(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/polearm/verdant_staff", True)
     @right_click_ability(
         name = "revitalize1",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def revitalize1():
+        say WIP
 
 # VerdantMasterstaff
 @add_custom_recipe([
@@ -127,11 +151,12 @@ class VerdantMasterstaff(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/polearm/verdant_masterstaff", True)
     @right_click_ability(
         name = "revitalize2",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def revitalize2():
+        say WIP
 
 # VerdantSceptor
 @add_custom_recipe([
@@ -149,28 +174,12 @@ class VerdantSceptor(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/polearm/verdant_sceptor", True)
     @right_click_ability(
         name = "revitalize3",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def revitalize3():
-
-# HelixSpear
-@add_loot_table
-@bolt_item
-class HelixSpear(GenesisItem):
-    item_name = ("Helix Spear", {"color":"white"})
-    rarity = "rare"
-    category = ["polearm"]
-    stats = ("mainhand", {"physical_power":85,"magic_power":60,"attack_speed":70})
-    item_model = texture_path_to_item_model("genesis:item/polearm/helix_spear", True)
-    @right_click_ability(
-        name = "piercing_light",
-        description = ,
-        mana = ,
-        cooldown = ,
-    )
-    def piercing_light():
+        say WIP
 
 # SceptorOfTheCrimsonEgg
 @add_loot_table
@@ -183,8 +192,9 @@ class SceptorOfTheCrimsonEgg(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/polearm/sceptor_of_the_crimson_egg", True)
     @right_click_ability(
         name = "firebird",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def firebird():
+        say WIP

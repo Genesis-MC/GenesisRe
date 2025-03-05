@@ -41,7 +41,7 @@ class GenesisItem:
             # Add to lore line
             color = "white"
             if stats[stat_name] < 0:
-                color = "dark_red"
+                color = "red"
 
             value_length = len(str(stats[stat_name]))
             wrapper_chars = stat_wrapper_characters[stat_name]

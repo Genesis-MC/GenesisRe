@@ -8,11 +8,13 @@ from genesis:mapping import item_display_uuid
 from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
+from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, BlizzardTear, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, HexedHailstone, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
+
 # ObsidianBlade
 @add_custom_recipe([
-    ["air", "air", "obsidian"],
-    ["air", "obsidian", "air"],
-    [SteelHilt, "air", "air"],
+    [None, None, "obsidian"],
+    [None, "obsidian", None],
+    [SteelHilt, None, None],
 ])
 @add_loot_table
 @bolt_item
@@ -40,9 +42,9 @@ class FadingDusk(GenesisItem):
 
 # SaberCrimson
 @add_custom_recipe([
-    ["air", "air", CrimsonAlloy],
-    ["air", CrimsonAlloy, "air"],
-    [BejeweledHilt, "air", "air"],
+    [None, None, CrimsonAlloy],
+    [None, CrimsonAlloy, None],
+    [BejeweledHilt, None, None],
 ])
 @add_loot_table
 @bolt_item
@@ -55,9 +57,9 @@ class SaberCrimson(GenesisItem):
 
 # SaberWarped
 @add_custom_recipe([
-    ["air", "air", WarpedAlloy],
-    ["air", WarpedAlloy, "air"],
-    [BejeweledHilt, "air", "air"],
+    [None, None, WarpedAlloy],
+    [None, WarpedAlloy, None],
+    [BejeweledHilt, None, None],
 ])
 @add_loot_table
 @bolt_item
@@ -79,11 +81,12 @@ class HailstoneBlade(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/sword/hailstone_blade", True)
     @right_click_ability(
         name = "hailslash",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def hailslash():
+        say WIP
 
 # Kopesh
 @add_loot_table
@@ -96,11 +99,12 @@ class Kopesh(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/sword/kopesh", True)
     @right_click_ability(
         name = "cleave1",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def cleave1():
+        say WIP
 
 # AcolyteBlade
 @add_loot_table
@@ -123,8 +127,9 @@ class Asophogeny(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/sword/asophogeny", True)
     @right_click_ability(
         name = "blood_root",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def blood_root():
+        say WIP

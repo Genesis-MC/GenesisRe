@@ -8,15 +8,13 @@ from genesis:mapping import item_display_uuid
 from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
-
-from genesis:item/ingredient import ShadeFlux
-
+from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, BlizzardTear, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, HexedHailstone, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 
 # IronDagger
 @add_custom_recipe([
-    ["air", "air", "iron_ingot"],
-    ["air", "iron_ingot", "air"],
-    ["stick", "air", "air"],
+    [None, None, "iron_ingot"],
+    [None, "iron_ingot", None],
+    ["stick", None, None],
 ])
 @add_loot_table
 @bolt_item
@@ -44,9 +42,9 @@ class Frostfang(GenesisItem):
 
 # HarbingerOfWinter
 @add_custom_recipe([
-    ["air", "air", Frostfang],
-    ["air", Frostfang, "air"],
-    [SteelHilt, "air", "air"],
+    [None, None, Frostfang],
+    [None, Frostfang, None],
+    [SteelHilt, None, None],
 ])
 @add_loot_table
 @bolt_item
@@ -103,11 +101,12 @@ class Vorpol(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/dagger/vorpol", True)
     @right_click_ability(
         name = "blitzkrieg",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def blitzkrieg():
+        say WIP
 
 # Vescherum
 @add_custom_recipe([
@@ -125,11 +124,12 @@ class Vescherum(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/dagger/vescherum", True)
     @right_click_ability(
         name = "hallowed_field",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def hallowed_field():
+        say WIP
 
 # Visharp
 @add_custom_recipe([
@@ -210,8 +210,9 @@ class PrismDagger(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/dagger/prism_dagger", True)
     @right_click_ability(
         name = "prism_shatter",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def prism_shatter():
+        say WIP

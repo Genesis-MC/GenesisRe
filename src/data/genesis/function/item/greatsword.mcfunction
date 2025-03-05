@@ -8,11 +8,14 @@ from genesis:mapping import item_display_uuid
 from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
+from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, BlizzardTear, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, HexedHailstone, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
+from genesis:item/dagger import HarbingerOfWinter
+
 # IronGreatsword
 @add_custom_recipe([
-    ["air", "iron_ingot", "air"],
+    [None, "iron_ingot", None],
     ["iron_ingot", "iron_ingot", "iron_ingot"],
-    ["air", "stick", "air"],
+    [None, "stick", None],
 ])
 @add_loot_table
 @bolt_item
@@ -25,9 +28,9 @@ class IronGreatsword(GenesisItem):
 
 # OvergrownGreatsword
 @add_custom_recipe([
-    ["air", VerdantTwig, "air"],
+    [None, VerdantTwig, None],
     [VerdantTwig, "iron_block", VerdantTwig],
-    ["air", SteelHilt, "air"],
+    [None, SteelHilt, None],
 ])
 @add_loot_table
 @bolt_item
@@ -40,9 +43,9 @@ class OvergrownGreatsword(GenesisItem):
 
 # Zweihander
 @add_custom_recipe([
-    ["air", MetalAlloy, "air"],
+    [None, MetalAlloy, None],
     [MetalAlloy, MetalAlloy, MetalAlloy],
-    ["air", SteelHilt, "air"],
+    [None, SteelHilt, None],
 ])
 @add_loot_table
 @bolt_item
@@ -52,7 +55,6 @@ class Zweihander(GenesisItem):
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":120,"attack_speed":45})
     item_model = "iron_sword" #! change to custom texture
-
     @right_click_ability(
         name = "Stance Swap - Onslaught",
         description = "Toggles Onslaught Stance. While Onslaught Stance is active, gain +40 Speed, +10% Attack Speed but -20 Armor, -20 Armor Toughness.",
@@ -65,7 +67,7 @@ class Zweihander(GenesisItem):
 @add_custom_recipe([
     [HarbingerOfWinter, EverfrostCore, HarbingerOfWinter],
     [HarbingerOfWinter, EverfrostCore, HarbingerOfWinter],
-    ["air", BejeweledHilt, "air"],
+    [None, BejeweledHilt, None],
 ])
 @add_loot_table
 @bolt_item
@@ -77,11 +79,12 @@ class EverfrostTitanblade(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/greatsword/everfrost_titanblade", True)
     @right_click_ability(
         name = "polar_vortex",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def polar_vortex():
+        say WIP
 
 # SwashbucklersGlory
 @add_loot_table
@@ -94,11 +97,12 @@ class SwashbucklersGlory(GenesisItem):
     item_model = texture_path_to_item_model("genesis:item/greatsword/swashbucklers_glory", True)
     @right_click_ability(
         name = "cleave2",
-        description = ,
-        mana = ,
-        cooldown = ,
+        description = "WIP",
+        mana = 10,
+        cooldown = 1,
     )
     def cleave2():
+        say WIP
     
 # RoyalCleaver
 @add_loot_table

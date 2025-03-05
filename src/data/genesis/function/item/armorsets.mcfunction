@@ -8,7 +8,9 @@ from genesis:mapping import item_display_uuid
 from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
-# SteelandureHelmet
+from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, BlizzardTear, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, HexedHailstone, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
+
+# SteelAndureHelmet
 @add_custom_recipe([
     ["iron_ingot", "chain", "iron_ingot"],
     ["chain", "iron_helmet", "chain"],
@@ -16,15 +18,15 @@ from genesis:item import GenesisItem
 ])
 @add_loot_table
 @bolt_item
-class SteelandureHelmet(GenesisItem):
-    item_name = ("Steelandure Helmet", {"color":"white"})
+class SteelAndureHelmet(GenesisItem):
+    item_name = ("Steel Andure Helmet", {"color":"white"})
     rarity = "common"
     category = ["helmet"]
     stats = ("head", {"armor":25})
     item_model = texture_path_to_item_model("genesis:item/armorsets/steelandurehelmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
-# SteelandureChestplate
+# SteelAndureChestplate
 @add_custom_recipe([
     ["iron_ingot", "chain", "iron_ingot"],
     ["chain", "iron_chestplate", "chain"],
@@ -32,15 +34,15 @@ class SteelandureHelmet(GenesisItem):
 ])
 @add_loot_table
 @bolt_item
-class SteelandureChestplate(GenesisItem):
-    item_name = ("Steelandure Chestplate", {"color":"white"})
+class SteelAndureChestplate(GenesisItem):
+    item_name = ("Steel Andure Chestplate", {"color":"white"})
     rarity = "common"
     category = ["chestplate"]
     stats = ("chest", {"armor":65})
     item_model = texture_path_to_item_model("genesis:item/armorsets/steelandurechestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
-# SteelandureLeggings
+# SteelAndureLeggings
 @add_custom_recipe([
     ["iron_ingot", "chain", "iron_ingot"],
     ["chain", "iron_leggings", "chain"],
@@ -48,15 +50,15 @@ class SteelandureChestplate(GenesisItem):
 ])
 @add_loot_table
 @bolt_item
-class SteelandureLeggings(GenesisItem):
-    item_name = ("Steelandure Leggings", {"color":"white"})
+class SteelAndureLeggings(GenesisItem):
+    item_name = ("Steel Andure Leggings", {"color":"white"})
     rarity = "common"
     category = ["leggings"]
-    stats = ("leg", {"armor":55})
+    stats = ("legs", {"armor":55})
     item_model = texture_path_to_item_model("genesis:item/armorsets/steelandureleggings", True)
-    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+    equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
-# SteelandureBoots
+# SteelAndureBoots
 @add_custom_recipe([
     ["iron_ingot", "chain", "iron_ingot"],
     ["chain", "iron_boots", "chain"],
@@ -64,8 +66,8 @@ class SteelandureLeggings(GenesisItem):
 ])
 @add_loot_table
 @bolt_item
-class SteelandureBoots(GenesisItem):
-    item_name = ("Steelandure Boots", {"color":"white"})
+class SteelAndureBoots(GenesisItem):
+    item_name = ("Steel Andure Boots", {"color":"white"})
     rarity = "common"
     category = ["boots"]
     stats = ("feet", {"armor":25})
@@ -117,9 +119,9 @@ class ReinforcedandureLeggings(GenesisItem):
     item_name = ("Reinforcedandure Leggings", {"color":"white"})
     rarity = "uncommon"
     category = ["leggings"]
-    stats = ("leg", {"armor":60,"armor_toughness":20})
+    stats = ("legs", {"armor":60,"armor_toughness":20})
     item_model = texture_path_to_item_model("genesis:item/armorsets/reinforcedandureleggings", True)
-    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+    equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # ReinforcedandureBoots
 @add_custom_recipe([
@@ -182,9 +184,9 @@ class ApprenticeTrousers(GenesisItem):
     item_name = ("Apprentice Trousers", {"color":"white"})
     rarity = "uncommon"
     category = ["leggings"]
-    stats = ("leg", {"armor":20,"mana_pool":20})
+    stats = ("legs", {"armor":20,"mana_pool":20})
     item_model = texture_path_to_item_model("genesis:item/armorsets/apprentice_trousers", True)
-    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+    equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # ApprenticeBoots
 @add_custom_recipe([
@@ -247,9 +249,9 @@ class MageTrousers(GenesisItem):
     item_name = ("Mage Trousers", {"color":"blue"})
     rarity = "rare"
     category = ["leggings"]
-    stats = ("leg", {"magic_power":15,"armor":50,"mana_pool":30,"mana_regen":5})
+    stats = ("legs", {"magic_power":15,"armor":50,"mana_pool":30,"mana_regen":5})
     item_model = texture_path_to_item_model("genesis:item/armorsets/mage_trousers", True)
-    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+    equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # MageBoots
 @add_custom_recipe([
@@ -312,9 +314,9 @@ class ArchmageTrousers(GenesisItem):
     item_name = ("Archmage Trousers", {"color":"dark_purple"})
     rarity = "epic"
     category = ["leggings"]
-    stats = ("leg", {"magic_power":25,"armor":60,"mana_pool":50,"mana_regen":8})
+    stats = ("legs", {"magic_power":25,"armor":60,"mana_pool":50,"mana_regen":8})
     item_model = texture_path_to_item_model("genesis:item/armorsets/archmage_trousers", True)
-    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+    equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # ArchmageBoots
 @add_custom_recipe([
@@ -340,7 +342,7 @@ class FrostveilHelmet(GenesisItem):
     item_name = ("Frostveil Helmet", {"color":"aqua"})
     rarity = "uncommon"
     category = ["helmet"]
-    stats = ("head", {"armor":20,"relic_power":5})
+    stats = ("head", {"armor":20})
     item_model = texture_path_to_item_model("genesis:item/armorsets/frostveil_helmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
@@ -351,7 +353,7 @@ class FrostveilChestplate(GenesisItem):
     item_name = ("Frostveil Chestplate", {"color":"aqua"})
     rarity = "uncommon"
     category = ["chestplate"]
-    stats = ("chest", {"armor":70,"relic_power":10})
+    stats = ("chest", {"armor":70})
     item_model = texture_path_to_item_model("genesis:item/armorsets/frostveil_chestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
@@ -362,9 +364,9 @@ class FrostveilLeggings(GenesisItem):
     item_name = ("Frostveil Leggings", {"color":"aqua"})
     rarity = "uncommon"
     category = ["leggings"]
-    stats = ("leg", {"armor":50,"relic_power":10})
+    stats = ("legs", {"armor":50})
     item_model = texture_path_to_item_model("genesis:item/armorsets/frostveil_leggings", True)
-    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+    equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # FrostveilBoots
 @add_loot_table
@@ -373,7 +375,7 @@ class FrostveilBoots(GenesisItem):
     item_name = ("Frostveil Boots", {"color":"aqua"})
     rarity = "uncommon"
     category = ["boots"]
-    stats = ("feet", {"armor":20,"relic_power":5})
+    stats = ("feet", {"armor":20})
     item_model = texture_path_to_item_model("genesis:item/armorsets/frostveil_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
@@ -385,7 +387,7 @@ class ShadedHelmet(GenesisItem):
     item_name = ("Shaded Helmet", {"color":"dark_purple"})
     rarity = "rare"
     category = ["helmet"]
-    stats = ("head", {"physical_power":5,"armor":20,"relic_power":15})
+    stats = ("head", {"physical_power":5,"armor":20})
     item_model = texture_path_to_item_model("genesis:item/armorsets/shaded_helmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
@@ -396,7 +398,7 @@ class ShadedChestplate(GenesisItem):
     item_name = ("Shaded Chestplate", {"color":"dark_purple"})
     rarity = "rare"
     category = ["chestplate"]
-    stats = ("chest", {"physical_power":5,"armor":70,"relic_power":20})
+    stats = ("chest", {"physical_power":5,"armor":70})
     item_model = texture_path_to_item_model("genesis:item/armorsets/shaded_chestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
@@ -407,9 +409,9 @@ class ShadedLeggings(GenesisItem):
     item_name = ("Shaded Leggings", {"color":"dark_purple"})
     rarity = "rare"
     category = ["leggings"]
-    stats = ("leg", {"physical_power":5,"armor":50,"relic_power":20})
+    stats = ("legs", {"physical_power":5,"armor":50})
     item_model = texture_path_to_item_model("genesis:item/armorsets/shaded_leggings", True)
-    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+    equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # ShadedBoots
 @add_loot_table
@@ -418,7 +420,7 @@ class ShadedBoots(GenesisItem):
     item_name = ("Shaded Boots", {"color":"dark_purple"})
     rarity = "rare"
     category = ["boots"]
-    stats = ("feet", {"physical_power":5,"armor":20,"relic_power":15})
+    stats = ("feet", {"physical_power":5,"armor":20})
     item_model = texture_path_to_item_model("genesis:item/armorsets/shaded_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
@@ -434,8 +436,8 @@ class ShadedBoots(GenesisItem):
 class VoidbreachHelmet(GenesisItem):
     item_name = ("Voidbreach Helmet", {"color":"light_purple"})
     rarity = "epic"
-    category = ["helmet", "void"]
-    stats = ("head", {"physical_power":5,"armor":30,"relic_power":20})
+    category = ["void","helmet"]
+    stats = ("head", {"physical_power":5,"armor":30})
     item_model = texture_path_to_item_model("genesis:item/armorsets/voidbreach_helmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
@@ -450,8 +452,8 @@ class VoidbreachHelmet(GenesisItem):
 class VoidbreachChestplate(GenesisItem):
     item_name = ("Voidbreach Chestplate", {"color":"light_purple"})
     rarity = "epic"
-    category = ["chestplate", "void"]
-    stats = ("chest", {"physical_power":5,"armor":75,"relic_power":20})
+    category = ["void","chestplate"]
+    stats = ("chest", {"physical_power":5,"armor":75})
     item_model = texture_path_to_item_model("genesis:item/armorsets/voidbreach_chestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
@@ -466,10 +468,10 @@ class VoidbreachChestplate(GenesisItem):
 class VoidbreachLeggings(GenesisItem):
     item_name = ("Voidbreach Leggings", {"color":"light_purple"})
     rarity = "epic"
-    category = ["leggings", "void"]
-    stats = ("leg", {"physical_power":5,"armor":55,"relic_power":20})
+    category = ["void","leggings"]
+    stats = ("legs", {"physical_power":5,"armor":55})
     item_model = texture_path_to_item_model("genesis:item/armorsets/voidbreach_leggings", True)
-    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+    equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # VoidbreachBoots
 @add_custom_recipe([
@@ -482,8 +484,8 @@ class VoidbreachLeggings(GenesisItem):
 class VoidbreachBoots(GenesisItem):
     item_name = ("Voidbreach Boots", {"color":"light_purple"})
     rarity = "epic"
-    category = ["boots", "void"]
-    stats = ("feet", {"physical_power":5,"armor":30,"relic_power":20})
+    category = ["void","boots"]
+    stats = ("feet", {"physical_power":5,"armor":30})
     item_model = texture_path_to_item_model("genesis:item/armorsets/voidbreach_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
@@ -491,8 +493,8 @@ class VoidbreachBoots(GenesisItem):
 # DreadnaughtHelmet
 @add_custom_recipe([
     [MetalAlloy, PyroclasticCore, MetalAlloy],
-    [MetalAlloy, "air", MetalAlloy],
-    ["air", "netherite_scrap", "air"],
+    [MetalAlloy, None, MetalAlloy],
+    [None, "netherite_scrap", None],
 ])
 @add_loot_table
 @bolt_item
@@ -500,13 +502,13 @@ class DreadnaughtHelmet(GenesisItem):
     item_name = ("Dreadnaught Helmet", {"color":"dark_red"})
     rarity = "legendary"
     category = ["helmet"]
-    stats = ("head", {"attack_speed":-4,"armor":40,"armor_toughness":40,"speed":-5,"relic_power":15})
+    stats = ("head", {"attack_speed":-4,"armor":40,"armor_toughness":40,"speed":-5})
     item_model = texture_path_to_item_model("genesis:item/armorsets/dreadnaught_helmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # DreadnaughtChestplate
 @add_custom_recipe([
-    ["netherite_scrap", "air", "netherite_scrap"],
+    ["netherite_scrap", None, "netherite_scrap"],
     [MetalAlloy, PyroclasticCore, MetalAlloy],
     [MetalAlloy, MetalAlloy, MetalAlloy],
 ])
@@ -516,15 +518,15 @@ class DreadnaughtChestplate(GenesisItem):
     item_name = ("Dreadnaught Chestplate", {"color":"dark_red"})
     rarity = "legendary"
     category = ["chestplate"]
-    stats = ("chest", {"attack_speed":-5,"armor":90,"armor_toughness":40,"speed":-6,"relic_power":15})
+    stats = ("chest", {"attack_speed":-5,"armor":90,"armor_toughness":40,"speed":-6})
     item_model = texture_path_to_item_model("genesis:item/armorsets/dreadnaught_chestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # DreadnaughtLeggings
 @add_custom_recipe([
     [MetalAlloy, PyroclasticCore, MetalAlloy],
-    [MetalAlloy, "air", MetalAlloy],
-    ["netherite_scrap", "air", "netherite_scrap"],
+    [MetalAlloy, None, MetalAlloy],
+    ["netherite_scrap", None, "netherite_scrap"],
 ])
 @add_loot_table
 @bolt_item
@@ -532,14 +534,14 @@ class DreadnaughtLeggings(GenesisItem):
     item_name = ("Dreadnaught Leggings", {"color":"dark_red"})
     rarity = "legendary"
     category = ["leggings"]
-    stats = ("leg", {"attack_speed":-5,"armor":70,"armor_toughness":40,"speed":-6,"relic_power":15})
+    stats = ("legs", {"attack_speed":-5,"armor":70,"armor_toughness":40,"speed":-6})
     item_model = texture_path_to_item_model("genesis:item/armorsets/dreadnaught_leggings", True)
-    equippable = {"slot":"leg","asset_id":"minecraft:diamond"}
+    equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # DreadnaughtBoots
 @add_custom_recipe([
-    ["air", "netherite_scrap", "air"],
-    [MetalAlloy, "air", MetalAlloy],
+    [None, "netherite_scrap", None],
+    [MetalAlloy, None, MetalAlloy],
     [MetalAlloy, PyroclasticCore, MetalAlloy],
 ])
 @add_loot_table
@@ -548,6 +550,6 @@ class DreadnaughtBoots(GenesisItem):
     item_name = ("Dreadnaught Boots", {"color":"dark_red"})
     rarity = "legendary"
     category = ["boots"]
-    stats = ("feet", {"attack_speed":-4,"armor":40,"armor_toughness":40,"speed":-5,"relic_power":15})
+    stats = ("feet", {"attack_speed":-4,"armor":40,"armor_toughness":40,"speed":-5})
     item_model = texture_path_to_item_model("genesis:item/armorsets/dreadnaught_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}

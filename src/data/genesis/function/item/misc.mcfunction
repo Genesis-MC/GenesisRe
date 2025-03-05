@@ -8,37 +8,41 @@ from genesis:mapping import item_display_uuid
 from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
+from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, BlizzardTear, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, HexedHailstone, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
+
+#! add in once crops are added in
 # EnhancedManaCookie
-@add_custom_recipe([
-    ["air", ManaBean, "air"],
-    [ManaBean, ManaCookie, ManaBean],
-    ["air", ManaBean, "air"],
-])
+#@add_custom_recipe([
+#    [None, ManaBean, None],
+#    [ManaBean, ManaCookie, ManaBean],
+#    [None, ManaBean, None],
+#])
 
 # AuricManaCookie
-@add_custom_recipe([
-    ["air", ManaBean, "air"],
-    [ManaBean, EnhancedManaCookie, ManaBean],
-    ["air", ManaBean, "air"],
-])
+#@add_custom_recipe([
+#    [None, ManaBean, None],
+#    [ManaBean, EnhancedManaCookie, ManaBean],
+#    [None, ManaBean, None],
+#])
 
+#! add in once minerals are added in
 # CrystalNode
-@add_custom_recipe([
-    ["amethyst_shard", "glass", "amethyst_shard"],
-    ["glass", CrystalBuds, "glass"],
-    ["amethyst_shard", "glass", "amethyst_shard"],
-])
+#@add_custom_recipe([
+#    ["amethyst_shard", "glass", "amethyst_shard"],
+#    ["glass", CrystalBuds, "glass"],
+#    ["amethyst_shard", "glass", "amethyst_shard"],
+#])
 
 # PiratesBounty
-@add_custom_recipe([
-    [AncientGoldCoin, AncientGoldCoin, AncientGoldCoin],
-    [AncientGoldCoin, "chest", AncientGoldCoin],
-    [AncientGoldCoin, AncientGoldCoin, AncientGoldCoin],
-])
+#@add_custom_recipe([
+#    [AncientGoldCoin, AncientGoldCoin, AncientGoldCoin],
+#    [AncientGoldCoin, "chest", AncientGoldCoin],
+#    [AncientGoldCoin, AncientGoldCoin, AncientGoldCoin],
+#])
 
 # HeartOfTheDepths
-@add_custom_recipe([
-    [ShardOfTheDepths, ShardOfTheDepths, ShardOfTheDepths],
-    [ShardOfTheDepths, "chest", ShardOfTheDepths],
-    [ShardOfTheDepths, ShardOfTheDepths, ShardOfTheDepths],
-])
+#@add_custom_recipe([
+#    [ShardOfTheDepths, ShardOfTheDepths, ShardOfTheDepths],
+#    [ShardOfTheDepths, "chest", ShardOfTheDepths],
+#    [ShardOfTheDepths, ShardOfTheDepths, ShardOfTheDepths],
+#])
