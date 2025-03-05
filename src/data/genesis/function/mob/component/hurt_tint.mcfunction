@@ -1,3 +1,6 @@
+append function genesis:load:
+  scoreboard objectives add genesis.mob.hurt_tint dummy
+
 function ~/activate:
   item_modifier ~/ {
     "function": "minecraft:set_components",

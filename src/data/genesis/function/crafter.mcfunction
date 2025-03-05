@@ -78,14 +78,23 @@ function ~/result_has_been_removed:
     tag @s remove genesis.crafter.has_output
     unless items block ~ ~-1 ~ container.15 * return 0
     raw ("item replace block ~ ~-1 ~ container.15 with white_stained_glass_pane[item_model=red_stained_glass_pane,tooltip_display={hide_tooltip:true},custom_data={genesis:{crafter:{placeholder:1b}}}]")
-    if entity @s[tag=genesis.crafter.reduce_durability_on_craft] return run function ~/../reduce_durability_on_craft:
-        tag @s remove genesis.crafter.reduce_durability_on_craft
-        for slot in input_slots:
-            if items block ~ ~-1 ~ f'container.{slot}' *[damage] store result block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' int -1 data get block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' -1.0000000001
-            if items block ~ ~-1 ~ f'container.{slot}' *[damage] unless data block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' data modify block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' set value 1 # Needed because default components are not on the item and execute store doesnt work
-            unless items block ~ ~-1 ~ f'container.{slot}' *[damage] item modify block ~ ~-1 ~ f'container.{slot}' ~/../reduce_amount_by_1
     for slot in input_slots:
-        item modify block ~ ~-1 ~ f'container.{slot}' ~/../reduce_amount_by_1
+        function ~/../on_craft_reduce_durability/{slot}:
+            unless entity @s[tag=genesis.crafter.on_craft_reduce_durability] return 0
+            unless items block ~ ~-1 ~ f'container.{slot}' *[damage] return 0
+            store result block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' int -1 data get block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' -1.0000000001
+            unless data block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' data modify block ~ ~-1 ~ f'Items[{{Slot:{slot}b}}].components."minecraft:damage"' set value 1 # Needed because default components are not on the item and execute store doesnt work
+            return 1
+
+        function ~/../on_craft_empty_buckets/{slot}:
+            unless entity @s[tag=genesis.crafter.on_craft_empty_buckets] return 0
+            unless items block ~ ~-1 ~ f'container.{slot}' #genesis:filled_buckets return 0
+            item replace block ~ ~-1 ~ f'container.{slot}' with bucket
+            return 1
+
+        unless function ~/../on_craft_empty_buckets/{slot}
+            unless function ~/../on_craft_reduce_durability/{slot}
+            item modify block ~ ~-1 ~ f'container.{slot}' ~/../reduce_amount_by_1
 
 
 item_modifier ~/reduce_amount_by_1 {
@@ -99,7 +108,7 @@ append function ~/recipes: # using append so order of exection while compiling w
     return 0
 
 
-def add_custom_recipe(recipe: list[list[str|type|None]], reduce_durability_instead = False):
+def add_custom_recipe(recipe: list[list[str|type|None]], reduce_durability = False, empty_buckets = False):
     def decorator(output):
         command = "execute "
         slot = 2
@@ -119,11 +128,15 @@ def add_custom_recipe(recipe: list[list[str|type|None]], reduce_durability_inste
             loot_table = {"pools": [{"rolls": 1,"entries": [{"type": "minecraft:item","name": f'minecraft:{output.base_item}',"functions": [{"function": "minecraft:set_components","components": output.components}]}]}]}
             command += f'run return run loot replace block ~ ~-1 ~ container.15 loot {loot_table}'
         prepend function genesis:crafter/recipes:
-            if reduce_durability_instead:
-                tag @s add genesis.crafter.reduce_durability_on_craft
+            if reduce_durability:
+                tag @s add genesis.crafter.on_craft_reduce_durability
+            if empty_buckets:
+                tag @s add genesis.crafter.on_craft_empty_buckets
             raw command
-            if reduce_durability_instead:
-                tag @s remove genesis.crafter.reduce_durability_on_craft # Done before and after so the ordering doesn't matter and we don't need to check the items twice
+            if reduce_durability:
+                tag @s remove genesis.crafter.on_craft_reduce_durability
+            if empty_buckets:
+                tag @s remove genesis.crafter.on_craft_empty_buckets
         return output
     return decorator
 

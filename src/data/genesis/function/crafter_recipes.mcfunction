@@ -16,4 +16,11 @@ add_custom_recipe([
     ["iron_sword",None,None],
     ["apple",     None,None],
     [ None,       None,None],
-], True)("melon_slice")
+], reduce_durability = True)("melon_slice")
+
+
+add_custom_recipe([
+    ["water_bucket","lava_bucket","water_bucket"],
+    ["lava_bucket", "obsidian",   "lava_bucket" ],
+    ["water_bucket","lava_bucket","water_bucket"],
+], empty_buckets = True)("crying_obsidian")

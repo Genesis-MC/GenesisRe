@@ -1,5 +1,95 @@
-from beet import Equipment, Texture, Model, ItemModel, Function, SoundConfig
+from beet import Equipment, Texture, Model, ItemModel, Function, SoundConfig, Structure
+from beet.contrib.worldgen import WorldgenTemplatePool
 from PIL import Image
+from copy import deepcopy
+from operator import itemgetter
+from genesis:utils import add_translation, camel_case_to_snake_case, to_nbt
+from nbtlib import String
+
+# print(ctx.data["genesis"].structures["zombie"].data)
+
+def add_template_pool(mob: type):
+    path = f"{mob.namespace}:mob/{mob.id}"
+    ctx.data[path] = WorldgenTemplatePool({
+        "elements": [
+            {
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": path,
+                "processors": {
+                    "processors": []
+                },
+                "projection": "rigid"
+            },
+            "weight": 1
+            }
+        ],
+        "fallback": "minecraft:empty"
+    })
+
+
+def add_structure(mob: type):
+    path = f"{mob.namespace}:mob/{mob.id}"
+    data = {
+        "id": "minecraft:armor_stand",
+        "NoGravity": True,
+        "Small": True,
+        "Marker": True,
+        "Invisible": True,
+        "Invulnerable": True,
+        "equipment": {
+            "feet": {
+                "id": "minecraft:poisonous_potato",
+                "components": {
+                    "minecraft:enchantments": {"genesis:worldgen/run_command": 1},
+                    "minecraft:custom_data": {
+                        "command": f"function {mob.namespace}:mob/summon/{mob.id}"
+                    }
+                }
+            }
+        }
+    }
+    # data = mob.entity_data.copy()
+    # data["id"] = mob.base_entity
+    ctx.data[path] = Structure(to_nbt({
+        "size":[1,1,1],
+        "entities": [
+            {
+                "nbt": data,
+                "blockPos": [0, 0, 0],
+                "pos": [0.5, 0.0, 0.5]
+            }
+        ],
+        "blocks": [
+            {
+                "nbt": {
+                    "joint": "rollable",
+                    "name": "minecraft:bottom",
+                    "pool": "minecraft:empty",
+                    "final_state": "minecraft:structure_void",
+                    "placement_priority": 0,
+                    "selection_priority": 0,
+                    "id": "minecraft:jigsaw",
+                    "target": "minecraft:bottom"
+                },
+                "pos": [
+                    0,
+                    0,
+                    0
+                ],
+                "state": 0
+            }
+        ],
+        "palette": [
+            {
+                "Properties": {
+                    "orientation": "down_south"
+                },
+                "Name": "minecraft:jigsaw"
+            }
+        ],
+        "DataVersion": 4318
+        }))
 
 def register_sounds(key, sounds):
     ctx.assets["genesis"].sound_config.merge(SoundConfig({
@@ -9,25 +99,11 @@ def register_sounds(key, sounds):
         }
     }))
 
-append function genesis:tick:
-    function genesis:mob/tick
-
-append function genesis:load:
-    function genesis:mob/load
-
 class classproperty:
     def __init__(self, func):
         self.fget = func
     def __get__(self, instance, owner):
         return self.fget(owner)
-
-def modifies_entity_data(func):
-    func.modifies_entity_data = True
-    return func
-
-def uses_entity_data(func):
-    func.uses_entity_data = True
-    return func
 
 def before_all(func):
     func.before_all = True
@@ -41,17 +117,53 @@ def genesis_mob(cls: type):
     cls.id = camel_case_to_snake_case(cls.__name__)
     cls.namespace = cls.__module__.split(":")[0]
     cls.init_vanilla_components(cls)
-    components, callables = _get_components_and_callables_from_parents(cls)
+    _, callables = _get_components_and_callables_from_parents(cls)
     _run_callables(cls, callables["before_all"])
     _run_callables(cls, callables["regular"])
-    for k, v in components.items(): 
+    components, _ = _get_components_and_callables_from_parents(cls)
+    for k, v in components.items():
         if k not in vanilla_components:
             component = CustomComponents.__dict__[k]
             component(cls, v)
     _run_callables(cls, callables["after_all"])
-
     return cls
 
+def event_decorator(func):
+    def decorator(bolt_func):
+        def run_it(p):
+            func(bolt_func, p)
+        run_it.decorator = True
+        return run_it
+    return decorator
+
+def on_init(order: int = 0):
+    @event_decorator
+    def decorator(func, mob):
+        if "on_init_funcs" in mob.__dict__:
+            mob.on_init_funcs = mob.on_init_funcs + [(func, order)]
+        else:
+            mob.on_init_funcs = [(func, order)]
+    return decorator
+
+def on_hurt(order: int = 0):
+    @event_decorator
+    def decorator(func, mob):
+        mob.hurt_detection = {}
+        if "on_hurt_funcs" in mob.__dict__:
+            mob.on_hurt_funcs = mob.on_hurt_funcs + [(func, order)]
+        else:
+            mob.on_hurt_funcs = [(func, order)]
+    return decorator
+
+def on_death(order: int = 0):
+    @event_decorator
+    def decorator(func, mob):
+        mob.hurt_detection = {}
+        if "on_death_funcs" in mob.__dict__:
+            mob.on_death_funcs = mob.on_death_funcs + [(func, order)]
+        else:
+            mob.on_death_funcs = [(func, order)]
+    return decorator
 
 class GenesisMob:
     def init_vanilla_components(cls):
@@ -66,6 +178,9 @@ class GenesisMob:
     def generate_summon_command(mob):
         function f"{mob.namespace}:mob/summon/{mob.id}":
             summon mob.base_entity ~ ~ ~ mob.entity_data
+
+        add_structure(mob)
+        add_template_pool(mob)
     
     @classproperty
     def entity_data(cls):
@@ -83,8 +198,8 @@ class GenesisMob:
         
         if len(cls.enchantments) > 0:
             data["equipment"]["head"]["components"].update({
-                "enchantment_glint_override": False,
-                "enchantments": cls.enchantments
+                "minecraft:enchantment_glint_override": False,
+                "minecraft:enchantments": cls.enchantments
             })
         return data
 
@@ -97,6 +212,7 @@ class TexturedHumanoid(GenesisMob):
 
     hurt_detection = {}
     hurt_tint = {}
+    can_pick_up_loot = False
     lefthand_extra_item_model = None
     righthand_extra_item_model = None
 
@@ -206,18 +322,25 @@ class TexturedHumanoid(GenesisMob):
             "id": "minecraft:poisonous_potato",
             "count": 1,
             "components": {
-                "minecraft:item_model": f"{mob.namespace}:_mob/{mob.id}/skin",
+                "minecraft:item_model": f"{mob.namespace}:_mob/{mob.id}/skin"
+            }
+        }
+        pants = {
+            "id": "minecraft:poisonous_potato",
+            "count": 1,
+            "components": {
                 "minecraft:equippable": {
                     "slot": "legs",
-                    "asset_id": f"{mob.namespace}:_mob/{mob.id}"
+                    "asset_id": f"{mob.namespace}:_mob/{mob.id}",
+                    "equip_sound": {"sound_id":"none"}
                 }
             }
         }
         mob.equipment.update({
-            "mainhand": skin_item,
-            "offhand": skin_item,
-            "head": skin_item,
-            "legs": skin_item
+            "mainhand": deepcopy(skin_item),
+            "offhand": deepcopy(skin_item),
+            "head": deepcopy(skin_item),
+            "legs": pants
         })
         mob.drop_chances.update({
             "mainhand": 0,
@@ -277,6 +400,45 @@ class CustomComponents:
         if component:
             mob.tags.add("genesis.mob.component.invisible")
             mob.active_effects.append({"id":"minecraft:invisibility","duration":-1,"show_particles":False,"show_icon":False})
+    
+    def on_init_funcs(mob, component):
+        mob.enchantments.update({"genesis:mob/component/init_tick": 1})
+        component.sort(key=itemgetter(1))
+
+        path = f'{mob.namespace}:mob/mob/{mob.id}/on_init'
+
+        function path:
+            for func, _ in component:
+                func()
+        
+        append function genesis:mob/component/init/tick:
+            execute if entity @s[tag=f"genesis.mob.{mob.id}"] run function path
+    
+    def on_hurt_funcs(mob, component):
+        mob.tags.add("genesis.mob.component.on_hurt_funcs")
+        component.sort(key=itemgetter(1))
+
+        path = f'{mob.namespace}:mob/mob/{mob.id}/on_hurt'
+
+        function path:
+            for func, _ in component:
+                func()
+        
+        append function genesis:mob/component/hurt_detection/call_on_hurt_funcs:
+            execute if entity @s[tag=f"genesis.mob.{mob.id}"] run function path
+    
+    def on_death_funcs(mob, component):
+        mob.tags.add("genesis.mob.component.on_death_funcs")
+        component.sort(key=itemgetter(1))
+
+        path = f'{mob.namespace}:mob/mob/{mob.id}/on_death'
+
+        function path:
+            for func, _ in component:
+                func()
+        
+        append function genesis:mob/component/hurt_detection/call_on_death_funcs:
+            execute if entity @s[tag=f"genesis.mob.{mob.id}"] run function path
 
     def custom_sounds(mob, component):
         mob.silent = True
@@ -290,6 +452,16 @@ class CustomComponents:
         if "ambient" in component:
             append function genesis:mob/component/custom_sounds/ambient:
                 execute if entity @s[tag=f"genesis.mob.{mob.id}"] run playsound component["ambient"] hostile @a[distance=..16] ~ ~ ~
+
+    def loot_table(mob, component):
+        path = f'{mob.namespace}:mob/{mob.id}'
+        loot_table path component
+        mob.death_loot_table = path
+
+    def name(mob, component):
+        key = f'{mob.namespace}.mob.{mob.id}'
+        add_translation(key, component)
+        mob.custom_name = {"translate":key}
 
 class VanillaComponents:
     def tags(mob, component):
@@ -320,8 +492,17 @@ class VanillaComponents:
     def is_immune_to_zombification(mob, component):
         return ("IsImmuneToZombification", component)
     
+    def can_pick_up_loot(mob, component):
+        return ("CanPickUpLoot", component)
+    
     def silent(mob, component):
         return ("Silent", component)
+    
+    def death_loot_table(mob, component):
+        return ("DeathLootTable", component)
+    
+    def custom_name(mob, component):
+        return ("CustomName", component)
 
 vanilla_components = []
 for k in VanillaComponents.__dict__.keys():
@@ -370,13 +551,3 @@ def _get_components_and_callables_from_parents(cls):
 def _run_callables(cls, callables):
     for c in callables:
         c(cls)
-
-
-def camel_case_to_snake_case(name: str) -> str:
-    out_id = name[0].lower()
-    for c in name[1:]:
-        if c.isupper():
-            out_id += "_" + c.lower()
-        else:
-            out_id += c
-    return out_id

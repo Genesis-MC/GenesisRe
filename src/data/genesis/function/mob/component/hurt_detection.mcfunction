@@ -7,7 +7,16 @@ function ~/triggered:
 
   execute if entity @s[tag=genesis.mob.component.custom_sounds] run function ~/../call_custom_sounds
 
+  execute if entity @s[tag=genesis.mob.component.on_hurt_funcs] run function ~/../call_on_hurt_funcs
+  execute if entity @s[tag=genesis.mob.component.on_death_funcs] if score #death_time genesis matches 1.. run function ~/../call_on_death_funcs
+
   execute if entity @s[tag=genesis.mob.component.hurt_tint] run function ./hurt_tint/activate
+
+function ~/call_on_hurt_funcs:
+  pass
+
+function ~/call_on_death_funcs:
+  pass
 
 function ~/call_custom_sounds:
   execute if score #death_time genesis matches 1.. run function ./custom_sounds/death
