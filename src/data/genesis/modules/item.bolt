@@ -77,7 +77,7 @@ class GenesisItem:
             " ",
         ]
         if category_modifier:
-            line += [{"translate":f'category_modifier.genesis.{category_modifier}',"color":rarity_text_color[item.rarity]},{"text":" ","color":"white"}] #!
+            line += [{"translate":f'category_modifier.genesis.{category_modifier}',"color":rarity_text_color[item.rarity]}," "]
         line.append({"translate":f'category.genesis.{main_category}',"color":rarity_text_color[item.rarity]})
         item.lore = [line] + item.get("lore", [])
 
