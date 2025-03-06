@@ -23,7 +23,6 @@ class IronSpear(GenesisItem):
     rarity = "common"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":65,"attack_speed":80})
-    item_model = texture_path_to_item_model("genesis:item/polearm/iron_spear", True)
 
 # Glaive
 @add_custom_recipe([
@@ -38,7 +37,6 @@ class Glaive(GenesisItem):
     rarity = "rare"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":75,"attack_speed":85})
-    item_model = texture_path_to_item_model("genesis:item/polearm/glaive", True)
     @right_click_ability(
         name = "stance_swap_onslaught",
         description = "WIP",
@@ -61,7 +59,6 @@ class Halycon(GenesisItem):
     rarity = "rare"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":75,"attack_speed":90,"speed":40})
-    item_model = texture_path_to_item_model("genesis:item/polearm/halycon", True)
     @right_click_ability(
         name = "windcharmer",
         description = "WIP",
@@ -79,7 +76,6 @@ class HelixSpear(GenesisItem):
     rarity = "rare"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":85,"magic_power":60,"attack_speed":70})
-    item_model = texture_path_to_item_model("genesis:item/polearm/helix_spear", True)
     @right_click_ability(
         name = "piercing_light",
         description = "WIP",
@@ -102,7 +98,6 @@ class HeavensThorn(GenesisItem):
     rarity = "epic"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":90,"magic_power":90,"attack_speed":70,"mana_pool":30,"mana_regen":8})
-    item_model = texture_path_to_item_model("genesis:item/polearm/heavens_thorn", True)
     @right_click_ability(
         name = "piercing_light",
         description = "WIP",
@@ -125,7 +120,6 @@ class VerdantStaff(GenesisItem):
     rarity = "uncommon"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":50,"attack_speed":70})
-    item_model = texture_path_to_item_model("genesis:item/polearm/verdant_staff", True)
     @right_click_ability(
         name = "revitalize1",
         description = "WIP",
@@ -148,7 +142,6 @@ class VerdantMasterstaff(GenesisItem):
     rarity = "rare"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":55,"attack_speed":70})
-    item_model = texture_path_to_item_model("genesis:item/polearm/verdant_masterstaff", True)
     @right_click_ability(
         name = "revitalize2",
         description = "WIP",
@@ -171,7 +164,6 @@ class VerdantSceptor(GenesisItem):
     rarity = "epic"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":60,"attack_speed":70})
-    item_model = texture_path_to_item_model("genesis:item/polearm/verdant_sceptor", True)
     @right_click_ability(
         name = "revitalize3",
         description = "WIP",
@@ -189,7 +181,6 @@ class SceptorOfTheCrimsonEgg(GenesisItem):
     rarity = "epic"
     category = ["polearm"]
     stats = ("mainhand", {"magic_power":100,"attack_speed":70,"mana_pool":50})
-    item_model = texture_path_to_item_model("genesis:item/polearm/sceptor_of_the_crimson_egg", True)
     @right_click_ability(
         name = "firebird",
         description = "WIP",

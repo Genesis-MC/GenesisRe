@@ -25,7 +25,6 @@ class HuntersVest(GenesisItem):
     rarity = "common"
     category = ["chestplate"]
     stats = ("chest", {"armor":50,"speed":10})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/hunters_vest", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # RangerVest
@@ -41,7 +40,6 @@ class RangersVest(GenesisItem):
     rarity = "uncommon"
     category = ["chestplate"]
     stats = ("chest", {"armor":60,"speed":15})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/rangers_vest", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # PlainstreaderBoots
@@ -57,7 +55,6 @@ class PlainstreaderBoots(GenesisItem):
     rarity = "common"
     category = ["boots"]
     stats = ("feet", {"armor":5,"speed":5})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/plainstreaderboots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # ForesttreaderBoots
@@ -73,7 +70,6 @@ class ForesttreaderBoots(GenesisItem):
     rarity = "uncommon"
     category = ["boots"]
     stats = ("feet", {"armor":10,"speed":30})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/foresttreaderboots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # MountaintreaderBoots
@@ -89,7 +85,6 @@ class MountaintreaderBoots(GenesisItem):
     rarity = "rare"
     category = ["boots"]
     stats = ("feet", {"armor":15,"speed":90})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/mountaintreaderboots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # PhantomtreaderBoots
@@ -105,7 +100,6 @@ class PhantomtreaderBoots(GenesisItem):
     rarity = "epic"
     category = ["boots"]
     stats = ("feet", {"armor":20,"speed":150})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/phantomtreaderboots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # CloudtreaderBoots
@@ -121,7 +115,6 @@ class CloudtreaderBoots(GenesisItem):
     rarity = "legendary"
     category = ["boots"]
     stats = ("feet", {"armor":25,"speed":200})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/cloudtreaderboots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # TerratreaderBoots
@@ -137,7 +130,6 @@ class TerratreaderBoots(GenesisItem):
     rarity = "mythical"
     category = ["boots"]
     stats = ("feet", {"armor":25,"speed":250})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/terratreaderboots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # PriarieGuardsHelmet
@@ -148,7 +140,6 @@ class PriarieGuardsHelmet(GenesisItem):
     rarity = "uncommon"
     category = ["helmet"]
     stats = ("head", {"armor_toughness":35})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/priarie_guards_helmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
     
 # HelmetOfTheLancerKnight
@@ -164,7 +155,6 @@ class HelmetOfTheLancerKnight(GenesisItem):
     rarity = "rare"
     category = ["helmet"]
     stats = ("head", {"armor_toughness":70})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/helmet_of_the_lancer_knight", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # WitchsRobe
@@ -180,7 +170,6 @@ class WitchsRobe(GenesisItem):
     rarity = "rare"
     category = ["chestplate"]
     stats = ("chest", {"physical_power":-20,"armor":40,"mana_pool":20,"mana_regen":10})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/witchs_robe", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # CrystalCirclet
@@ -196,7 +185,6 @@ class CrystalCirclet(GenesisItem):
     rarity = "epic"
     category = ["helmet"]
     stats = ("head", {"magic_power":25,"attack_speed":10,"armor":30,"armor_toughness":10})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/crystal_circlet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # GhastlyChestplate
@@ -212,7 +200,6 @@ class GhastlyChestplate(GenesisItem):
     rarity = "rare"
     category = ["chestplate"]
     stats = ("chest", {"armor":65})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/ghastly_chestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # EtherealChestplate
@@ -247,7 +234,6 @@ class BlackMarketBoots(GenesisItem):
     rarity = "uncommon"
     category = ["boots"]
     stats = ("feet", {"armor":5,"speed":-50,"luck":10})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/black_market_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 # NomadicShawl
@@ -258,7 +244,6 @@ class NomadicShawl(GenesisItem):
     rarity = "common"
     category = ["chestplate"]
     stats = ("chest", {"armor":30,"armor_toughness":-10,"speed":25})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/nomadic_shawl", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # PatchedTrousers
@@ -269,7 +254,6 @@ class PatchedTrousers(GenesisItem):
     rarity = "common"
     category = ["leggings"]
     stats = ("legs", {"armor":30})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/patched_trousers", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # IgneousHelmet
@@ -280,7 +264,6 @@ class IgneousHelmet(GenesisItem):
     rarity = "rare"
     category = ["helmet"]
     stats = ("head", {"armor":40,"armor_toughness":20,"knockback_resistance":20,"speed":-20})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/igneous_helmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # Heartguard
@@ -291,7 +274,6 @@ class Heartguard(GenesisItem):
     rarity = "epic"
     category = ["chestplate"]
     stats = ("chest", {"health":200})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/heartguard", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # BlueSpaceHelmet
@@ -302,7 +284,6 @@ class BlueSpacehelmet(GenesisItem):
     rarity = "rare"
     category = ["helmet"]
     stats = ("head", {"armor":30,"armor_toughness":10})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/blue_spacehelmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # GreenSpaceHelmet
@@ -313,7 +294,6 @@ class GreenSpacehelmet(GenesisItem):
     rarity = "rare"
     category = ["helmet"]
     stats = ("head", {"armor":30,"armor_toughness":10})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/green_spacehelmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # PinkSpaceHelmet
@@ -324,7 +304,6 @@ class PinkSpacehelmet(GenesisItem):
     rarity = "rare"
     category = ["helmet"]
     stats = ("head", {"armor":30,"armor_toughness":10})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/pink_spacehelmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # RedSpaceHelmet
@@ -335,7 +314,6 @@ class RedSpacehelmet(GenesisItem):
     rarity = "rare"
     category = ["helmet"]
     stats = ("head", {"armor":30,"armor_toughness":10})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/red_spacehelmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # YellowSpaceHelmet
@@ -346,7 +324,6 @@ class YellowSpacehelmet(GenesisItem):
     rarity = "rare"
     category = ["helmet"]
     stats = ("head", {"armor":30,"armor_toughness":10})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/yellow_spacehelmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # TreantTrousers
@@ -357,7 +334,6 @@ class TreantTrousers(GenesisItem):
     rarity = "rare"
     category = ["leggings"]
     stats = ("legs", {"attack_speed":-8,"armor":50,"armor_toughness":10,"knockback_resistance":15})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/treant_trousers", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # PerfectStrategy
@@ -368,7 +344,6 @@ class PerfectStrategy(GenesisItem):
     rarity = "epic"
     category = ["chestplate"]
     stats = ("chest", {"health":200,"armor":-500})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/Perfect Strategy", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # Dunestride
@@ -379,7 +354,6 @@ class Dunestride(GenesisItem):
     rarity = "rare"
     category = ["elemental","leggings"]
     stats = ("legs", {"magic_power":20,"armor":50,"armor_toughness":20,"mana_pool":30})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/dunestride", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # Atmosphere
@@ -390,7 +364,6 @@ class Atmosphere(GenesisItem):
     rarity = "epic"
     category = ["elemental","helmet"]
     stats = ("head", {"armor":20,"mana_pool":60,"ability_haste":5})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/atmosphere", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # CowlOfTheOverseer
@@ -401,5 +374,4 @@ class CowlOfTheOverseer(GenesisItem):
     rarity = "legendary"
     category = ["helmet"]
     stats = ("head", {"armor":30,"mana_pool":70,"ability_haste":10})
-    item_model = texture_path_to_item_model("genesis:item/armorpiece/cowl_of_the_overseer", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}

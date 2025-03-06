@@ -23,7 +23,6 @@ class IronScythe(GenesisItem):
     rarity = "common"
     category = ["scythe"]
     stats = ("mainhand", {"physical_power":85,"attack_speed":50})
-    item_model = texture_path_to_item_model("genesis:item/scythe/iron_scythe", True)
 
 # RecluseFang
 @add_loot_table
@@ -33,7 +32,6 @@ class RecluseFang(GenesisItem):
     rarity = "uncommon"
     category = ["scythe"]
     stats = ("mainhand", {"physical_power":85,"attack_speed":50})
-    item_model = texture_path_to_item_model("genesis:item/scythe/recluse_fang", True)
 
 # VenomlashFang
 @add_custom_recipe([
@@ -48,7 +46,6 @@ class VenomlashFang(GenesisItem):
     rarity = "rare"
     category = ["scythe"]
     stats = ("mainhand", {"physical_power":90,"attack_speed":60})
-    item_model = texture_path_to_item_model("genesis:item/scythe/venomlash_fang", True)
 
 # JackOReaper
 @add_loot_table
@@ -58,7 +55,6 @@ class JackOReaper(GenesisItem):
     rarity = "rare"
     category = ["scythe"]
     stats = ("mainhand", {"physical_power":88,"attack_speed":60})
-    item_model = texture_path_to_item_model("genesis:item/scythe/jack_o_reaper", True)
 
 # PrismarineScythe
 @add_loot_table
@@ -68,7 +64,6 @@ class PrismarineScythe(GenesisItem):
     rarity = "rare"
     category = ["scythe"]
     stats = ("mainhand", {"physical_power":90,"attack_speed":60,"mana_regen":10})
-    item_model = texture_path_to_item_model("genesis:item/scythe/prismarine_scythe", True)
 
 # Riptide
 @add_loot_table
@@ -78,7 +73,6 @@ class Riptide(GenesisItem):
     rarity = "epic"
     category = ["elemental","scythe"]
     stats = ("mainhand", {"physical_power":95,"attack_speed":65,"mana_regen":15})
-    item_model = texture_path_to_item_model("genesis:item/scythe/riptide", True)
     @right_click_ability(
         name = "mana_siphon",
         description = "WIP",
@@ -96,7 +90,6 @@ class CloudSail(GenesisItem):
     rarity = "rare"
     category = ["scythe"]
     stats = ("mainhand", {"physical_power":80,"attack_speed":50})
-    item_model = texture_path_to_item_model("genesis:item/scythe/cloud_sail", True)
     @right_click_ability(
         name = "cloud_drift",
         description = "WIP",

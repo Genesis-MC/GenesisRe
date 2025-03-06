@@ -23,7 +23,6 @@ class ObsidianBlade(GenesisItem):
     rarity = "uncommon"
     category = ["sword"]
     stats = ("mainhand", {"physical_power":80,"attack_speed":85,"armor":-10})
-    item_model = texture_path_to_item_model("genesis:item/sword/obsidian_blade", True)
 
 # FadingDusk
 @add_custom_recipe([
@@ -38,7 +37,6 @@ class FadingDusk(GenesisItem):
     rarity = "rare"
     category = ["sword"]
     stats = ("mainhand", {"physical_power":80,"attack_speed":85,"armor":-10})
-    item_model = texture_path_to_item_model("genesis:item/sword/fading_dusk", True)
 
 # SaberCrimson
 @add_custom_recipe([
@@ -53,7 +51,6 @@ class SaberCrimson(GenesisItem):
     rarity = "epic"
     category = ["sword"]
     stats = ("mainhand", {"physical_power":85,"attack_speed":95,"health":-40})
-    item_model = texture_path_to_item_model("genesis:item/sword/saber_crimson", True)
 
 # SaberWarped
 @add_custom_recipe([
@@ -68,7 +65,6 @@ class SaberWarped(GenesisItem):
     rarity = "epic"
     category = ["sword"]
     stats = ("mainhand", {"physical_power":85,"attack_speed":95,"mana_regen":-30})
-    item_model = texture_path_to_item_model("genesis:item/sword/saber_warped", True)
 
 # HailstoneBlade
 @add_loot_table
@@ -78,7 +74,6 @@ class HailstoneBlade(GenesisItem):
     rarity = "epic"
     category = ["sword"]
     stats = ("mainhand", {"physical_power":75,"attack_speed":100})
-    item_model = texture_path_to_item_model("genesis:item/sword/hailstone_blade", True)
     @right_click_ability(
         name = "hailslash",
         description = "WIP",
@@ -96,7 +91,6 @@ class Kopesh(GenesisItem):
     rarity = "rare"
     category = ["sword"]
     stats = ("mainhand", {"physical_power":80,"attack_speed":85})
-    item_model = texture_path_to_item_model("genesis:item/sword/kopesh", True)
     @right_click_ability(
         name = "cleave1",
         description = "WIP",
@@ -114,8 +108,7 @@ class AcolyteBlade(GenesisItem):
     rarity = "rare"
     category = ["sword"]
     stats = ("mainhand", {"physical_power":85,"attack_speed":80})
-    item_model = texture_path_to_item_model("genesis:item/dagger/acolyte_blade", True)
-    
+
 # Asophogheny
 @add_loot_table
 @bolt_item
@@ -124,7 +117,6 @@ class Asophogeny(GenesisItem):
     rarity = "epic"
     category = ["sword"]
     stats = ("mainhand", {"physical_power":100,"magic_power":90,"attack_speed":80})
-    item_model = texture_path_to_item_model("genesis:item/sword/asophogeny", True)
     @right_click_ability(
         name = "blood_root",
         description = "WIP",

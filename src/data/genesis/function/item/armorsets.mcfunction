@@ -23,7 +23,6 @@ class SteelAndureHelmet(GenesisItem):
     rarity = "common"
     category = ["helmet"]
     stats = ("head", {"armor":25})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/steelandurehelmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # SteelAndureChestplate
@@ -39,7 +38,6 @@ class SteelAndureChestplate(GenesisItem):
     rarity = "common"
     category = ["chestplate"]
     stats = ("chest", {"armor":65})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/steelandurechestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # SteelAndureLeggings
@@ -55,7 +53,6 @@ class SteelAndureLeggings(GenesisItem):
     rarity = "common"
     category = ["leggings"]
     stats = ("legs", {"armor":55})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/steelandureleggings", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # SteelAndureBoots
@@ -71,7 +68,6 @@ class SteelAndureBoots(GenesisItem):
     rarity = "common"
     category = ["boots"]
     stats = ("feet", {"armor":25})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/steelandureboots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 
@@ -88,7 +84,6 @@ class ReinforcedandureHelmet(GenesisItem):
     rarity = "uncommon"
     category = ["helmet"]
     stats = ("head", {"armor":30,"armor_toughness":20})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/reinforcedandurehelmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # ReinforcedandureChestplate
@@ -104,7 +99,6 @@ class ReinforcedandureChestplate(GenesisItem):
     rarity = "uncommon"
     category = ["chestplate"]
     stats = ("chest", {"armor":70,"armor_toughness":20})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/reinforcedandurechestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # ReinforcedandureLeggings
@@ -120,7 +114,6 @@ class ReinforcedandureLeggings(GenesisItem):
     rarity = "uncommon"
     category = ["leggings"]
     stats = ("legs", {"armor":60,"armor_toughness":20})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/reinforcedandureleggings", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # ReinforcedandureBoots
@@ -136,7 +129,6 @@ class ReinforcedandureBoots(GenesisItem):
     rarity = "uncommon"
     category = ["boots"]
     stats = ("feet", {"armor":30,"armor_toughness":20})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/reinforcedandureboots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 
@@ -153,7 +145,6 @@ class ApprenticeHat(GenesisItem):
     rarity = "uncommon"
     category = ["helmet"]
     stats = ("head", {"armor":10,"mana_pool":10})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/apprentice_hat", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # ApprenticeRobe
@@ -169,7 +160,6 @@ class ApprenticeRobe(GenesisItem):
     rarity = "uncommon"
     category = ["chestplate"]
     stats = ("chest", {"armor":30,"mana_pool":20})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/apprentice_robe", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # ApprenticeTrousers
@@ -185,7 +175,6 @@ class ApprenticeTrousers(GenesisItem):
     rarity = "uncommon"
     category = ["leggings"]
     stats = ("legs", {"armor":20,"mana_pool":20})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/apprentice_trousers", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # ApprenticeBoots
@@ -201,7 +190,6 @@ class ApprenticeBoots(GenesisItem):
     rarity = "uncommon"
     category = ["boots"]
     stats = ("feet", {"armor":10,"mana_pool":10})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/apprentice_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 
@@ -218,7 +206,6 @@ class MageHat(GenesisItem):
     rarity = "rare"
     category = ["helmet"]
     stats = ("head", {"magic_power":10,"armor":25,"mana_pool":20,"mana_regen":4})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/mage_hat", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # MageRobe
@@ -234,7 +221,6 @@ class MageRobe(GenesisItem):
     rarity = "rare"
     category = ["chestplate"]
     stats = ("chest", {"magic_power":15,"armor":60,"mana_pool":30,"mana_regen":5})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/mage_robe", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # MageTrousers
@@ -250,7 +236,6 @@ class MageTrousers(GenesisItem):
     rarity = "rare"
     category = ["leggings"]
     stats = ("legs", {"magic_power":15,"armor":50,"mana_pool":30,"mana_regen":5})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/mage_trousers", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # MageBoots
@@ -266,7 +251,6 @@ class MageBoots(GenesisItem):
     rarity = "rare"
     category = ["boots"]
     stats = ("feet", {"magic_power":10,"armor":25,"mana_pool":20,"mana_regen":4})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/mage_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 
@@ -283,7 +267,6 @@ class ArchmageHat(GenesisItem):
     rarity = "epic"
     category = ["helmet"]
     stats = ("head", {"magic_power":15,"armor":30,"mana_pool":40,"mana_regen":5})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/archmage_hat", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # ArchmageRobe
@@ -299,7 +282,6 @@ class ArchmageRobe(GenesisItem):
     rarity = "epic"
     category = ["chestplate"]
     stats = ("chest", {"magic_power":25,"armor":70,"mana_pool":50,"mana_regen":8})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/archmage_robe", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # ArchmageTrousers
@@ -315,7 +297,6 @@ class ArchmageTrousers(GenesisItem):
     rarity = "epic"
     category = ["leggings"]
     stats = ("legs", {"magic_power":25,"armor":60,"mana_pool":50,"mana_regen":8})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/archmage_trousers", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # ArchmageBoots
@@ -331,7 +312,6 @@ class ArchmageBoots(GenesisItem):
     rarity = "epic"
     category = ["boots"]
     stats = ("feet", {"magic_power":15,"armor":30,"mana_pool":40,"mana_regen":5})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/archmage_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 
@@ -343,7 +323,6 @@ class FrostveilHelmet(GenesisItem):
     rarity = "uncommon"
     category = ["helmet"]
     stats = ("head", {"armor":20})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/frostveil_helmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # FrostveilChestplate
@@ -354,7 +333,6 @@ class FrostveilChestplate(GenesisItem):
     rarity = "uncommon"
     category = ["chestplate"]
     stats = ("chest", {"armor":70})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/frostveil_chestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # FrostveilLeggings
@@ -365,7 +343,6 @@ class FrostveilLeggings(GenesisItem):
     rarity = "uncommon"
     category = ["leggings"]
     stats = ("legs", {"armor":50})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/frostveil_leggings", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # FrostveilBoots
@@ -376,7 +353,6 @@ class FrostveilBoots(GenesisItem):
     rarity = "uncommon"
     category = ["boots"]
     stats = ("feet", {"armor":20})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/frostveil_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 
@@ -388,7 +364,6 @@ class ShadedHelmet(GenesisItem):
     rarity = "rare"
     category = ["helmet"]
     stats = ("head", {"physical_power":5,"armor":20})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/shaded_helmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # ShadedChestplate
@@ -399,7 +374,6 @@ class ShadedChestplate(GenesisItem):
     rarity = "rare"
     category = ["chestplate"]
     stats = ("chest", {"physical_power":5,"armor":70})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/shaded_chestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # ShadedLeggings
@@ -410,7 +384,6 @@ class ShadedLeggings(GenesisItem):
     rarity = "rare"
     category = ["leggings"]
     stats = ("legs", {"physical_power":5,"armor":50})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/shaded_leggings", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # ShadedBoots
@@ -421,7 +394,6 @@ class ShadedBoots(GenesisItem):
     rarity = "rare"
     category = ["boots"]
     stats = ("feet", {"physical_power":5,"armor":20})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/shaded_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 
@@ -438,7 +410,6 @@ class VoidbreachHelmet(GenesisItem):
     rarity = "epic"
     category = ["void","helmet"]
     stats = ("head", {"physical_power":5,"armor":30})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/voidbreach_helmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # VoidbreachChestplate
@@ -454,7 +425,6 @@ class VoidbreachChestplate(GenesisItem):
     rarity = "epic"
     category = ["void","chestplate"]
     stats = ("chest", {"physical_power":5,"armor":75})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/voidbreach_chestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # VoidbreachLeggings
@@ -470,7 +440,6 @@ class VoidbreachLeggings(GenesisItem):
     rarity = "epic"
     category = ["void","leggings"]
     stats = ("legs", {"physical_power":5,"armor":55})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/voidbreach_leggings", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # VoidbreachBoots
@@ -486,7 +455,6 @@ class VoidbreachBoots(GenesisItem):
     rarity = "epic"
     category = ["void","boots"]
     stats = ("feet", {"physical_power":5,"armor":30})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/voidbreach_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 
@@ -503,7 +471,6 @@ class DreadnaughtHelmet(GenesisItem):
     rarity = "legendary"
     category = ["helmet"]
     stats = ("head", {"attack_speed":-4,"armor":40,"armor_toughness":40,"speed":-5})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/dreadnaught_helmet", True)
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # DreadnaughtChestplate
@@ -519,7 +486,6 @@ class DreadnaughtChestplate(GenesisItem):
     rarity = "legendary"
     category = ["chestplate"]
     stats = ("chest", {"attack_speed":-5,"armor":90,"armor_toughness":40,"speed":-6})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/dreadnaught_chestplate", True)
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # DreadnaughtLeggings
@@ -535,7 +501,6 @@ class DreadnaughtLeggings(GenesisItem):
     rarity = "legendary"
     category = ["leggings"]
     stats = ("legs", {"attack_speed":-5,"armor":70,"armor_toughness":40,"speed":-6})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/dreadnaught_leggings", True)
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # DreadnaughtBoots
@@ -551,5 +516,4 @@ class DreadnaughtBoots(GenesisItem):
     rarity = "legendary"
     category = ["boots"]
     stats = ("feet", {"attack_speed":-4,"armor":40,"armor_toughness":40,"speed":-5})
-    item_model = texture_path_to_item_model("genesis:item/armorsets/dreadnaught_boots", True)
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}

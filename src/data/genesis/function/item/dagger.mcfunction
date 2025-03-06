@@ -22,7 +22,6 @@ class IronDagger(GenesisItem):
     rarity = "common"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":35,"attack_speed":100})
-    item_model = texture_path_to_item_model("genesis:item/dagger/iron_dagger", True)
 
 # Frostfang
 @add_custom_recipe([
@@ -37,7 +36,6 @@ class Frostfang(GenesisItem):
     rarity = "uncommon"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":25,"attack_speed":100})
-    item_model = texture_path_to_item_model("genesis:item/dagger/frostfang", True)
 
 # HarbingerOfWinter
 @add_custom_recipe([
@@ -52,7 +50,6 @@ class HarbingerOfWinter(GenesisItem):
     rarity = "rare"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":30,"attack_speed":120,"speed":30})
-    item_model = texture_path_to_item_model("genesis:item/dagger/harbinger_of_winter", True)
 
 # ShadedDagger
 @add_custom_recipe([
@@ -67,7 +64,6 @@ class ShadedDagger(GenesisItem):
     rarity = "uncommon"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":40,"attack_speed":100,"speed":15})
-    item_model = texture_path_to_item_model("genesis:item/dagger/shaded_dagger", True)
 
 # VoidRazor
 @add_custom_recipe([
@@ -82,7 +78,6 @@ class VoidRazor(GenesisItem):
     rarity = "epic"
     category = ["void", "dagger"]
     stats = ("mainhand", {"physical_power":45,"attack_speed":110,"speed":25})
-    item_model = texture_path_to_item_model("genesis:item/dagger/void_razor", True)
 
 # Vorpol
 @add_custom_recipe([
@@ -97,7 +92,6 @@ class Vorpol(GenesisItem):
     rarity = "legendary"
     category = ["void", "dagger"]
     stats = ("mainhand", {"physical_power":50,"attack_speed":100,"speed":100})
-    item_model = texture_path_to_item_model("genesis:item/dagger/vorpol", True)
     @right_click_ability(
         name = "blitzkrieg",
         description = "WIP",
@@ -120,7 +114,6 @@ class Vescherum(GenesisItem):
     rarity = "legendary"
     category = ["void", "dagger"]
     stats = ("mainhand", {"physical_power":50,"attack_speed":110,"armor_toughness":60,"speed":30})
-    item_model = texture_path_to_item_model("genesis:item/dagger/vescherum", True)
     @right_click_ability(
         name = "hallowed_field",
         description = "WIP",
@@ -143,7 +136,6 @@ class Visharp(GenesisItem):
     rarity = "legendary"
     category = ["void", "dagger"]
     stats = ("mainhand", {"physical_power":60,"attack_speed":110})
-    item_model = texture_path_to_item_model("genesis:item/dagger/visharp", True)
     @right_click_ability(
         name = "Voidrend",
         description = "Teleport up to 5 blocks ahead of you and deal 40% Physical Power to opponents in a 3-block radius from your initial position",
@@ -166,7 +158,6 @@ class Hook(GenesisItem):
     rarity = "uncommon"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":35,"attack_speed":110,"luck":10})
-    item_model = texture_path_to_item_model("genesis:item/dagger/hook", True)
 
 # LadyLuck
 @add_loot_table
@@ -176,7 +167,6 @@ class LadyLuck(GenesisItem):
     rarity = "mythical"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":30,"attack_speed":130,"luck":50})
-    item_model = texture_path_to_item_model("genesis:item/dagger/lady_luck", True)
 
 # VermillionGlove
 @add_loot_table
@@ -186,7 +176,6 @@ class VermillionGlove(GenesisItem):
     rarity = "uncommon"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":45,"attack_speed":100})
-    item_model = texture_path_to_item_model("genesis:item/dagger/vermillion_glove", True)
 
 # CrystalMoon
 @add_loot_table
@@ -196,7 +185,6 @@ class CrystalMoon(GenesisItem):
     rarity = "rare"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":30,"attack_speed":100,"armor_toughness":-20,"mana_regen":5})
-    item_model = texture_path_to_item_model("genesis:item/dagger/crystal_moon", True)
 
 # PrismDagger
 @add_loot_table
@@ -206,7 +194,6 @@ class PrismDagger(GenesisItem):
     rarity = "epic"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":50,"magic_power":100,"attack_speed":105,"mana_regen":10})
-    item_model = texture_path_to_item_model("genesis:item/dagger/prism_dagger", True)
     @right_click_ability(
         name = "prism_shatter",
         description = "WIP",

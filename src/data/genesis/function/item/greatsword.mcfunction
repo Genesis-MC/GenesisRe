@@ -23,7 +23,6 @@ class IronGreatsword(GenesisItem):
     rarity = "common"
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":110,"attack_speed":38})
-    item_model = texture_path_to_item_model("genesis:item/greatsword/iron_greatsword", True)
 
 # OvergrownGreatsword
 @add_custom_recipe([
@@ -38,7 +37,6 @@ class OvergrownGreatsword(GenesisItem):
     rarity = "uncommon"
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":125,"attack_speed":40,"health":40})
-    item_model = texture_path_to_item_model("genesis:item/greatsword/overgrown_greatsword", True)
 
 # Zweihander
 @add_custom_recipe([
@@ -75,7 +73,6 @@ class EverfrostTitanblade(GenesisItem):
     rarity = "legendary"
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":150,"attack_speed":30,"mana_pool":20,"mana_regen":5,"speed":-50})
-    item_model = texture_path_to_item_model("genesis:item/greatsword/everfrost_titanblade", True)
     @right_click_ability(
         name = "polar_vortex",
         description = "WIP",
@@ -93,7 +90,6 @@ class SwashbucklersGlory(GenesisItem):
     rarity = "epic"
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":140,"attack_speed":35,"armor_toughness":30})
-    item_model = texture_path_to_item_model("genesis:item/greatsword/swashbucklers_glory", True)
     @right_click_ability(
         name = "cleave2",
         description = "WIP",
@@ -111,7 +107,6 @@ class RoyalCleaver(GenesisItem):
     rarity = "epic"
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":150,"attack_speed":40,"armor":30,"knockback_resistance":30,"mana_regen":-10,"speed":-25})
-    item_model = texture_path_to_item_model("genesis:item/greatsword/royal_cleaver", True)
 
 # Exetol
 @add_loot_table

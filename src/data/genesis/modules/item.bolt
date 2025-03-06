@@ -105,6 +105,33 @@ class GenesisItem:
         add_translation(trans_string, item_name[0])
         return {"translate":trans_string} | item_name[1]
 
+    @transformer(component = "item_model")
+    def item_model_transformer(item, item_model):
+        if item_model != None:
+            return item_model
+
+        category = item.category[-1]
+        parent = "minecraft:item/generated"
+        if category in ['sword','tool']:
+            parent = "minecraft:item/handheld"
+        elif category in ['polearm','greatsword','dagger','scythe']:
+            parent = f'genesis:item/template/{category}'
+
+        path = f'genesis:item/{category}/{item.id}'
+        truncated_path = f'genesis:{category}/{item.id}'
+
+        model path {
+            "parent": parent,
+            "textures": {"layer0": path}
+        }
+
+        item_model truncated_path {"model": {
+            "type": "minecraft:model",
+            "model": path
+        }}
+
+        return truncated_path
+
     @after_all
     @custom_component(component = "passives")
     def passives_handler(item, passives):
