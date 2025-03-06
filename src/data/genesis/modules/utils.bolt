@@ -40,13 +40,15 @@ def break_text_into_lines(text: str, trans_base: str, italic = False, color = "g
 
 
 def add_loot_table(item):
-    loot_table f'{item.namespace}:item/{item.category[-1]}/{item.id}' {
+    path = f'{item.namespace}:item/{item.category[-1]}/{item.id}'
+    loot_table path {
         "pools": [{"rolls": 1,"entries": [{
             "type": "minecraft:item",
             "name": f'minecraft:{item.base_item}',
             "functions": [{"function": "minecraft:set_components","components": item.components}]
         }]}]
     }
+    item.loot_table = path
     return item
 
 
