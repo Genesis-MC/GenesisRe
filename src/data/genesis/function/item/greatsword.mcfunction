@@ -1,4 +1,3 @@
-from ps_beet_bolt.bolt_item import bolt_item
 from genesis:utils import add_loot_table, texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
@@ -17,8 +16,7 @@ from genesis:item/dagger import HarbingerOfWinter
     [None, "stick", None],
 ])
 @add_loot_table
-@bolt_item
-class IronGreatsword(GenesisItem):
+class IronGreatsword(metaclass=GenesisItem):
     item_name = ("Iron Greatsword", {"color":"white"})
     rarity = "common"
     category = ["greatsword"]
@@ -31,8 +29,7 @@ class IronGreatsword(GenesisItem):
     [None, SteelHilt, None],
 ])
 @add_loot_table
-@bolt_item
-class OvergrownGreatsword(GenesisItem):
+class OvergrownGreatsword(metaclass=GenesisItem):
     item_name = ("OvergrownGreatsword", {"color":"green"})
     rarity = "uncommon"
     category = ["greatsword"]
@@ -45,8 +42,7 @@ class OvergrownGreatsword(GenesisItem):
     [None, SteelHilt, None],
 ])
 @add_loot_table
-@bolt_item
-class Zweihander(GenesisItem):
+class Zweihander(metaclass=GenesisItem):
     item_name = ("Zweihander", {"color":"white"})
     rarity = "rare"
     category = ["greatsword"]
@@ -67,8 +63,7 @@ class Zweihander(GenesisItem):
     [None, BejeweledHilt, None],
 ])
 @add_loot_table
-@bolt_item
-class EverfrostTitanblade(GenesisItem):
+class EverfrostTitanblade(metaclass=GenesisItem):
     item_name = ("Everfrost Titanblade", {"color":"aqua"})
     rarity = "legendary"
     category = ["greatsword"]
@@ -84,8 +79,7 @@ class EverfrostTitanblade(GenesisItem):
 
 # SwashbucklersGlory
 @add_loot_table
-@bolt_item
-class SwashbucklersGlory(GenesisItem):
+class SwashbucklersGlory(metaclass=GenesisItem):
     item_name = ("Swashbucklers Glory", {"color":"blue"})
     rarity = "epic"
     category = ["greatsword"]
@@ -101,8 +95,7 @@ class SwashbucklersGlory(GenesisItem):
     
 # RoyalCleaver
 @add_loot_table
-@bolt_item
-class RoyalCleaver(GenesisItem):
+class RoyalCleaver(metaclass=GenesisItem):
     item_name = ("Royal Cleaver", {"color":"gold"})
     rarity = "epic"
     category = ["greatsword"]
@@ -110,8 +103,7 @@ class RoyalCleaver(GenesisItem):
 
 # Exetol
 @add_loot_table
-@bolt_item
-class Exetol(GenesisItem):
+class Exetol(metaclass=GenesisItem):
     item_name = ("Exetol", {"color":"red"})
     rarity = "legendary"
     category = ["greatsword"]

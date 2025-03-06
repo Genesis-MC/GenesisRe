@@ -1,4 +1,3 @@
-from ps_beet_bolt.bolt_item import bolt_item
 from genesis:item import GenesisItem
 from genesis:placeable import on_place
 from genesis:utils import add_loot_table
@@ -147,8 +146,7 @@ def add_custom_recipe(recipe: list[list[str|type|None]], reduce_durability = Fal
     ['#logs','#logs','#logs'],
 ])
 @add_loot_table
-@bolt_item
-class Crafter(GenesisItem):
+class Crafter(metaclass=GenesisItem):
     item_name = ("Genesis Crafter", {})
     item_model = "crafting_table"
     rarity = "common"

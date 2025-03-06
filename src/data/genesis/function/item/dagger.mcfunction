@@ -1,4 +1,3 @@
-from ps_beet_bolt.bolt_item import bolt_item
 from genesis:utils import add_loot_table, texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
@@ -16,8 +15,7 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
     ["stick", None, None],
 ])
 @add_loot_table
-@bolt_item
-class IronDagger(GenesisItem):
+class IronDagger(metaclass=GenesisItem):
     item_name = ("Iron Dagger", {"color":"white"})
     rarity = "common"
     category = ["dagger"]
@@ -30,8 +28,7 @@ class IronDagger(GenesisItem):
     [BlizzardTear, BlizzardTear, BlizzardTear],
 ])
 @add_loot_table
-@bolt_item
-class Frostfang(GenesisItem):
+class Frostfang(metaclass=GenesisItem):
     item_name = ("Frostfang", {"color":"aqua"})
     rarity = "uncommon"
     category = ["dagger"]
@@ -44,8 +41,7 @@ class Frostfang(GenesisItem):
     [SteelHilt, None, None],
 ])
 @add_loot_table
-@bolt_item
-class HarbingerOfWinter(GenesisItem):
+class HarbingerOfWinter(metaclass=GenesisItem):
     item_name = ("Harbinger Of Winter", {"color":"aqua"})
     rarity = "rare"
     category = ["dagger"]
@@ -58,8 +54,7 @@ class HarbingerOfWinter(GenesisItem):
     [ShadeFlux, ShadeFlux, ShadeFlux],
 ])
 @add_loot_table
-@bolt_item
-class ShadedDagger(GenesisItem):
+class ShadedDagger(metaclass=GenesisItem):
     item_name = ("Shaded Dagger", {"color":"dark_purple"})
     rarity = "uncommon"
     category = ["dagger"]
@@ -72,8 +67,7 @@ class ShadedDagger(GenesisItem):
     [VoidedFragment, "crying_obsidian", VoidedFragment],
 ])
 @add_loot_table
-@bolt_item
-class VoidRazor(GenesisItem):
+class VoidRazor(metaclass=GenesisItem):
     item_name = ("Void Razor", {"color":"dark_purple"})
     rarity = "epic"
     category = ["void", "dagger"]
@@ -86,8 +80,7 @@ class VoidRazor(GenesisItem):
     [ShardOfTheWarpedEmpyrean, PyroclasticCore, ShardOfTheCrimsonAbyss],
 ])
 @add_loot_table
-@bolt_item
-class Vorpol(GenesisItem):
+class Vorpol(metaclass=GenesisItem):
     item_name = ("Vorpol", {"color":"light_purple"})
     rarity = "legendary"
     category = ["void", "dagger"]
@@ -108,8 +101,7 @@ class Vorpol(GenesisItem):
     [ShardOfTheCrimsonAbyss, LivingwoodCore, ShardOfTheCrimsonAbyss],
 ])
 @add_loot_table
-@bolt_item
-class Vescherum(GenesisItem):
+class Vescherum(metaclass=GenesisItem):
     item_name = ("Vescherum", {"color":"light_purple"})
     rarity = "legendary"
     category = ["void", "dagger"]
@@ -130,8 +122,7 @@ class Vescherum(GenesisItem):
     [ShardOfTheWarpedEmpyrean, EverfrostCore, ShardOfTheWarpedEmpyrean],
 ])
 @add_loot_table
-@bolt_item
-class Visharp(GenesisItem):
+class Visharp(metaclass=GenesisItem):
     item_name = ("Visharp", {"color":"light_purple"})
     rarity = "legendary"
     category = ["void", "dagger"]
@@ -152,8 +143,7 @@ class Visharp(GenesisItem):
 
 # Hook
 @add_loot_table
-@bolt_item
-class Hook(GenesisItem):
+class Hook(metaclass=GenesisItem):
     item_name = ("Hook", {"color":"white"})
     rarity = "uncommon"
     category = ["dagger"]
@@ -161,8 +151,7 @@ class Hook(GenesisItem):
 
 # LadyLuck
 @add_loot_table
-@bolt_item
-class LadyLuck(GenesisItem):
+class LadyLuck(metaclass=GenesisItem):
     item_name = ("LadyLuck", {"color":"gold"})
     rarity = "mythical"
     category = ["dagger"]
@@ -170,8 +159,7 @@ class LadyLuck(GenesisItem):
 
 # VermillionGlove
 @add_loot_table
-@bolt_item
-class VermillionGlove(GenesisItem):
+class VermillionGlove(metaclass=GenesisItem):
     item_name = ("Vermillion Glove", {"color":"dark_red"})
     rarity = "uncommon"
     category = ["dagger"]
@@ -179,8 +167,7 @@ class VermillionGlove(GenesisItem):
 
 # CrystalMoon
 @add_loot_table
-@bolt_item
-class CrystalMoon(GenesisItem):
+class CrystalMoon(metaclass=GenesisItem):
     item_name = ("Crystal Moon", {"color":"white"})
     rarity = "rare"
     category = ["dagger"]
@@ -188,8 +175,7 @@ class CrystalMoon(GenesisItem):
 
 # PrismDagger
 @add_loot_table
-@bolt_item
-class PrismDagger(GenesisItem):
+class PrismDagger(metaclass=GenesisItem):
     item_name = ("Prism Dagger", {"color":"light_purple"})
     rarity = "epic"
     category = ["dagger"]

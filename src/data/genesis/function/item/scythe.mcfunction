@@ -1,4 +1,3 @@
-from ps_beet_bolt.bolt_item import bolt_item
 from genesis:utils import add_loot_table, texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
@@ -17,8 +16,7 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
     ["stick", None, None],
 ])
 @add_loot_table
-@bolt_item
-class IronScythe(GenesisItem):
+class IronScythe(metaclass=GenesisItem):
     item_name = ("Iron Scythe", {"color":"white"})
     rarity = "common"
     category = ["scythe"]
@@ -26,8 +24,7 @@ class IronScythe(GenesisItem):
 
 # RecluseFang
 @add_loot_table
-@bolt_item
-class RecluseFang(GenesisItem):
+class RecluseFang(metaclass=GenesisItem):
     item_name = ("Recluse Fang", {"color":"red"})
     rarity = "uncommon"
     category = ["scythe"]
@@ -40,8 +37,7 @@ class RecluseFang(GenesisItem):
     [VenomSac, "diamond", VenomSac],
 ])
 @add_loot_table
-@bolt_item
-class VenomlashFang(GenesisItem):
+class VenomlashFang(metaclass=GenesisItem):
     item_name = ("Venomlash Fang", {"color":"dark_purple"})
     rarity = "rare"
     category = ["scythe"]
@@ -49,8 +45,7 @@ class VenomlashFang(GenesisItem):
 
 # JackOReaper
 @add_loot_table
-@bolt_item
-class JackOReaper(GenesisItem):
+class JackOReaper(metaclass=GenesisItem):
     item_name = ("Jack O' Reaper", {"color":"white"})
     rarity = "rare"
     category = ["scythe"]
@@ -58,8 +53,7 @@ class JackOReaper(GenesisItem):
 
 # PrismarineScythe
 @add_loot_table
-@bolt_item
-class PrismarineScythe(GenesisItem):
+class PrismarineScythe(metaclass=GenesisItem):
     item_name = ("Prismarine Scythe", {"color":"dark_aqua"})
     rarity = "rare"
     category = ["scythe"]
@@ -67,8 +61,7 @@ class PrismarineScythe(GenesisItem):
 
 # Riptide
 @add_loot_table
-@bolt_item
-class Riptide(GenesisItem):
+class Riptide(metaclass=GenesisItem):
     item_name = ("Riptide", {"color":"dark_aqua"})
     rarity = "epic"
     category = ["elemental","scythe"]
@@ -84,8 +77,7 @@ class Riptide(GenesisItem):
 
 # CloudSail
 @add_loot_table
-@bolt_item
-class CloudSail(GenesisItem):
+class CloudSail(metaclass=GenesisItem):
     item_name = ("Cloud Sail", {"color":"white"})
     rarity = "rare"
     category = ["scythe"]

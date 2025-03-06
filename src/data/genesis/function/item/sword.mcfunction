@@ -1,4 +1,3 @@
-from ps_beet_bolt.bolt_item import bolt_item
 from genesis:utils import add_loot_table, texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
@@ -17,8 +16,7 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
     [SteelHilt, None, None],
 ])
 @add_loot_table
-@bolt_item
-class ObsidianBlade(GenesisItem):
+class ObsidianBlade(metaclass=GenesisItem):
     item_name = ("Obsidian Blade", {"color":"white"})
     rarity = "uncommon"
     category = ["sword"]
@@ -31,8 +29,7 @@ class ObsidianBlade(GenesisItem):
     [ShadeFlux, ShadeFlux, ShadeFlux],
 ])
 @add_loot_table
-@bolt_item
-class FadingDusk(GenesisItem):
+class FadingDusk(metaclass=GenesisItem):
     item_name = ("Fading Dusk", {"color":"dark_purple"})
     rarity = "rare"
     category = ["sword"]
@@ -45,8 +42,7 @@ class FadingDusk(GenesisItem):
     [BejeweledHilt, None, None],
 ])
 @add_loot_table
-@bolt_item
-class SaberCrimson(GenesisItem):
+class SaberCrimson(metaclass=GenesisItem):
     item_name = ("Saber Crimson", {"color":"red"})
     rarity = "epic"
     category = ["sword"]
@@ -59,8 +55,7 @@ class SaberCrimson(GenesisItem):
     [BejeweledHilt, None, None],
 ])
 @add_loot_table
-@bolt_item
-class SaberWarped(GenesisItem):
+class SaberWarped(metaclass=GenesisItem):
     item_name = ("Saber Warped", {"color":"dark_aqua"})
     rarity = "epic"
     category = ["sword"]
@@ -68,8 +63,7 @@ class SaberWarped(GenesisItem):
 
 # HailstoneBlade
 @add_loot_table
-@bolt_item
-class HailstoneBlade(GenesisItem):
+class HailstoneBlade(metaclass=GenesisItem):
     item_name = ("Hailstone Blade", {"color":"aqua"})
     rarity = "epic"
     category = ["sword"]
@@ -85,8 +79,7 @@ class HailstoneBlade(GenesisItem):
 
 # Kopesh
 @add_loot_table
-@bolt_item
-class Kopesh(GenesisItem):
+class Kopesh(metaclass=GenesisItem):
     item_name = ("Kopesh", {"color":"dark_red"})
     rarity = "rare"
     category = ["sword"]
@@ -102,8 +95,7 @@ class Kopesh(GenesisItem):
 
 # AcolyteBlade
 @add_loot_table
-@bolt_item
-class AcolyteBlade(GenesisItem):
+class AcolyteBlade(metaclass=GenesisItem):
     item_name = ("Acolyte Blade", {"color":"dark_red"})
     rarity = "rare"
     category = ["sword"]
@@ -111,8 +103,7 @@ class AcolyteBlade(GenesisItem):
 
 # Asophogheny
 @add_loot_table
-@bolt_item
-class Asophogeny(GenesisItem):
+class Asophogeny(metaclass=GenesisItem):
     item_name = ("Asophogeny", {"color":"dark_red"})
     rarity = "epic"
     category = ["sword"]

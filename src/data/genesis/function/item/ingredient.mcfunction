@@ -1,4 +1,3 @@
-from ps_beet_bolt.bolt_item import bolt_item
 from genesis:utils import add_loot_table, break_text_into_lines, texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
@@ -14,8 +13,7 @@ from genesis:item import GenesisItem
     ["iron_ingot", "iron_ingot", "iron_ingot"],
 ])
 @add_loot_table
-@bolt_item
-class SteelHilt(GenesisItem):
+class SteelHilt(metaclass=GenesisItem):
     item_name = ("Steel Hilt", {"color":"white"})
     rarity = "common"
     category = ["ingredient"]
@@ -32,8 +30,7 @@ class SteelHilt(GenesisItem):
     ["gold_ingot", "gold_ingot", "gold_ingot"],
 ])
 @add_loot_table
-@bolt_item
-class GildedHilt(GenesisItem):
+class GildedHilt(metaclass=GenesisItem):
     item_name = ("Gilded Hilt", {"color":"white"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -50,8 +47,7 @@ class GildedHilt(GenesisItem):
     ["diamond", "diamond", "diamond"],
 ])
 @add_loot_table
-@bolt_item
-class BejeweledHilt(GenesisItem):
+class BejeweledHilt(metaclass=GenesisItem):
     item_name = ("Bejeweled Hilt", {"color":"white"})
     rarity = "rare"
     category = ["ingredient"]
@@ -68,8 +64,7 @@ class BejeweledHilt(GenesisItem):
 #    [NetheriteSediment, ShardOfTheCrimsonAbyss, NetheriteSediment],
 #])
 @add_loot_table
-@bolt_item
-class CrimsonAlloy(GenesisItem):
+class CrimsonAlloy(metaclass=GenesisItem):
     item_name = ("Crimson Alloy", {"color":"red"})
     rarity = "legendary"
     category = ["ingredient"]
@@ -86,8 +81,7 @@ class CrimsonAlloy(GenesisItem):
 #    [NetheriteSediment, ShardOfTheWarpedEmpyrean, NetheriteSediment],
 #])
 @add_loot_table
-@bolt_item
-class WarpedAlloy(GenesisItem):
+class WarpedAlloy(metaclass=GenesisItem):
     item_name = ("Warped Alloy", {"color":"dark_aqua"})
     rarity = "legendary"
     category = ["ingredient"]
@@ -98,8 +92,7 @@ class WarpedAlloy(GenesisItem):
     )
     
 @add_loot_table
-@bolt_item
-class VerdantTwig(GenesisItem):
+class VerdantTwig(metaclass=GenesisItem):
     item_name = ("Verdant Twig", {"color":"white"})
     rarity = "common"
     category = ["ingredient"]
@@ -110,8 +103,7 @@ class VerdantTwig(GenesisItem):
     )
     
 @add_loot_table
-@bolt_item
-class MossyBark(GenesisItem):
+class MossyBark(metaclass=GenesisItem):
     item_name = ("Mossy Bark", {"color":"white"})
     rarity = "common"
     category = ["ingredient"]
@@ -128,8 +120,7 @@ class MossyBark(GenesisItem):
     [VerdantTwig, MossyBark, VerdantTwig],
 ])
 @add_loot_table
-@bolt_item
-class VerdantGem(GenesisItem):
+class VerdantGem(metaclass=GenesisItem):
     item_name = ("Verdant Gem", {"color":"green"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -140,8 +131,7 @@ class VerdantGem(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class VermillionClay(GenesisItem):
+class VermillionClay(metaclass=GenesisItem):
     item_name = ("Vermillion Clay", {"color":"white"})
     rarity = "common"
     category = ["ingredient"]
@@ -158,8 +148,7 @@ class VermillionClay(GenesisItem):
     [VermillionClay, VermillionClay, VermillionClay],
 ])
 @add_loot_table
-@bolt_item
-class VermillionGem(GenesisItem):
+class VermillionGem(metaclass=GenesisItem):
     item_name = ("Vermillion Gem", {"color":"dark_red"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -170,8 +159,7 @@ class VermillionGem(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class ShadeFlux(GenesisItem):
+class ShadeFlux(metaclass=GenesisItem):
     item_name = ("Shade Flux", {"color":"dark_purple"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -188,8 +176,7 @@ class ShadeFlux(GenesisItem):
     [None, ShadeFlux, None],
 ])
 @add_loot_table
-@bolt_item
-class ShadedEnderPearl(GenesisItem):
+class ShadedEnderPearl(metaclass=GenesisItem):
     item_name = ("Shaded Ender Pearl", {"color":"light_purple"})
     rarity = "rare"
     category = ["ingredient"]
@@ -200,8 +187,7 @@ class ShadedEnderPearl(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class VoidedFragment(GenesisItem):
+class VoidedFragment(metaclass=GenesisItem):
     item_name = ("Voided Fragment", {"color":"dark_purple"})
     rarity = "rare"
     category = ["ingredient"]
@@ -218,8 +204,7 @@ class VoidedFragment(GenesisItem):
     [None, VoidedFragment, None],
 ])
 @add_loot_table
-@bolt_item
-class VoidedEnderPearl(GenesisItem):
+class VoidedEnderPearl(metaclass=GenesisItem):
     item_name = ("Voided Ender Pearl", {"color":"dark_purple"})
     rarity = "epic"
     category = ["ingredient"]
@@ -266,8 +251,7 @@ class VoidedEnderPearl(GenesisItem):
 #])
 
 @add_loot_table
-@bolt_item
-class AncientGoldCoin(GenesisItem):
+class AncientGoldCoin(metaclass=GenesisItem):
     item_name = ("Ancient Gold Coin", {"color":"white"})
     rarity = "rare"
     category = ["ingredient"]
@@ -278,8 +262,7 @@ class AncientGoldCoin(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class ArcaneCloth(GenesisItem):
+class ArcaneCloth(metaclass=GenesisItem):
     item_name = ("Arcane Cloth", {"color":"light_purple"})
     rarity = "rare"
     category = ["ingredient"]
@@ -290,8 +273,7 @@ class ArcaneCloth(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class BlizzardTear(GenesisItem):
+class BlizzardTear(metaclass=GenesisItem):
     item_name = ("Blizzard Tear", {"color":"white"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -302,8 +284,7 @@ class BlizzardTear(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class BoarHide(GenesisItem):
+class BoarHide(metaclass=GenesisItem):
     item_name = ("Boar Hide", {"color":"white"})
     rarity = "common"
     category = ["ingredient"]
@@ -314,8 +295,7 @@ class BoarHide(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class Calimari(GenesisItem):
+class Calimari(metaclass=GenesisItem):
     item_name = ("Calimari", {"color":"white"})
     rarity = "common"
     category = ["ingredient"]
@@ -326,8 +306,7 @@ class Calimari(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class Cloth(GenesisItem):
+class Cloth(metaclass=GenesisItem):
     item_name = ("Cloth", {"color":"white"})
     rarity = "common"
     category = ["ingredient"]
@@ -338,8 +317,7 @@ class Cloth(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class CrystalDust(GenesisItem):
+class CrystalDust(metaclass=GenesisItem):
     item_name = ("Crystal Dust", {"color":"white"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -350,8 +328,7 @@ class CrystalDust(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class CrystalScale(GenesisItem):
+class CrystalScale(metaclass=GenesisItem):
     item_name = ("Crystal Scale", {"color":"aqua"})
     rarity = "rare"
     category = ["ingredient"]
@@ -362,8 +339,7 @@ class CrystalScale(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class Drumstick(GenesisItem):
+class Drumstick(metaclass=GenesisItem):
     item_name = ("Drumstick", {"color":"white"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -374,8 +350,7 @@ class Drumstick(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class FloralNectar(GenesisItem):
+class FloralNectar(metaclass=GenesisItem):
     item_name = ("Floral Nectar", {"color":"white"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -386,8 +361,7 @@ class FloralNectar(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class HexedHailstone(GenesisItem):
+class HexedHailstone(metaclass=GenesisItem):
     item_name = ("Hexed Hailstone", {"color":"white"})
     rarity = "epic"
     category = ["ingredient"]
@@ -398,8 +372,7 @@ class HexedHailstone(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class EverfrostCore(GenesisItem):
+class EverfrostCore(metaclass=GenesisItem):
     item_name = ("Everfrost Core", {"color":"white"})
     rarity = "legendary"
     category = ["ingredient"]
@@ -410,8 +383,7 @@ class EverfrostCore(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class LivingwoodCore(GenesisItem):
+class LivingwoodCore(metaclass=GenesisItem):
     item_name = ("Livingwood Core", {"color":"green"})
     rarity = "legendary"
     category = ["ingredient"]
@@ -422,8 +394,7 @@ class LivingwoodCore(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class PyroclasticCore(GenesisItem):
+class PyroclasticCore(metaclass=GenesisItem):
     item_name = ("Pyroclastic Core", {"color":"red"})
     rarity = "legendary"
     category = ["ingredient"]
@@ -434,8 +405,7 @@ class PyroclasticCore(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class ManaCloth(GenesisItem):
+class ManaCloth(metaclass=GenesisItem):
     item_name = ("Mana Cloth", {"color":"white"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -446,8 +416,7 @@ class ManaCloth(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class MetalAlloy(GenesisItem):
+class MetalAlloy(metaclass=GenesisItem):
     item_name = ("Metal Alloy", {"color":"white"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -458,8 +427,7 @@ class MetalAlloy(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class MutatedFlesh(GenesisItem):
+class MutatedFlesh(metaclass=GenesisItem):
     item_name = ("Mutated Flesh", {"color":"white"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -470,8 +438,7 @@ class MutatedFlesh(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class PrimeBeef(GenesisItem):
+class PrimeBeef(metaclass=GenesisItem):
     item_name = ("Prime Beef", {"color":"white"})
     rarity = "rare"
     category = ["ingredient"]
@@ -482,8 +449,7 @@ class PrimeBeef(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class PureCrystalDust(GenesisItem):
+class PureCrystalDust(metaclass=GenesisItem):
     item_name = ("Pure Crystal Dust", {"color":"light_purple"})
     rarity = "epic"
     category = ["ingredient"]
@@ -494,8 +460,7 @@ class PureCrystalDust(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class ScrapscuttleEgg(GenesisItem):
+class ScrapscuttleEgg(metaclass=GenesisItem):
     item_name = ("Scrapscuttle Egg", {"color":"white"})
     rarity = "epic"
     category = ["ingredient"]
@@ -506,8 +471,7 @@ class ScrapscuttleEgg(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class ShardOfTheCrimsonAbyss(GenesisItem):
+class ShardOfTheCrimsonAbyss(metaclass=GenesisItem):
     item_name = ("Shard Of The Crimson Abyss", {"color":"red"})
     rarity = "legendary"
     category = ["ingredient"]
@@ -518,8 +482,7 @@ class ShardOfTheCrimsonAbyss(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class ShardOfTheDepths(GenesisItem):
+class ShardOfTheDepths(metaclass=GenesisItem):
     item_name = ("Shard Of The Depths", {"color":"dark_purple"})
     rarity = "epic"
     category = ["ingredient"]
@@ -530,8 +493,7 @@ class ShardOfTheDepths(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class ShardOfTheWarpedEmpyrean(GenesisItem):
+class ShardOfTheWarpedEmpyrean(metaclass=GenesisItem):
     item_name = ("Shard Of The Warped Empyrean", {"color":"dark_aqua"})
     rarity = "epic"
     category = ["ingredient"]
@@ -542,8 +504,7 @@ class ShardOfTheWarpedEmpyrean(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class TerraclodPearl(GenesisItem):
+class TerraclodPearl(metaclass=GenesisItem):
     item_name = ("Terraclod Pearl", {"color":"gold"})
     rarity = "legendary"
     category = ["ingredient"]
@@ -554,8 +515,7 @@ class TerraclodPearl(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class Truffle(GenesisItem):
+class Truffle(metaclass=GenesisItem):
     item_name = ("Truffle", {"color":"white"})
     rarity = "epic"
     category = ["ingredient"]
@@ -566,8 +526,7 @@ class Truffle(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class VenomSac(GenesisItem):
+class VenomSac(metaclass=GenesisItem):
     item_name = ("Venom Sac", {"color":"white"})
     rarity = "rare"
     category = ["ingredient"]
@@ -578,8 +537,7 @@ class VenomSac(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class VerdantShard(GenesisItem):
+class VerdantShard(metaclass=GenesisItem):
     item_name = ("Verdant Shard", {"color":"white"})
     rarity = "uncommon"
     category = ["ingredient"]
@@ -590,8 +548,7 @@ class VerdantShard(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class WizardsTruffle(GenesisItem):
+class WizardsTruffle(metaclass=GenesisItem):
     item_name = ("Wizards Truffle", {"color":"blue"})
     rarity = "legendary"
     category = ["ingredient"]
@@ -602,8 +559,7 @@ class WizardsTruffle(GenesisItem):
     )
 
 @add_loot_table
-@bolt_item
-class WolfFang(GenesisItem):
+class WolfFang(metaclass=GenesisItem):
     item_name = ("Wolf Fang", {"color":"white"})
     rarity = "common"
     category = ["ingredient"]
