@@ -100,6 +100,7 @@ def genesis_status(cls):
         if getattr(cls, 'icon', None) != None:
             function genesis:status/hud/update_icons
             scoreboard players add @s genesis.hud.display 1
+            tag @s add genesis.hud.display
 
         for k, v in cls.__dict__.items():
             if callable(v) and getattr(v, '__on_apply_status__', False):

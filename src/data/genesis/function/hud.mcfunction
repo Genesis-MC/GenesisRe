@@ -6,7 +6,6 @@ append function genesis:load:
 
 
 append function genesis:tick:
-    as @a[tag=!genesis.hud.display] if score @s genesis.hud.display matches 1.. tag @s add genesis.hud.display
     as @a[tag=genesis.hud.display] function genesis:hud/tick
 
 

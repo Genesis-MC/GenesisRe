@@ -5,6 +5,7 @@ from genesis:utils import constant
 def reduce_mana_or_return(amount: int, update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
     if score @s genesis.mana.current matches (None, amount - 1) return 0
     if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
+    if score @s genesis.mana.current = @s genesis.mana.max tag @s add genesis.hud.display
     scoreboard players remove @s genesis.mana.current (amount)
     if update:
         function #genesis:mana/changed
@@ -14,6 +15,7 @@ def reduce_mana_or_return(amount: int, update = True): # This is actual mana, so
 def reduce_mana_by_score_or_return(name: str, objective: str, update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
     raw (f'execute if score {name} {objective} > @s genesis.mana.current run return 0')
     if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
+    if score @s genesis.mana.current = @s genesis.mana.max tag @s add genesis.hud.display
     raw (f'scoreboard players operation @s genesis.mana.current -= {name} {objective}')
     if update:
         function #genesis:mana/changed
@@ -50,6 +52,7 @@ function ~/calculate_max_mana:
     scoreboard players operation @s genesis.mana.max *= @s genesis.stat.mana_pool
     scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
     unless score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
+    unless score @s genesis.mana.current = @s genesis.mana.max tag @s add genesis.hud.display
     function #genesis:mana/changed
     function genesis:mana/update_hud
 
