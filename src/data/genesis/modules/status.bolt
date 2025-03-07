@@ -22,215 +22,219 @@ append function genesis:player/join:
     scoreboard players set @s genesis.status.remove_next 2147483647
 
 
-def genesis_status(cls):
-    cls.id = camel_case_to_snake_case(cls.__name__)
-    cls.hash = _int_hash('status' + cls.id)
-    cls.tag = f'genesis.status.has.{cls.id}'
-    cls.category = getattr(cls, 'category', [])
-    cls.slot = getattr(cls, 'slot', None)
+class GenesisStatus(type):
+    def __new__(mcs, name, bases, namespace):
+        cls = super().__new__(mcs, name, bases, namespace)
+        if getattr(cls, 'abstract', False):
+            return cls
 
-    #> SET DEFAULTS
-    # add slot to category
-    if cls.slot != None:
-        cls.category.append(cls.slot)
-    # set stuff based on icon
-    if getattr(cls, 'icon', None) != None:
-        cls.category.append('has_icon')
-        global current_icon
-        cls.icon_chr = chr(current_icon)
-        current_icon += 1
+        cls.id = camel_case_to_snake_case(cls.__name__)
+        cls.hash = _int_hash('status' + cls.id)
+        cls.tag = f'genesis.status.has.{cls.id}'
+        cls.category = getattr(cls, 'category', [])
 
-    #> SET SCOREBOARD VARIABLES
-    cls.until = f'genesis.status.unique.{cls.id}.until'
-    if cls.slot != None:
-        cls.until = f'genesis.status.slot.{cls.slot}.until'
+        #> SET DEFAULTS
+        # add slot to category
+        if hasattr(cls,'slot'):
+            cls.category.append(cls.slot)
+        # set stuff based on icon
+        if hasattr(cls, 'icon'):
+            cls.category.append('has_icon')
+            global current_icon
+            cls.icon_chr = chr(current_icon)
+            current_icon += 1
 
-    cls.value = f'genesis.status.unique.{cls.id}.value'
-    if cls.slot != None:
-        cls.value = f'genesis.status.slot.{cls.slot}.value'
+        #> SET SCOREBOARD VARIABLES
+        cls.until = f'genesis.status.unique.{cls.id}.until'
+        if hasattr(cls,'slot'):
+            cls.until = f'genesis.status.slot.{cls.slot}.until'
 
-    #> REGISTER SCOREBOARDS
-    global added_slots
-    append function genesis:load:
-        if cls.slot != None and cls.slot not in added_slots:
-            added_slots.append(cls.slot)
-            scoreboard objectives add f'genesis.status.slot.{cls.slot}.id' dummy
-        scoreboard objectives add (cls.until) dummy
-        scoreboard objectives add (cls.value) dummy
+        cls.value = f'genesis.status.unique.{cls.id}.value'
+        if hasattr(cls,'slot'):
+            cls.value = f'genesis.status.slot.{cls.slot}.value'
 
-    #> SET UP STUFF FOR TIMING OUT
-    prepend function genesis:status/remove_next:
-        if cls.slot == None:
-            if score .gametime genesis >= @s (cls.until) function f'genesis:status/remove/{cls.id}'
-        else:
-            if score @s f'genesis.status.slot.{cls.slot}.id' matches cls.hash if score .gametime genesis >= @s (cls.until) function f'genesis:status/remove/{cls.id}'
+        #> REGISTER SCOREBOARDS
+        global added_slots
+        append function genesis:load:
+            if hasattr(cls,'slot') and cls.slot not in added_slots:
+                added_slots.append(cls.slot)
+                scoreboard objectives add f'genesis.status.slot.{cls.slot}.id' dummy
+            scoreboard objectives add (cls.until) dummy
+            scoreboard objectives add (cls.value) dummy
 
-    global added_slots_remove_next
-    append function genesis:status/remove_next:
-        if cls.slot == None:
-            if score @s (cls.until) matches 1.. scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
-        elif cls.slot not in added_slots_remove_next:
-            added_slots_remove_next.append(cls.slot)
-            if score @s (cls.until) matches 1.. scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
+        #> SET UP STUFF FOR TIMING OUT
+        prepend function genesis:status/remove_next:
+            if hasattr(cls,'slot'):
+                if score @s f'genesis.status.slot.{cls.slot}.id' matches cls.hash if score .gametime genesis >= @s (cls.until) function f'genesis:status/remove/{cls.id}'
+            else:
+                if score .gametime genesis >= @s (cls.until) function f'genesis:status/remove/{cls.id}'
 
-    #> SET UP APPLY "METHOD"
-    def apply(duration: int|tuple[str,str], value: int|tuple[str,str] = 0):
-        if cls.slot == None:
-            if entity @s[tag=(cls.tag)] function f'genesis:status/remove/{cls.id}'
-        else:
-            function f'genesis:status/category/{cls.slot}/remove'
-            scoreboard players set @s f'genesis.status.slot.{cls.slot}.id' (cls.hash)
+        global added_slots_remove_next
+        append function genesis:status/remove_next:
+            if not hasattr(cls,'slot'):
+                if score @s (cls.until) matches 1.. scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
+            elif cls.slot not in added_slots_remove_next:
+                added_slots_remove_next.append(cls.slot)
+                if score @s (cls.until) matches 1.. scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
 
-        if isinstance(duration, int):
-            scoreboard players set @s (cls.until) (duration)
-        else:
-            raw (f'scoreboard players operation @s {cls.until} = {duration[0]} {duration[1]}')
-        scoreboard players operation @s (cls.until) += .gametime genesis
-        scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
-        if isinstance(value, int):
-            scoreboard players set @s (cls.value) (value)
-        else:
-            raw (f'scoreboard players operation @s {cls.value} = {value[0]} {value[1]}')
+        #> SET UP APPLY "METHOD"
+        def apply(duration: int|tuple[str,str], value: int|tuple[str,str] = 0):
+            if hasattr(cls,'slot'):
+                function f'genesis:status/category/{cls.slot}/remove'
+                scoreboard players set @s f'genesis.status.slot.{cls.slot}.id' (cls.hash)
+            else:
+                if entity @s[tag=(cls.tag)] function f'genesis:status/remove/{cls.id}'
 
-        tag @s add (cls.tag)
-
-        for category in getattr(cls, 'category', []):
-            tag @s add f'genesis.status.category.{category}'
-
-        if getattr(cls, 'icon', None) != None:
-            function genesis:status/hud/update_icons
-            scoreboard players add @s genesis.hud.display 1
-            tag @s add genesis.hud.display
-
-        for k, v in cls.__dict__.items():
-            if callable(v) and getattr(v, '__on_apply_status__', False):
-                v(cls)
-    cls.apply = apply
-
-    #> SET UP REMOVE "METHOD"
-    function f'genesis:status/remove/{cls.id}':
-        if cls.slot != None:
-            scoreboard players reset @s f'genesis.status.slot.{cls.slot}.id'
-        scoreboard players reset @s (cls.until)
-        scoreboard players reset @s (cls.value)
-
-        tag @s remove (cls.tag)
-
-        for category in getattr(cls, 'category', []):
-            function f'genesis:status/category/{category}/refresh'
-
-        if getattr(cls, 'icon', None) != None:
-            function genesis:status/hud/update_icons
-            scoreboard players remove @s genesis.hud.display 1
-
-        for k, v in cls.__dict__.items():
-            if callable(v) and getattr(v, '__on_remove_status__', False):
-                v(cls)
-
-    def remove():
-        function f'genesis:status/remove/{cls.id}'
-    cls.remove = remove
-
-    #> APPEND TO FUNCTION TO REMOVE/REFRESH WHOLE CATEGORY
-    global added_categories
-    for category in getattr(cls, 'category', []):
-        if category not in added_categories:
-            added_categories.append(category)
-            function f'genesis:status/category/{category}/remove':
-                tag @s remove f'genesis.status.category.{category}'
-            function f'genesis:status/category/{category}/refresh':
-                tag @s remove f'genesis.status.category.{category}'
-
-        append function f'genesis:status/category/{category}/remove':
-            if entity @s[tag=(cls.tag)] function f'genesis:status/remove/{cls.id}'
-        append function f'genesis:status/category/{category}/refresh':
-            if entity @s[tag=(cls.tag)] return run tag @s add f'genesis.status.category.{category}'
-
-    #> METHOD TO MODIFY DURATION
-    def modify_duration(operation: str, duration: int|tuple[str,str]):
-        scoreboard players operation @s (cls.until) -= .gametime genesis
-
-        if isinstance(duration, int):
-            if operation == '=':
+            if isinstance(duration, int):
                 scoreboard players set @s (cls.until) (duration)
-            elif operation == '+=':
-                scoreboard players add @s (cls.until) (duration)
-            elif operation == '-=':
-                scoreboard players remove @s (cls.until) (duration)
             else:
-                raw (f'scoreboard players operation @s {cls.until} {operation} {constant(duration)} genesis')
-        else:
-            raw (f'scoreboard players operation @s {cls.until} {operation} {duration[0]} {duration[1]}')
-
-        scoreboard players operation @s (cls.until) += .gametime genesis
-        function genesis:status/remove_next #! consider dirtying instead of calling outright
-    cls.modify_duration = modify_duration
-
-    #> METHOD TO MODIFY VALUE
-    def modify_value(operation: str, value: int|tuple[str,str]):
-        for k, v in cls.__dict__.items():
-            if callable(v) and getattr(v, '__before_value_change_status__', False):
-                v(cls)
-
-        if isinstance(value, int):
-            if operation == '=':
+                raw (f'scoreboard players operation @s {cls.until} = {duration[0]} {duration[1]}')
+            scoreboard players operation @s (cls.until) += .gametime genesis
+            scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
+            if isinstance(value, int):
                 scoreboard players set @s (cls.value) (value)
-            elif operation == '+=':
-                scoreboard players add @s (cls.value) (value)
-            elif operation == '-=':
-                scoreboard players remove @s (cls.value) (value)
             else:
-                raw (f'scoreboard players operation @s {cls.value} {operation} {constant(value)} genesis')
-        else:
-            raw (f'scoreboard players operation @s {cls.value} {operation} {value[0]} {value[1]}')
+                raw (f'scoreboard players operation @s {cls.value} = {value[0]} {value[1]}')
 
-        for k, v in cls.__dict__.items():
-            if callable(v) and getattr(v, '__after_value_change_status__', False):
-                v(cls)
-    cls.modify_value = modify_value
+            tag @s add (cls.tag)
 
-    #> ICON STUFF
-    if getattr(cls, 'icon', None) != None:
-        status_font = ctx.assets.fonts.get('genesis:hud/status', {"data":{"providers":[{
-            "type": "bitmap",
-            "file": "genesis:font/hud/status_background.png",
-            "height": 14,
-            "ascent": -27,
-            "chars": ["b"]
-        }, {
-            "type": "bitmap",
-            "file": "genesis:font/hud/status_overlay.png",
-            "height": 12,
-            "ascent": -28,
-            "chars": ["0123456789ABC"]
-        }, {
-            "type": "space",
-            "advances": {
-                "|": 1,
-                ":": -14,
-                "#": -15,
-                "+": 92,
-                "-": -92,
-            }
-        }]}}
-        ).data
-        status_font['providers'].append({
-            "type": "bitmap",
-            "file": f'{cls.icon}.png',
-            "height": 12,
-            "ascent": -28,
-            "chars": [cls.icon_chr]
-        })
-        ctx.assets['genesis:hud/status'] = Font(status_font)
+            for category in getattr(cls, 'category', []):
+                tag @s add f'genesis.status.category.{category}'
 
-        append function genesis:status/hud/update_icons_for_each:
-            #! make icons stack if more are added
-            if entity @s[tag=(cls.tag)] data modify storage genesis:player self.hud[1][1] append value f'b:{cls.icon_chr}|'
-            if entity @s[tag=(cls.tag)] data modify storage genesis:player self.hud[1][2] append value "#"
+            if getattr(cls, 'icon', None) != None:
+                function genesis:status/hud/update_icons
+                scoreboard players add @s genesis.hud.display 1
+                tag @s add genesis.hud.display
 
-        #! add cooldown logic
+            for k, v in cls.__dict__.items():
+                if callable(v) and getattr(v, '__on_apply_status__', False):
+                    v(cls)
+        cls.apply = apply
 
-    return cls
+        #> SET UP REMOVE "METHOD"
+        function f'genesis:status/remove/{cls.id}':
+            if hasattr(cls,'slot'):
+                scoreboard players reset @s f'genesis.status.slot.{cls.slot}.id'
+            scoreboard players reset @s (cls.until)
+            scoreboard players reset @s (cls.value)
+
+            tag @s remove (cls.tag)
+
+            for category in getattr(cls, 'category', []):
+                function f'genesis:status/category/{category}/refresh'
+
+            if hasattr(cls, 'icon'):
+                function genesis:status/hud/update_icons
+                scoreboard players remove @s genesis.hud.display 1
+
+            for k, v in cls.__dict__.items():
+                if callable(v) and getattr(v, '__on_remove_status__', False):
+                    v(cls)
+
+        def remove():
+            function f'genesis:status/remove/{cls.id}'
+        cls.remove = remove
+
+        #> APPEND TO FUNCTION TO REMOVE/REFRESH WHOLE CATEGORY
+        global added_categories
+        for category in getattr(cls, 'category', []):
+            if category not in added_categories:
+                added_categories.append(category)
+                function f'genesis:status/category/{category}/remove':
+                    tag @s remove f'genesis.status.category.{category}'
+                function f'genesis:status/category/{category}/refresh':
+                    tag @s remove f'genesis.status.category.{category}'
+
+            append function f'genesis:status/category/{category}/remove':
+                if entity @s[tag=(cls.tag)] function f'genesis:status/remove/{cls.id}'
+            append function f'genesis:status/category/{category}/refresh':
+                if entity @s[tag=(cls.tag)] return run tag @s add f'genesis.status.category.{category}'
+
+        #> METHOD TO MODIFY DURATION
+        def modify_duration(operation: str, duration: int|tuple[str,str]):
+            scoreboard players operation @s (cls.until) -= .gametime genesis
+
+            if isinstance(duration, int):
+                if operation == '=':
+                    scoreboard players set @s (cls.until) (duration)
+                elif operation == '+=':
+                    scoreboard players add @s (cls.until) (duration)
+                elif operation == '-=':
+                    scoreboard players remove @s (cls.until) (duration)
+                else:
+                    raw (f'scoreboard players operation @s {cls.until} {operation} {constant(duration)} genesis')
+            else:
+                raw (f'scoreboard players operation @s {cls.until} {operation} {duration[0]} {duration[1]}')
+
+            scoreboard players operation @s (cls.until) += .gametime genesis
+            function genesis:status/remove_next #! consider dirtying instead of calling outright
+        cls.modify_duration = modify_duration
+
+        #> METHOD TO MODIFY VALUE
+        def modify_value(operation: str, value: int|tuple[str,str]):
+            for k, v in cls.__dict__.items():
+                if callable(v) and getattr(v, '__before_value_change_status__', False):
+                    v(cls)
+
+            if isinstance(value, int):
+                if operation == '=':
+                    scoreboard players set @s (cls.value) (value)
+                elif operation == '+=':
+                    scoreboard players add @s (cls.value) (value)
+                elif operation == '-=':
+                    scoreboard players remove @s (cls.value) (value)
+                else:
+                    raw (f'scoreboard players operation @s {cls.value} {operation} {constant(value)} genesis')
+            else:
+                raw (f'scoreboard players operation @s {cls.value} {operation} {value[0]} {value[1]}')
+
+            for k, v in cls.__dict__.items():
+                if callable(v) and getattr(v, '__after_value_change_status__', False):
+                    v(cls)
+        cls.modify_value = modify_value
+
+        #> ICON STUFF
+        if getattr(cls, 'icon', None) != None:
+            status_font = ctx.assets.fonts.get('genesis:hud/status', {"data":{"providers":[{
+                "type": "bitmap",
+                "file": "genesis:font/hud/status_background.png",
+                "height": 14,
+                "ascent": -27,
+                "chars": ["b"]
+            }, {
+                "type": "bitmap",
+                "file": "genesis:font/hud/status_overlay.png",
+                "height": 12,
+                "ascent": -28,
+                "chars": ["0123456789ABC"]
+            }, {
+                "type": "space",
+                "advances": {
+                    "|": 1,
+                    ":": -14,
+                    "#": -15,
+                    "+": 92,
+                    "-": -92,
+                }
+            }]}}
+            ).data
+            status_font['providers'].append({
+                "type": "bitmap",
+                "file": f'{cls.icon}.png',
+                "height": 12,
+                "ascent": -28,
+                "chars": [cls.icon_chr]
+            })
+            ctx.assets['genesis:hud/status'] = Font(status_font)
+
+            append function genesis:status/hud/update_icons_for_each:
+                #! make icons stack if more are added
+                if entity @s[tag=(cls.tag)] data modify storage genesis:player self.hud[1][1] append value f'b:{cls.icon_chr}|'
+                if entity @s[tag=(cls.tag)] data modify storage genesis:player self.hud[1][2] append value "#"
+
+            #! add cooldown logic
+
+        return cls
 
 
 def on_apply_status(func):

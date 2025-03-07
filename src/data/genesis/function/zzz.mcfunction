@@ -1,6 +1,6 @@
 #> THIS FILE IS FOR EVERYTHING ONLY USED FOR DEVELOPMENT THAT SHOULD NOT BE IN THE FINAL RELEASE
 
-from genesis:status import genesis_status, on_apply_status, on_remove_status, before_value_change_status, after_value_change_status
+from genesis:status import GenesisStatus, on_apply_status, on_remove_status, before_value_change_status, after_value_change_status
 
 
 function ~/reset_player_join:
@@ -10,8 +10,7 @@ function ~/reset_player_join:
     advancement revoke @s only genesis:player/join
 
 
-@genesis_status
-class FrederickTheStatus:
+class FrederickTheStatus(metaclass=GenesisStatus):
     slot = "chest"
     category = ["bad","good","technical","slowing","stops_movement"]
 
@@ -27,8 +26,8 @@ class FrederickTheStatus:
 function ~/test_apply_status:
     FrederickTheStatus.apply(200, 125)
 
-@genesis_status
-class UniqueStatus:
+
+class UniqueStatus(metaclass=GenesisStatus):
     category = ["buff","regeneration","bad"]
     icon = "genesis:font/status/poison_or_something"
 
