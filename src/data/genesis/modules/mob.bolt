@@ -277,6 +277,46 @@ class CustomComponents:
         key = f'{mob.namespace}.mob.{mob.id}'
         add_translation(key, component)
         mob.custom_name = {"translate":key}
+    
+    def wings(mob, component):
+        ctx.assets[f"{mob.namespace}:_mob/{mob.id}_wings"] = Equipment({
+            "layers": {
+                "wings": [
+                    {
+                        "texture": f"{mob.namespace}:{component}",
+                        "dyeable": {
+                            "color_when_undyed": 16383998
+                        }
+                    }
+                ]
+            }
+        })
+        item = {
+            "id": "minecraft:poisonous_potato",
+            "count": 1,
+            "components": {
+                "minecraft:glider": {},
+                "minecraft:equippable": {
+                    "slot": "chest",
+                    "asset_id": f"{mob.namespace}:_mob/{mob.id}_wings",
+                    "equip_sound": {"sound_id":"none"}
+                },
+                "minecraft:custom_data": {
+                    "genesis": {
+                        "mob": {
+                            "hurt_tint": True
+                        }
+                    }
+                }
+            }
+        }
+        mob.equipment.update({
+            "chest": item
+        })
+        mob.drop_chances.update({
+            "chest": 0
+        })
+
 
 class VanillaComponents:
     def tags(mob, component):
@@ -508,7 +548,14 @@ class TexturedHumanoid(GenesisMob):
             "id": "minecraft:poisonous_potato",
             "count": 1,
             "components": {
-                "minecraft:item_model": f"{mob.namespace}:_mob/{mob.id}/skin"
+                "minecraft:item_model": f"{mob.namespace}:_mob/{mob.id}/skin",
+                "minecraft:custom_data": {
+                    "genesis": {
+                        "mob": {
+                            "hurt_tint": True
+                        }
+                    }
+                }
             }
         }
         pants = {
@@ -519,6 +566,13 @@ class TexturedHumanoid(GenesisMob):
                     "slot": "legs",
                     "asset_id": f"{mob.namespace}:_mob/{mob.id}",
                     "equip_sound": {"sound_id":"none"}
+                },
+                "minecraft:custom_data": {
+                    "genesis": {
+                        "mob": {
+                            "hurt_tint": True
+                        }
+                    }
                 }
             }
         }

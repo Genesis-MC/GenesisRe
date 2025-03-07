@@ -43,3 +43,11 @@ class Pirate(PlayerLike):
     register_sounds("mob.pirate.death", ["genesis:mob/pirate/death0","genesis:mob/pirate/death1"])
     register_sounds("mob.pirate.hurt", ["genesis:mob/pirate/hurt0","genesis:mob/pirate/hurt1","genesis:mob/pirate/hurt2"])
     register_sounds("mob.pirate.ambient", ["genesis:mob/pirate/ambient0","genesis:mob/pirate/ambient1","genesis:mob/pirate/ambient2","genesis:mob/pirate/ambient3","genesis:mob/pirate/ambient4"])
+
+class Angel(PlayerLike):
+  wings = "angel_wings"
+
+  @on_death()
+  def ascend():
+    particle explosion
+    tp @s ~ ~-1000 ~
