@@ -9,9 +9,19 @@ class GenesisItem(type):
         cls = super().__new__(mcs, name, bases, namespace)
 
         if not hasattr(cls, 'base_item'):
-            cls.base_item = 'poisonous_potato'
-        if not hasattr(cls, 'removed_components'):
-            cls.removed_components = ['food','consumable']
+            if cls.category[-1] in ['polearm','sword','greatsword','dagger','scythe']:
+                cls.base_item = 'stone_sword'
+                cls.removed_components = ['attribute_modifiers','max_damage','repairable','tool']
+                if not hasattr(cls, 'enchantable'):
+                    cls.enchantable = {"value":15}
+            elif cls.category[-1] in ['helmet','chestplate','leggings','boots']:
+                cls.base_item = f'chainmail_{cls.category[-1]}'
+                cls.removed_components = ['attribute_modifiers','max_damage','repairable']
+                if not hasattr(cls, 'enchantable'):
+                    cls.enchantable = {"value":15}
+            else:
+                cls.base_item = 'poisonous_potato'
+                cls.removed_components = ['food','consumable']
 
         cls.id = camel_case_to_snake_case(cls.__name__)
         cls.namespace = cls.__module__.split(':')[0]
