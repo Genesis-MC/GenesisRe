@@ -108,4 +108,3 @@ class Exetol(metaclass=GenesisItem):
     rarity = "legendary"
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":150,"attack_speed":40})
-    item_model = texture_path_to_item_model("genesis:item/greatsword/exetol", True)
