@@ -8,6 +8,45 @@ from nbtlib import String
 
 # print(ctx.data["genesis"].structures["zombie"].data)
 
+
+def _get_components_and_callables_from_parents(cls):
+    components = {}
+    callables = {
+        "before_all": [],
+        "regular": [],
+        "after_all": [],
+    }
+    # get info of parent classes recursively
+    for parent in reversed(cls.__bases__):
+        if parent != object:
+            cmp, cal = _get_components_and_callables_from_parents(parent)
+            for ck, cv in cmp.items():
+                components[ck] = cv
+            callables["before_all"] += cal["before_all"]
+            callables["after_all"] += cal["after_all"]
+            callables["regular"] += cal["regular"]
+    # get info of this class
+    for k, v in cls.__dict__.items():
+        if (
+            k in component_names or k in components
+        ):  #! custom components are currently ignored
+            components[k] = v
+        if callable(v):
+            if "custom_component" in v.__dict__:
+                components[v.custom_component] = getattr(cls, v.custom_component, None)
+            if getattr(v, "before_all", False):
+                callables["before_all"].append(v)
+            elif getattr(v, "after_all", False):
+                callables["after_all"].append(v)
+            elif not (v.__name__ == 'init_vanilla_components'):
+                callables["regular"].append(v)
+    return (components, callables)
+    
+
+def _run_callables(cls, callables):
+    for c in callables:
+        c(cls)
+
 def add_template_pool(mob: type):
     path = f"{mob.namespace}:mob/{mob.id}"
     ctx.data[path] = WorldgenTemplatePool({
@@ -113,20 +152,6 @@ def after_all(func):
     func.after_all = True
     return func
 
-def genesis_mob(cls: type):
-    cls.id = camel_case_to_snake_case(cls.__name__)
-    cls.namespace = cls.__module__.split(":")[0]
-    cls.init_vanilla_components(cls)
-    _, callables = _get_components_and_callables_from_parents(cls)
-    _run_callables(cls, callables["before_all"])
-    _run_callables(cls, callables["regular"])
-    components, _ = _get_components_and_callables_from_parents(cls)
-    for k, v in components.items():
-        if k not in vanilla_components:
-            component = CustomComponents.__dict__[k]
-            component(cls, v)
-    _run_callables(cls, callables["after_all"])
-    return cls
 
 def event_decorator(func):
     def decorator(bolt_func):
@@ -165,7 +190,167 @@ def on_death(order: int = 0):
             mob.on_death_funcs = [(func, order)]
     return decorator
 
-class GenesisMob:
+
+
+
+class CustomComponents:
+    def hurt_detection(mob, component):
+        mob.tags.add("genesis.mob.component.hurt_detection")
+        mob.attributes.append({"id":"minecraft:max_absorption","base":-3.999999999999999})
+        mob.active_effects.append({"id":"minecraft:absorption","duration":-1,"show_particles":False,"show_icon":False})
+        mob.enchantments.update({"genesis:mob/component/hurt_detection": 1})
+
+    def hurt_tint(mob, component):
+        mob.tags.add("genesis.mob.component.hurt_tint")
+
+    def burn_in_daylight(mob, component):
+        if component:
+            # mob.tags.add("genesis.mob.component.burn_in_daylight")
+            mob.enchantments.update({"genesis:mob/component/burn_in_daylight": 1})
+
+    def enchantments(mob, component):
+        pass
+
+    def invisible(mob, component):
+        if component:
+            mob.tags.add("genesis.mob.component.invisible")
+            mob.active_effects.append({"id":"minecraft:invisibility","duration":-1,"show_particles":False,"show_icon":False})
+    
+    def on_init_funcs(mob, component):
+        mob.enchantments.update({"genesis:mob/component/init_tick": 1})
+        component.sort(key=itemgetter(1))
+
+        path = f'{mob.namespace}:mob/mob/{mob.id}/on_init'
+
+        function path:
+            for func, _ in component:
+                func()
+        
+        append function genesis:mob/component/init/tick:
+            execute if entity @s[tag=f"genesis.mob.{mob.id}"] run function path
+    
+    def on_hurt_funcs(mob, component):
+        mob.tags.add("genesis.mob.component.on_hurt_funcs")
+        component.sort(key=itemgetter(1))
+
+        path = f'{mob.namespace}:mob/mob/{mob.id}/on_hurt'
+
+        function path:
+            for func, _ in component:
+                func()
+        
+        append function genesis:mob/component/hurt_detection/call_on_hurt_funcs:
+            execute if entity @s[tag=f"genesis.mob.{mob.id}"] run function path
+    
+    def on_death_funcs(mob, component):
+        mob.tags.add("genesis.mob.component.on_death_funcs")
+        component.sort(key=itemgetter(1))
+
+        path = f'{mob.namespace}:mob/mob/{mob.id}/on_death'
+
+        function path:
+            for func, _ in component:
+                func()
+        
+        append function genesis:mob/component/hurt_detection/call_on_death_funcs:
+            execute if entity @s[tag=f"genesis.mob.{mob.id}"] run function path
+
+    def custom_sounds(mob, component):
+        mob.silent = True
+        mob.tags.add("genesis.mob.component.custom_sounds")
+        if "death" in component:
+            append function genesis:mob/component/custom_sounds/death:
+                execute if entity @s[tag=f"genesis.mob.{mob.id}"] run playsound component["death"] hostile @a[distance=..16] ~ ~ ~
+        if "hurt" in component:
+            append function genesis:mob/component/custom_sounds/hurt:
+                execute if entity @s[tag=f"genesis.mob.{mob.id}"] run playsound component["hurt"] hostile @a[distance=..16] ~ ~ ~
+        if "ambient" in component:
+            append function genesis:mob/component/custom_sounds/ambient:
+                execute if entity @s[tag=f"genesis.mob.{mob.id}"] run playsound component["ambient"] hostile @a[distance=..16] ~ ~ ~
+
+    def loot_table(mob, component):
+        path = f'{mob.namespace}:mob/{mob.id}'
+        loot_table path component
+        mob.death_loot_table = path
+
+    def name(mob, component):
+        key = f'{mob.namespace}.mob.{mob.id}'
+        add_translation(key, component)
+        mob.custom_name = {"translate":key}
+
+class VanillaComponents:
+    def tags(mob, component):
+        if len(component) == 0:
+            return None
+        return ("Tags", list(component))
+    
+    def equipment(mob, component):
+        if len(component.keys()) == 0:
+            return None
+        return ("equipment", component)
+    
+    def drop_chances(mob, component):
+        if len(component.keys()) == 0:
+            return None
+        return ("drop_chances", component)
+    
+    def active_effects(mob, component):
+        if len(component) == 0:
+            return None
+        return ("active_effects", component)
+    
+    def attributes(mob, component):
+        if len(component) == 0:
+            return None
+        return ("attributes", component)
+    
+    def is_immune_to_zombification(mob, component):
+        return ("IsImmuneToZombification", component)
+    
+    def can_pick_up_loot(mob, component):
+        return ("CanPickUpLoot", component)
+    
+    def silent(mob, component):
+        return ("Silent", component)
+    
+    def death_loot_table(mob, component):
+        return ("DeathLootTable", component)
+    
+    def custom_name(mob, component):
+        return ("CustomName", component)
+
+
+vanilla_components = []
+for k in VanillaComponents.__dict__.keys():
+    if not k.startswith("__"):
+        vanilla_components.append(k)
+component_names = vanilla_components.copy()
+for k in CustomComponents.__dict__.keys():
+    if not k.startswith("__"):
+        component_names.append(k)
+
+
+class MobMetaclass(type):
+    def __new__(mcs, name, bases, namespace):
+        cls = super().__new__(mcs, name, bases, namespace)
+        is_abstract = 'abstract' in cls.__dict__
+        if not is_abstract:
+            cls.id = camel_case_to_snake_case(cls.__name__)
+            cls.namespace = cls.__module__.split(":")[0]
+            cls.init_vanilla_components(cls)
+            _, callables = _get_components_and_callables_from_parents(cls)
+            _run_callables(cls, callables["before_all"])
+            _run_callables(cls, callables["regular"])
+            components, _ = _get_components_and_callables_from_parents(cls)
+            for k, v in components.items():
+                if k not in vanilla_components:
+                    component = CustomComponents.__dict__[k]
+                    component(cls, v)
+            _run_callables(cls, callables["after_all"])
+        return cls
+
+class GenesisMob(metaclass=MobMetaclass):
+    abstract = True
     def init_vanilla_components(cls):
         cls.tags = set()
         cls.equipment = dict()
@@ -205,6 +390,7 @@ class GenesisMob:
 
 
 class TexturedHumanoid(GenesisMob):
+    abstract = True
     """
     A humanoid shaped mob which can wear armour. 
     Renders a custom texture by equipped items.
@@ -350,6 +536,7 @@ class TexturedHumanoid(GenesisMob):
         })
 
 class TexturedZombieVariant(TexturedHumanoid):
+    abstract=True
     """
     A zombie-like mob with a custom texture rendered by equipped items.
     Can only use meelee attacks.
@@ -361,6 +548,7 @@ class TexturedZombieVariant(TexturedHumanoid):
 
 
 class PlayerLike(TexturedHumanoid):
+    abstract=True
     """
     A human-shaped mob which holds its arms down.
     Can only use meelee attacks.
@@ -376,178 +564,3 @@ class PlayerLike(TexturedHumanoid):
         "death": "minecraft:entity.enderman.death",
         "ambient": "minecraft:entity.enderman.ambient"
     }
-
-
-class CustomComponents:
-    def hurt_detection(mob, component):
-        mob.tags.add("genesis.mob.component.hurt_detection")
-        mob.attributes.append({"id":"minecraft:max_absorption","base":-3.999999999999999})
-        mob.active_effects.append({"id":"minecraft:absorption","duration":-1,"show_particles":False,"show_icon":False})
-        mob.enchantments.update({"genesis:mob/component/hurt_detection": 1})
-
-    def hurt_tint(mob, component):
-        mob.tags.add("genesis.mob.component.hurt_tint")
-
-    def burn_in_daylight(mob, component):
-        if component:
-            # mob.tags.add("genesis.mob.component.burn_in_daylight")
-            mob.enchantments.update({"genesis:mob/component/burn_in_daylight": 1})
-
-    def enchantments(mob, component):
-        pass
-
-    def invisible(mob, component):
-        if component:
-            mob.tags.add("genesis.mob.component.invisible")
-            mob.active_effects.append({"id":"minecraft:invisibility","duration":-1,"show_particles":False,"show_icon":False})
-    
-    def on_init_funcs(mob, component):
-        mob.enchantments.update({"genesis:mob/component/init_tick": 1})
-        component.sort(key=itemgetter(1))
-
-        path = f'{mob.namespace}:mob/mob/{mob.id}/on_init'
-
-        function path:
-            for func, _ in component:
-                func()
-        
-        append function genesis:mob/component/init/tick:
-            execute if entity @s[tag=f"genesis.mob.{mob.id}"] run function path
-    
-    def on_hurt_funcs(mob, component):
-        mob.tags.add("genesis.mob.component.on_hurt_funcs")
-        component.sort(key=itemgetter(1))
-
-        path = f'{mob.namespace}:mob/mob/{mob.id}/on_hurt'
-
-        function path:
-            for func, _ in component:
-                func()
-        
-        append function genesis:mob/component/hurt_detection/call_on_hurt_funcs:
-            execute if entity @s[tag=f"genesis.mob.{mob.id}"] run function path
-    
-    def on_death_funcs(mob, component):
-        mob.tags.add("genesis.mob.component.on_death_funcs")
-        component.sort(key=itemgetter(1))
-
-        path = f'{mob.namespace}:mob/mob/{mob.id}/on_death'
-
-        function path:
-            for func, _ in component:
-                func()
-        
-        append function genesis:mob/component/hurt_detection/call_on_death_funcs:
-            execute if entity @s[tag=f"genesis.mob.{mob.id}"] run function path
-
-    def custom_sounds(mob, component):
-        mob.silent = True
-        mob.tags.add("genesis.mob.component.custom_sounds")
-        if "death" in component:
-            append function genesis:mob/component/custom_sounds/death:
-                execute if entity @s[tag=f"genesis.mob.{mob.id}"] run playsound component["death"] hostile @a[distance=..16] ~ ~ ~
-        if "hurt" in component:
-            append function genesis:mob/component/custom_sounds/hurt:
-                execute if entity @s[tag=f"genesis.mob.{mob.id}"] run playsound component["hurt"] hostile @a[distance=..16] ~ ~ ~
-        if "ambient" in component:
-            append function genesis:mob/component/custom_sounds/ambient:
-                execute if entity @s[tag=f"genesis.mob.{mob.id}"] run playsound component["ambient"] hostile @a[distance=..16] ~ ~ ~
-
-    def loot_table(mob, component):
-        path = f'{mob.namespace}:mob/{mob.id}'
-        loot_table path component
-        mob.death_loot_table = path
-
-    def name(mob, component):
-        key = f'{mob.namespace}.mob.{mob.id}'
-        add_translation(key, component)
-        mob.custom_name = {"translate":key}
-
-class VanillaComponents:
-    def tags(mob, component):
-        if len(component) == 0:
-            return None
-        return ("Tags", list(component))
-    
-    def equipment(mob, component):
-        if len(component.keys()) == 0:
-            return None
-        return ("equipment", component)
-    
-    def drop_chances(mob, component):
-        if len(component.keys()) == 0:
-            return None
-        return ("drop_chances", component)
-    
-    def active_effects(mob, component):
-        if len(component) == 0:
-            return None
-        return ("active_effects", component)
-    
-    def attributes(mob, component):
-        if len(component) == 0:
-            return None
-        return ("attributes", component)
-    
-    def is_immune_to_zombification(mob, component):
-        return ("IsImmuneToZombification", component)
-    
-    def can_pick_up_loot(mob, component):
-        return ("CanPickUpLoot", component)
-    
-    def silent(mob, component):
-        return ("Silent", component)
-    
-    def death_loot_table(mob, component):
-        return ("DeathLootTable", component)
-    
-    def custom_name(mob, component):
-        return ("CustomName", component)
-
-vanilla_components = []
-for k in VanillaComponents.__dict__.keys():
-    if not k.startswith("__"):
-        vanilla_components.append(k)
-component_names = vanilla_components.copy()
-for k in CustomComponents.__dict__.keys():
-    if not k.startswith("__"):
-        component_names.append(k)
-
-
-def _get_components_and_callables_from_parents(cls):
-    components = {}
-    callables = {
-        "before_all": [],
-        "regular": [],
-        "after_all": [],
-    }
-    # get info of parent classes recursively
-    for parent in reversed(cls.__bases__):
-        if parent != object:
-            cmp, cal = _get_components_and_callables_from_parents(parent)
-            for ck, cv in cmp.items():
-                components[ck] = cv
-            callables["before_all"] += cal["before_all"]
-            callables["after_all"] += cal["after_all"]
-            callables["regular"] += cal["regular"]
-    # get info of this class
-    for k, v in cls.__dict__.items():
-        if (
-            k in component_names or k in components
-        ):  #! custom components are currently ignored
-            components[k] = v
-        if callable(v):
-            if "custom_component" in v.__dict__:
-                components[v.custom_component] = getattr(cls, v.custom_component, None)
-            if getattr(v, "before_all", False):
-                callables["before_all"].append(v)
-            elif getattr(v, "after_all", False):
-                callables["after_all"].append(v)
-            elif not (v.__name__ == 'init_vanilla_components'):
-                callables["regular"].append(v)
-    return (components, callables)
-    
-
-def _run_callables(cls, callables):
-    for c in callables:
-        c(cls)

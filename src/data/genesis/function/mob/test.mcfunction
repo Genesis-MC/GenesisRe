@@ -1,20 +1,17 @@
-from genesis:mob import genesis_mob, TexturedZombieVariant, PlayerLike, register_sounds, on_init, on_hurt, on_death
+from genesis:mob import TexturedZombieVariant, PlayerLike, register_sounds, on_init, on_hurt, on_death
 
 
-@genesis_mob
 class VerdantZombie(TexturedZombieVariant):
   @on_init()
   def say_hi():
     say Hello, I'm a Verdant Zombie!
 
-@genesis_mob
 class UndeadMiner(TexturedZombieVariant):
   righthand_extra_item_model = {
     "type": "minecraft:model",
     "model": "minecraft:item/iron_pickaxe"
   }
 
-@genesis_mob
 class Pirate(PlayerLike):
   custom_sounds = {
     "hurt": "genesis:mob.pirate.hurt",
