@@ -3,6 +3,10 @@ append function genesis:load:
     scoreboard objectives add genesis.player.id dummy
 
 
+append function genesis:tick:
+    as @a at @s function genesis:player/tick
+
+
 advancement ~/join {
     "criteria": { "criteria": { "trigger": "minecraft:tick" }},
     "rewards": { "function": "genesis:player/join" },

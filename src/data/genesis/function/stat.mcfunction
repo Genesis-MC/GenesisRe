@@ -22,12 +22,11 @@ append function genesis:load:
             scoreboard objectives add f'genesis.stat.{stat_name}.{slot}' dummy
 
 # Attribute to Score stats
-append function genesis:tick:
-    as @a function genesis:stat/tick:
-        for stat_name, attribute_ratio in stat_attribute_to_score.items():
-            scoreboard players operation .prev f'genesis.stat.{stat_name}' = @s f'genesis.stat.{stat_name}'
-            store result score @s f'genesis.stat.{stat_name}' attribute @s attribute_ratio['attribute'] get attribute_ratio['ratio']
-            unless score .prev f'genesis.stat.{stat_name}' = @s f'genesis.stat.{stat_name}' function f'#genesis:stat/update/{stat_name}'
+append function genesis:player/tick:
+    for stat_name, attribute_ratio in stat_attribute_to_score.items():
+        scoreboard players operation .prev f'genesis.stat.{stat_name}' = @s f'genesis.stat.{stat_name}'
+        store result score @s f'genesis.stat.{stat_name}' attribute @s attribute_ratio['attribute'] get attribute_ratio['ratio']
+        unless score .prev f'genesis.stat.{stat_name}' = @s f'genesis.stat.{stat_name}' function f'#genesis:stat/update/{stat_name}'
 
 # Read all other stats from equipment
 for slot in slots:

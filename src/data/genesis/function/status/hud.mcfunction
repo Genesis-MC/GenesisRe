@@ -31,5 +31,5 @@ function ~/update_cooldown:
             # add icon for each applied status
             function ~/../update_cooldown_for_each
 
-append function genesis:tick:
-    as @a[scores={genesis.status.has_visual_cooldown=0..}] function genesis:status/hud/update_cooldown
+append function genesis:player/tick:
+    if score @s genesis.status.has_visual_cooldown matches 0.. function genesis:status/hud/update_cooldown

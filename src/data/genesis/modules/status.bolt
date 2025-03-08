@@ -15,8 +15,8 @@ append function genesis:load:
     scoreboard objectives add genesis.status.has_icon dummy
 
 
-append function genesis:tick:
-    as @a if score .gametime genesis >= @s genesis.status.remove_next function genesis:status/remove_next:
+append function genesis:player/tick:
+    if score .gametime genesis >= @s genesis.status.remove_next function genesis:status/remove_next:
         scoreboard players set @s genesis.status.remove_next 2147483647
 
 

@@ -106,8 +106,8 @@ predicate ~/should_regen {
 }
 
 
-append function genesis:tick:
-    as @a[predicate=genesis:mana/should_regen] function genesis:mana/tick
+append function genesis:player/tick:
+    if predicate genesis:mana/should_regen function genesis:mana/tick
 function ~/tick:
     if score @s genesis.mana.current matches 0 scoreboard players add @s genesis.hud.display 1
     if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1

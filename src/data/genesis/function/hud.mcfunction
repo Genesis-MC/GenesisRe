@@ -6,8 +6,8 @@ append function genesis:load:
     scoreboard objectives add genesis.hud.display dummy
 
 
-append function genesis:tick:
-    as @a[scores={genesis.hud.display=0..}] function genesis:hud/tick
+append function genesis:player/tick:
+    if score @s genesis.hud.display matches 0.. function genesis:hud/tick
 
 
 function ~/tick:
