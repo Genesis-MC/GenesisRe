@@ -1,5 +1,11 @@
 from genesis:mapping import stat_names, stat_attribute_to_score, slots
-from genesis:utils import constant
+from genesis:utils import constant, smart_scoreboard_operation
+
+
+def modify_score_stat(stat_name: str, operation: str, value: int|tuple[str,str]):
+    smart_scoreboard_operation('@s', f'genesis.stat.{stat_name}', operation, value)
+    function f'#genesis:stat/update/{stat_name}'
+
 
 # Set up variables
 score_first_stats = []

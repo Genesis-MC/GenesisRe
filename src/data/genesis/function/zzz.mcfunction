@@ -57,7 +57,7 @@ function ~/increase_value_by_12:
 class ChestTwo(metaclass=GenesisStatus):
     slot = "chest"
     permanent = True
-    icon = "genesis:font/status/block_damage_passive_on_cooldown_or_something"
+    icon = "genesis:font/status/steadfast_cooldown"
 
 function ~/chest_two_apply:
     ChestTwo.apply()

@@ -1,3 +1,4 @@
+from genesis:status import GenesisStatus, on_apply_status, on_remove_status
 from genesis:utils import add_loot_table, texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
@@ -5,6 +6,7 @@ from bolt_item:decorators import on_consume, on_tick
 from argon:decorators import on_attack, on_attacked
 from genesis:mapping import item_display_uuid
 from genesis:crafter import add_custom_recipe
+from genesis:stat import modify_score_stat
 from genesis:item import GenesisItem
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, BlizzardTear, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, HexedHailstone, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
@@ -189,6 +191,21 @@ class GhastlyChestplate(metaclass=GenesisItem):
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # EtherealChestplate
+class PassiveSteadfastCooldown(metaclass=GenesisStatus):
+    icon = "genesis:font/status/steadfast_cooldown"
+
+class PassiveSteadfast(metaclass=GenesisStatus):
+    slot = "chest"
+    icon = "genesis:font/status/steadfast_cooldown"
+
+    @on_apply_status
+    def gain_knockback_resistance(status):
+        modify_score_stat('knockback_resistance', '+=', 100)
+
+    @on_remove_status
+    def remove_knockback_resistance(status):
+        modify_score_stat('knockback_resistance', '-=', 100)
+
 @add_custom_recipe([
     [None, ShadedEnderPearl, None],
     [ShardOfTheWarpedEmpyrean, GhastlyChestplate, ShardOfTheWarpedEmpyrean],
@@ -200,7 +217,6 @@ class EtherealChestplate(metaclass=GenesisItem):
     rarity = "epic"
     category = ["chestplate"]
     stats = ("chest", {"armor":80,"armor_toughness":10})
-    item_model = "diamond_chestplate"
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
     passives = [{
         "name": "Steadfast",
@@ -209,7 +225,13 @@ class EtherealChestplate(metaclass=GenesisItem):
 
     @on_attacked(full_slot = 'armor.chest')
     def gain_knockback_resistance():
-        say NOT IMPLEMENTED YET #! can be added when passive cooldown is a thing
+        if entity @s[tag=(PassiveSteadfastCooldown.tag)] return 0
+        PassiveSteadfastCooldown.apply(12 * 20)
+        PassiveSteadfast.apply(5 * 20)
+
+    @on_unequip(slot = 'chest')
+    def remove_statuses():
+        PassiveSteadfast.remove()
 
 # BlackMarketBoots
 @add_loot_table

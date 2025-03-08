@@ -166,12 +166,13 @@ class GenesisStatus(type):
                 function genesis:status/hud/update_icons
                 scoreboard players remove @s genesis.hud.display 1
 
-            for k, v in cls.__dict__.items():
+            for k in dir(cls):
+                v = getattr(cls, k, None)
                 if callable(v) and getattr(v, '__on_remove_status__', False):
                     v(cls)
 
         def remove():
-            function f'genesis:status/remove/{cls.id}'
+            if entity @s[tag=(cls.tag)] function f'genesis:status/remove/{cls.id}'
         cls.remove = remove
 
         #> APPEND TO FUNCTION TO REMOVE/REFRESH WHOLE CATEGORY
@@ -238,7 +239,6 @@ class GenesisStatus(type):
                 "type": "space",
                 "advances": {
                     "|": 1,
-                    "]": 3,
                     ":": -14,
                     "#": -15,
                     "+": 92,
@@ -265,7 +265,7 @@ class GenesisStatus(type):
                 #! make cooldowns also stack if more are added
                 if is_permanent:
                     if entity @s[tag=(cls.tag)] function ~/{cls.id}:
-                        data modify storage genesis:player self.hud[2][1] append value f'|0]'
+                        data modify storage genesis:player self.hud[2][1] append value f'|0|'
                         data modify storage genesis:player self.hud[2][2] append value "#"
                 else:
                     if entity @s[tag=(cls.tag)] function ~/{cls.id}:
@@ -278,7 +278,7 @@ class GenesisStatus(type):
                         scoreboard players operation #cooldown_sprite genesis += #remainder genesis
 
                         for i in range(13):
-                            if score #cooldown_sprite genesis matches i data modify storage genesis:player self.hud[2][1] append value f'|{hex(i)[-1].upper()}]'
+                            if score #cooldown_sprite genesis matches i data modify storage genesis:player self.hud[2][1] append value f'|{hex(i)[-1].upper()}|'
                         data modify storage genesis:player self.hud[2][2] append value "#"
         return cls
 
