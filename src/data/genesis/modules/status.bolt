@@ -33,84 +33,90 @@ class GenesisStatus(type):
         cls.id = camel_case_to_snake_case(cls.__name__)
         cls.hash = _int_hash('status' + cls.id)
         cls.tag = f'genesis.status.has.{cls.id}'
-        cls.category = getattr(cls, 'category', [])
+
+        is_permanent = getattr(cls, 'permanent', False)
+        has_slot = hasattr(cls, 'slot')
+        has_icon = hasattr(cls, 'icon')
 
         #> SET DEFAULTS
         # add slot to category
-        if hasattr(cls,'slot'):
-            cls.category.append(cls.slot)
+        if has_slot:
+            cls.category = getattr(cls, 'category', []) + [cls.slot]
         # set stuff based on icon
-        if hasattr(cls, 'icon'):
+        if has_icon:
             global current_icon
             cls.icon_chr = chr(current_icon)
             current_icon += 1
 
         #> SET SCOREBOARD VARIABLES
-        if hasattr(cls,'slot'):
+        if has_slot:
             cls.until = f'genesis.status.slot.{cls.slot}.until'
+            cls.value = f'genesis.status.slot.{cls.slot}.value'
+            cls.max_duration = f'genesis.status.slot.{cls.slot}.max_duration'
         else:
             cls.until = f'genesis.status.unique.{cls.id}.until'
-
-        if hasattr(cls,'slot'):
-            cls.value = f'genesis.status.slot.{cls.slot}.value'
-        else:
             cls.value = f'genesis.status.unique.{cls.id}.value'
-
-        if hasattr(cls,'icon'):
-            if hasattr(cls,'slot'):
-                cls.max_duration = f'genesis.status.slot.{cls.slot}.max_duration'
-            else:
-                cls.max_duration = f'genesis.status.unique.{cls.id}.max_duration'
+            cls.max_duration = f'genesis.status.unique.{cls.id}.max_duration'
 
         #> REGISTER SCOREBOARDS
         global added_slots
         append function genesis:load:
-            if hasattr(cls,'slot') and cls.slot not in added_slots:
-                added_slots.append(cls.slot)
-                scoreboard objectives add f'genesis.status.slot.{cls.slot}.id' dummy
-                scoreboard objectives add (cls.until) dummy
-                scoreboard objectives add (cls.value) dummy
-                if hasattr(cls,'icon'):
+            if has_slot:
+                if (cls.slot + ';id') not in added_slots:
+                    added_slots.append(cls.slot + ';id')
+                    scoreboard objectives add f'genesis.status.slot.{cls.slot}.id' dummy
+                if (cls.slot + ';value') not in added_slots:
+                    added_slots.append(cls.slot + ';value')
+                    scoreboard objectives add (cls.value) dummy
+                if (cls.slot + ';until') not in added_slots and not is_permanent:
+                    added_slots.append(cls.slot + ';until')
+                    scoreboard objectives add (cls.until) dummy
+                if (cls.slot + ';max_duration') not in added_slots and not is_permanent and has_icon:
+                    added_slots.append(cls.slot + ';max_duration')
                     scoreboard objectives add (cls.max_duration) dummy
-            elif not hasattr(cls,'slot'):
-                scoreboard objectives add (cls.until) dummy
+            else:
                 scoreboard objectives add (cls.value) dummy
-                if hasattr(cls,'icon'):
+                if not is_permanent:
+                    scoreboard objectives add (cls.until) dummy
+                if has_icon and not is_permanent:
                     scoreboard objectives add (cls.max_duration) dummy
 
         #> SET UP STUFF FOR TIMING OUT
-        prepend function genesis:status/remove_next:
-            if hasattr(cls,'slot'):
-                if score @s f'genesis.status.slot.{cls.slot}.id' matches cls.hash if score .gametime genesis >= @s (cls.until) function f'genesis:status/remove/{cls.id}'
-            else:
-                if score .gametime genesis >= @s (cls.until) function f'genesis:status/remove/{cls.id}'
+        if not is_permanent:
+            prepend function genesis:status/remove_next:
+                if has_slot:
+                    if score @s f'genesis.status.slot.{cls.slot}.id' matches cls.hash if score .gametime genesis >= @s (cls.until) function f'genesis:status/remove/{cls.id}'
+                else:
+                    if score .gametime genesis >= @s (cls.until) function f'genesis:status/remove/{cls.id}'
 
-        global added_slots_remove_next
-        append function genesis:status/remove_next:
-            if not hasattr(cls,'slot'):
-                if score @s (cls.until) matches 1.. scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
-            elif cls.slot not in added_slots_remove_next:
-                added_slots_remove_next.append(cls.slot)
-                if score @s (cls.until) matches 1.. scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
+            global added_slots_remove_next
+            append function genesis:status/remove_next:
+                if not has_slot:
+                    if score @s (cls.until) matches 1.. scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
+                elif cls.slot not in added_slots_remove_next:
+                    added_slots_remove_next.append(cls.slot)
+                    if score @s (cls.until) matches 1.. scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
 
         #> SET UP APPLY "METHOD"
         def apply(duration: int|tuple[str,str], value: int|tuple[str,str] = 0):
-            if hasattr(cls,'slot'):
+            if has_slot:
                 if entity @s[tag=f'genesis.status.category.{cls.slot}'] function f'genesis:status/category/{cls.slot}/remove'
                 scoreboard players set @s f'genesis.status.slot.{cls.slot}.id' (cls.hash)
             else:
                 if entity @s[tag=(cls.tag)] function f'genesis:status/remove/{cls.id}'
 
-            if isinstance(duration, int):
-                scoreboard players set @s (cls.until) (duration)
-                if hasattr(cls,'icon'):
-                    scoreboard players set @s (cls.max_duration) (duration)
-            else:
-                raw (f'scoreboard players operation @s {cls.until} = {duration[0]} {duration[1]}')
-                if hasattr(cls,'icon'):
-                    scoreboard players operation @s (cls.max_duration) = @s (cls.until)
-            scoreboard players operation @s (cls.until) += .gametime genesis
-            scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
+            if not is_permanent:
+                if isinstance(duration, int):
+                    scoreboard players set @s (cls.until) (duration)
+                    if has_icon:
+                        scoreboard players set @s (cls.max_duration) (duration)
+                else:
+                    raw (f'scoreboard players operation @s {cls.until} = {duration[0]} {duration[1]}')
+                    if has_icon:
+                        scoreboard players operation @s (cls.max_duration) = @s (cls.until)
+                scoreboard players operation @s (cls.until) += .gametime genesis
+                scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
+
             if isinstance(value, int):
                 scoreboard players set @s (cls.value) (value)
             else:
@@ -121,8 +127,9 @@ class GenesisStatus(type):
             for category in getattr(cls, 'category', []):
                 tag @s add f'genesis.status.category.{category}'
 
-            if hasattr(cls,'icon'):
-                scoreboard players add @s genesis.status.has_visual_cooldown 1
+            if has_icon:
+                if not is_permanent:
+                    scoreboard players add @s genesis.status.has_visual_cooldown 1
                 scoreboard players add @s genesis.status.has_icon 1
                 function genesis:status/hud/update_icons
                 scoreboard players add @s genesis.hud.display 1
@@ -131,14 +138,19 @@ class GenesisStatus(type):
                 if callable(v) and getattr(v, '__on_apply_status__', False):
                     v(cls)
         cls.apply = apply
+        if is_permanent:
+            def apply2(value: int|tuple[str,str] = 0):
+                apply(0, value)
+            cls.apply = apply2
 
         #> SET UP REMOVE "METHOD"
         function f'genesis:status/remove/{cls.id}':
-            if hasattr(cls,'slot'):
+            if has_slot:
                 scoreboard players reset @s f'genesis.status.slot.{cls.slot}.id'
-            if hasattr(cls,'icon'):
+            if has_icon and not is_permanent:
                 scoreboard players reset @s (cls.max_duration)
-            scoreboard players reset @s (cls.until)
+            if not is_permanent:
+                scoreboard players reset @s (cls.until)
             scoreboard players reset @s (cls.value)
 
             tag @s remove (cls.tag)
@@ -146,8 +158,9 @@ class GenesisStatus(type):
             for category in getattr(cls, 'category', []):
                 function f'genesis:status/category/{category}/refresh'
 
-            if hasattr(cls, 'icon'):
-                scoreboard players remove @s genesis.status.has_visual_cooldown 1
+            if has_icon:
+                if not is_permanent:
+                    scoreboard players remove @s genesis.status.has_visual_cooldown 1
                 scoreboard players remove @s genesis.status.has_icon 1
                 function genesis:status/hud/update_icons
                 scoreboard players remove @s genesis.hud.display 1
@@ -176,13 +189,14 @@ class GenesisStatus(type):
                 if entity @s[tag=(cls.tag)] return run tag @s add f'genesis.status.category.{category}'
 
         #> METHOD TO MODIFY DURATION
-        def modify_duration(operation: str, duration: int|tuple[str,str]):
-            scoreboard players operation @s (cls.until) -= .gametime genesis
-            smart_scoreboard_operation('@s', cls.until, operation, duration)
-            scoreboard players operation @s (cls.until) += .gametime genesis
+        if not is_permanent:
+            def modify_duration(operation: str, duration: int|tuple[str,str]):
+                scoreboard players operation @s (cls.until) -= .gametime genesis
+                smart_scoreboard_operation('@s', cls.until, operation, duration)
+                scoreboard players operation @s (cls.until) += .gametime genesis
 
-            scoreboard players set @s genesis.status.remove_next -1 # This makes sure that the remove_next function gets run next tick
-        cls.modify_duration = modify_duration
+                scoreboard players set @s genesis.status.remove_next -1 # This makes sure that the remove_next function gets run next tick
+            cls.modify_duration = modify_duration
 
         #> METHOD TO MODIFY VALUE
         def modify_value(operation: str, value: int|tuple[str,str]):
@@ -198,13 +212,13 @@ class GenesisStatus(type):
         cls.modify_value = modify_value
 
         #> METHOD TO MODIFY MAX DURATION
-        if hasattr(cls,'icon'):
+        if has_icon and not is_permanent:
             def modify_max_duration(operation: str, max_duration: int|tuple[str,str]):
                 smart_scoreboard_operation('@s', cls.max_duration, operation, max_duration)
             cls.modify_max_duration = modify_max_duration
 
         #> ICON STUFF
-        if hasattr(cls,'icon'):
+        if has_icon:
             status_font = ctx.assets.fonts.get('genesis:hud/status', {"data":{"providers":[{
                 "type": "bitmap",
                 "file": "genesis:font/hud/status_background.png",
@@ -240,23 +254,29 @@ class GenesisStatus(type):
 
             append function genesis:status/hud/update_icons_for_each:
                 #! make icons stack if more are added
-                if entity @s[tag=(cls.tag)] data modify storage genesis:player self.hud[1][1] append value f'b:{cls.icon_chr}|'
-                if entity @s[tag=(cls.tag)] data modify storage genesis:player self.hud[1][2] append value "#"
+                if entity @s[tag=(cls.tag)] function ~/{cls.id}:
+                    data modify storage genesis:player self.hud[1][1] append value f'b:{cls.icon_chr}|'
+                    data modify storage genesis:player self.hud[1][2] append value "#"
 
             append function genesis:status/hud/update_cooldown_for_each:
                 #! make cooldowns also stack if more are added
-                if entity @s[tag=(cls.tag)] function ~/{cls.id}:
-                    scoreboard players operation #cooldown_sprite genesis = @s (cls.until)
-                    scoreboard players operation #cooldown_sprite genesis -= .gametime genesis
-                    scoreboard players operation #cooldown_sprite genesis *= constant(24) genesis
-                    store result score #remainder genesis scoreboard players operation #cooldown_sprite genesis /= @s (cls.max_duration)
-                    scoreboard players operation #cooldown_sprite genesis /= constant(2) genesis
-                    scoreboard players operation #remainder genesis %= constant(2) genesis
-                    scoreboard players operation #cooldown_sprite genesis += #remainder genesis
+                if is_permanent:
+                    if entity @s[tag=(cls.tag)] function ~/{cls.id}:
+                        data modify storage genesis:player self.hud[2][1] append value f'|0]'
+                        data modify storage genesis:player self.hud[2][2] append value "#"
+                else:
+                    if entity @s[tag=(cls.tag)] function ~/{cls.id}:
+                        scoreboard players operation #cooldown_sprite genesis = @s (cls.until)
+                        scoreboard players operation #cooldown_sprite genesis -= .gametime genesis
+                        scoreboard players operation #cooldown_sprite genesis *= constant(24) genesis
+                        store result score #remainder genesis scoreboard players operation #cooldown_sprite genesis /= @s (cls.max_duration)
+                        scoreboard players operation #cooldown_sprite genesis /= constant(2) genesis
+                        scoreboard players operation #remainder genesis %= constant(2) genesis
+                        scoreboard players operation #cooldown_sprite genesis += #remainder genesis
 
-                    for i in range(13):
-                        if score #cooldown_sprite genesis matches i data modify storage genesis:player self.hud[2][1] append value f'|{hex(i)[-1].upper()}]'
-                    data modify storage genesis:player self.hud[2][2] append value "#"
+                        for i in range(13):
+                            if score #cooldown_sprite genesis matches i data modify storage genesis:player self.hud[2][1] append value f'|{hex(i)[-1].upper()}]'
+                        data modify storage genesis:player self.hud[2][2] append value "#"
         return cls
 
 

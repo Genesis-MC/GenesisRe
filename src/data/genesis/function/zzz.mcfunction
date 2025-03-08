@@ -52,3 +52,12 @@ function ~/second_status_test:
 function ~/increase_value_by_12:
     unless entity @s[tag=(UniqueStatus.tag)] return run say I DONT HAVE THIS STATUS, SILLY
     UniqueStatus.modify_value('+=', 12)
+
+
+class ChestTwo(metaclass=GenesisStatus):
+    slot = "chest"
+    permanent = True
+    icon = "genesis:font/status/block_damage_passive_on_cooldown_or_something"
+
+function ~/chest_two_apply:
+    ChestTwo.apply()
