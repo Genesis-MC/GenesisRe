@@ -21,12 +21,12 @@ def right_click_ability(name: str, description: str, cooldown: float, mana = 0, 
         active_ability_cost_line = [{"translate":"text.genesis.active_ability","color":"dark_gray"},{"text":" [","italic":false}]
 
         if mana:
-            active_ability_cost_line += [{"translate":"icon.genesis.mana","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(mana),"italic":false,"color":rarity_text_color["rare"]}]
+            active_ability_cost_line += [{"text":"\u0049","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(mana),"italic":false,"color":rarity_text_color["rare"]}]
 
         if cooldown:
             if mana:
                 active_ability_cost_line += [{"text":" | ","color":"dark_gray"}]
-            active_ability_cost_line += [{"translate":"icon.genesis.cooldown","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(cooldown)+"s","italic":false,"color":rarity_text_color["uncommon"]}]
+            active_ability_cost_line += [{"text":"\u004A","color":"white","italic":false,"font":"genesis:icon"},{"text":" "+str(cooldown)+"s","italic":false,"color":rarity_text_color["uncommon"]}]
 
         active_ability_cost_line += [{"text":"]","italic":false}]
 
