@@ -6,6 +6,7 @@ def reduce_mana_or_return(amount: int, update = True): # This is actual mana, so
     if score @s genesis.mana.current matches (None, amount - 1) return 0
     if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
     scoreboard players remove @s genesis.mana.current (amount)
+    if score @s genesis.mana.current matches 0 scoreboard players remove @s genesis.hud.display 1
     if update:
         function #genesis:mana/changed
         function genesis:mana/update_hud
@@ -15,12 +16,14 @@ def reduce_mana_by_score_or_return(name: str, objective: str, update = True): # 
     raw (f'execute if score {name} {objective} > @s genesis.mana.current run return 0')
     if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
     raw (f'scoreboard players operation @s genesis.mana.current -= {name} {objective}')
+    if score @s genesis.mana.current matches 0 scoreboard players remove @s genesis.hud.display 1
     if update:
         function #genesis:mana/changed
         function genesis:mana/update_hud
 
 
 def add_mana(amount: int, update = True):
+    if score @s genesis.mana.current matches 0 scoreboard players add @s genesis.hud.display 1
     scoreboard players add @s genesis.mana.current (amount)
     scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
     if score @s genesis.mana.current = @s genesis.mana.max scoreboard players remove @s genesis.hud.display 1
@@ -30,6 +33,7 @@ def add_mana(amount: int, update = True):
 
 
 def add_mana_by_score(name: str, objective: str, update = True):
+    if score @s genesis.mana.current matches 0 scoreboard players add @s genesis.hud.display 1
     raw (f'scoreboard players operation @s genesis.mana.current += {name} {objective}')
     scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
     if score @s genesis.mana.current = @s genesis.mana.max scoreboard players remove @s genesis.hud.display 1
@@ -54,30 +58,80 @@ function ~/calculate_max_mana:
     function genesis:mana/update_hud
 
 
-predicate ~/is_full {
-    "condition": "minecraft:entity_scores",
-    "entity": "this",
-    "scores": {
-        "genesis.mana.current": {
-            "min": {
-                "type": "minecraft:score",
-                "target": "this",
-                "score": "genesis.mana.max"
-            },
-            "max": {
-                "type": "minecraft:score",
-                "target": "this",
-                "score": "genesis.mana.max"
-            }
+predicate ~/should_regen {
+    "condition": "minecraft:any_of",
+    "terms": [
+        {
+            "condition": "minecraft:all_of",
+            "terms": [
+                {
+                    "condition": "minecraft:inverted",
+                    "term": {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "genesis.mana.current": {
+                                "min": {
+                                    "type": "minecraft:score",
+                                    "target": "this",
+                                    "score": "genesis.mana.max"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "condition": "minecraft:entity_scores",
+                    "entity": "this",
+                    "scores": {
+                        "genesis.stat.mana_regen": {
+                            "min": 1
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "condition": "minecraft:all_of",
+            "terms": [
+                {
+                    "condition": "minecraft:entity_scores",
+                    "entity": "this",
+                    "scores": {
+                        "genesis.mana.current": {
+                            "min": 1
+                        }
+                    }
+                },
+                {
+                    "condition": "minecraft:entity_scores",
+                    "entity": "this",
+                    "scores": {
+                        "genesis.stat.mana_regen": {
+                            "max": -1
+                        }
+                    }
+                }
+            ]
         }
-    }
+    ]
 }
 
 
 append function genesis:tick:
-    as @a[predicate=!genesis:mana/is_full] function genesis:mana/tick
+    as @a[predicate=genesis:mana/should_regen] function genesis:mana/tick
 function ~/tick:
-    add_mana_by_score('@s', 'genesis.stat.mana_regen')
+    if score @s genesis.mana.current matches 0 scoreboard players add @s genesis.hud.display 1
+    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
+
+    scoreboard players operation @s genesis.mana.current += @s genesis.stat.mana_regen
+    scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
+    if score @s genesis.mana.current matches ..-1 scoreboard players set @s genesis.mana.current 0
+
+    if score @s genesis.mana.current matches 0 scoreboard players remove @s genesis.hud.display 1
+    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players remove @s genesis.hud.display 1
+    function #genesis:mana/changed
+    function genesis:mana/update_hud
 
 
 function ~/update_hud:
@@ -99,8 +153,8 @@ function ~/update_hud:
     #> MODIFY PLAYER HUD STORAGE
     with PerPlayerStorage():
         execute function ~/../update_hud_wrapped:
-            #> RETURN EARLY IF MANA IS FULL => HIDE HUD
-            if score @s genesis.mana.current = @s genesis.mana.max return run data modify storage genesis:player self.hud[0] set value [""]
+            #> RETURN EARLY IF MANA IS FULL OR EMPTY => HIDE HUD
+            unless score @s genesis.mana.filled_pixels matches 1..78 return run data modify storage genesis:player self.hud[0] set value [""]
             if entity @s[tag=!genesis.mana.is_drowning] data modify storage genesis:player self.hud[0] set value [{
                 text: "+",
                 font: "genesis:hud/mana_bar",
