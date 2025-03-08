@@ -134,7 +134,8 @@ class GenesisStatus(type):
                 function genesis:status/hud/update_icons
                 scoreboard players add @s genesis.hud.display 1
 
-            for k, v in cls.__dict__.items():
+            for k in dir(cls):
+                v = getattr(cls, k, None)
                 if callable(v) and getattr(v, '__on_apply_status__', False):
                     v(cls)
         cls.apply = apply
@@ -200,13 +201,15 @@ class GenesisStatus(type):
 
         #> METHOD TO MODIFY VALUE
         def modify_value(operation: str, value: int|tuple[str,str]):
-            for k, v in cls.__dict__.items():
+            for k in dir(cls):
+                v = getattr(cls, k, None)
                 if callable(v) and getattr(v, '__before_value_change_status__', False):
                     v(cls)
 
             smart_scoreboard_operation('@s', cls.value, operation, value)
 
-            for k, v in cls.__dict__.items():
+            for k in dir(cls):
+                v = getattr(cls, k, None)
                 if callable(v) and getattr(v, '__after_value_change_status__', False):
                     v(cls)
         cls.modify_value = modify_value

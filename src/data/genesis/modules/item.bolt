@@ -29,7 +29,8 @@ class GenesisItem(type):
 
         components = {}
         decorators = []
-        for k, v in cls.__dict__.items():
+        for k in dir(cls):
+            v = getattr(cls, k, None)
             if k in component_names + ['stats','category','passives']:
                 components[k] = v
             elif callable(v) and hasattr(v, 'decorator'):
