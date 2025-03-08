@@ -304,8 +304,10 @@ class GenesisStatusMetaclass(type):
                         scoreboard players operation #remainder genesis %= constant(2) genesis
                         scoreboard players operation #cooldown_sprite genesis += #remainder genesis
 
-                        for i in range(13):
-                            if score #cooldown_sprite genesis matches i data modify storage genesis:player self.hud[2][1] append value f'|{hex(i)[-1].upper()}|'
+                        if score #cooldown_sprite genesis matches ..0 data modify storage genesis:player self.hud[2][1] append value f'|0|'
+                        for i in range(1,12):
+                            if score #cooldown_sprite genesis matches (i) data modify storage genesis:player self.hud[2][1] append value f'|{hex(i)[-1].upper()}|'
+                        if score #cooldown_sprite genesis matches 12.. data modify storage genesis:player self.hud[2][1] append value f'|C|'
                         data modify storage genesis:player self.hud[2][2] append value "#"
         return cls
 
