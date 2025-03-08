@@ -1,6 +1,5 @@
 from genesis:item import GenesisItem
 from genesis:placeable import on_place
-from genesis:utils import add_loot_table
 
 
 input_slots = [2,3,4,11,12,13,20,21,22]
@@ -145,7 +144,6 @@ def add_custom_recipe(recipe: list[list[str|type|None]], reduce_durability = Fal
     ['#logs', None  ,'#logs'],
     ['#logs','#logs','#logs'],
 ])
-@add_loot_table
 class Crafter(GenesisItem):
     item_name = ("Genesis Crafter", {})
     item_model = "crafting_table"

@@ -1,4 +1,4 @@
-from genesis:utils import add_loot_table, break_text_into_lines, texture_path_to_item_model
+from genesis:utils import break_text_into_lines, texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
 from bolt_item:decorators import on_consume, on_tick
@@ -12,7 +12,6 @@ from genesis:item import GenesisItem
     ["iron_ingot", "stick", "iron_ingot"],
     ["iron_ingot", "iron_ingot", "iron_ingot"],
 ])
-@add_loot_table
 class SteelHilt(GenesisItem):
     item_name = ("Steel Hilt", {"color":"white"})
     rarity = "common"
@@ -29,7 +28,6 @@ class SteelHilt(GenesisItem):
     ["gold_ingot", SteelHilt, "gold_ingot"],
     ["gold_ingot", "gold_ingot", "gold_ingot"],
 ])
-@add_loot_table
 class GildedHilt(GenesisItem):
     item_name = ("Gilded Hilt", {"color":"white"})
     rarity = "uncommon"
@@ -46,7 +44,6 @@ class GildedHilt(GenesisItem):
     ["diamond", GildedHilt, "diamond"],
     ["diamond", "diamond", "diamond"],
 ])
-@add_loot_table
 class BejeweledHilt(GenesisItem):
     item_name = ("Bejeweled Hilt", {"color":"white"})
     rarity = "rare"
@@ -63,7 +60,6 @@ class BejeweledHilt(GenesisItem):
 #    [ShardOfTheCrimsonAbyss, MetalAlloy, ShardOfTheCrimsonAbyss],
 #    [NetheriteSediment, ShardOfTheCrimsonAbyss, NetheriteSediment],
 #])
-@add_loot_table
 class CrimsonAlloy(GenesisItem):
     item_name = ("Crimson Alloy", {"color":"red"})
     rarity = "legendary"
@@ -80,7 +76,6 @@ class CrimsonAlloy(GenesisItem):
 #    [ShardOfTheWarpedEmpyrean, MetalAlloy, ShardOfTheWarpedEmpyrean],
 #    [NetheriteSediment, ShardOfTheWarpedEmpyrean, NetheriteSediment],
 #])
-@add_loot_table
 class WarpedAlloy(GenesisItem):
     item_name = ("Warped Alloy", {"color":"dark_aqua"})
     rarity = "legendary"
@@ -91,7 +86,6 @@ class WarpedAlloy(GenesisItem):
         italic = True,
     )
     
-@add_loot_table
 class VerdantTwig(GenesisItem):
     item_name = ("Verdant Twig", {"color":"white"})
     rarity = "common"
@@ -102,7 +96,6 @@ class VerdantTwig(GenesisItem):
         italic = True,
     )
     
-@add_loot_table
 class MossyBark(GenesisItem):
     item_name = ("Mossy Bark", {"color":"white"})
     rarity = "common"
@@ -119,7 +112,6 @@ class MossyBark(GenesisItem):
     [MossyBark, "emerald", MossyBark],
     [VerdantTwig, MossyBark, VerdantTwig],
 ])
-@add_loot_table
 class VerdantGem(GenesisItem):
     item_name = ("Verdant Gem", {"color":"green"})
     rarity = "uncommon"
@@ -130,7 +122,6 @@ class VerdantGem(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class VermillionClay(GenesisItem):
     item_name = ("Vermillion Clay", {"color":"white"})
     rarity = "common"
@@ -147,7 +138,6 @@ class VermillionClay(GenesisItem):
     [VermillionClay, "diamond", VermillionClay],
     [VermillionClay, VermillionClay, VermillionClay],
 ])
-@add_loot_table
 class VermillionGem(GenesisItem):
     item_name = ("Vermillion Gem", {"color":"dark_red"})
     rarity = "uncommon"
@@ -158,7 +148,6 @@ class VermillionGem(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class ShadeFlux(GenesisItem):
     item_name = ("Shade Flux", {"color":"dark_purple"})
     rarity = "uncommon"
@@ -175,7 +164,6 @@ class ShadeFlux(GenesisItem):
     [ShadeFlux, "ender_pearl", ShadeFlux],
     [None, ShadeFlux, None],
 ])
-@add_loot_table
 class ShadedEnderPearl(GenesisItem):
     item_name = ("Shaded Ender Pearl", {"color":"light_purple"})
     rarity = "rare"
@@ -186,7 +174,6 @@ class ShadedEnderPearl(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class VoidedFragment(GenesisItem):
     item_name = ("Voided Fragment", {"color":"dark_purple"})
     rarity = "rare"
@@ -203,7 +190,6 @@ class VoidedFragment(GenesisItem):
     [VoidedFragment, ShadedEnderPearl, VoidedFragment],
     [None, VoidedFragment, None],
 ])
-@add_loot_table
 class VoidedEnderPearl(GenesisItem):
     item_name = ("Voided Ender Pearl", {"color":"dark_purple"})
     rarity = "epic"
@@ -250,7 +236,6 @@ class VoidedEnderPearl(GenesisItem):
 #    [None, CrimsonEnhancementCrystal, None],
 #])
 
-@add_loot_table
 class AncientGoldCoin(GenesisItem):
     item_name = ("Ancient Gold Coin", {"color":"white"})
     rarity = "rare"
@@ -261,7 +246,6 @@ class AncientGoldCoin(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class ArcaneCloth(GenesisItem):
     item_name = ("Arcane Cloth", {"color":"light_purple"})
     rarity = "rare"
@@ -272,7 +256,6 @@ class ArcaneCloth(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class BlizzardTear(GenesisItem):
     item_name = ("Blizzard Tear", {"color":"white"})
     rarity = "uncommon"
@@ -283,7 +266,6 @@ class BlizzardTear(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class BoarHide(GenesisItem):
     item_name = ("Boar Hide", {"color":"white"})
     rarity = "common"
@@ -294,7 +276,6 @@ class BoarHide(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class Calimari(GenesisItem):
     item_name = ("Calimari", {"color":"white"})
     rarity = "common"
@@ -305,7 +286,6 @@ class Calimari(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class Cloth(GenesisItem):
     item_name = ("Cloth", {"color":"white"})
     rarity = "common"
@@ -316,7 +296,6 @@ class Cloth(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class CrystalDust(GenesisItem):
     item_name = ("Crystal Dust", {"color":"white"})
     rarity = "uncommon"
@@ -327,7 +306,6 @@ class CrystalDust(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class CrystalScale(GenesisItem):
     item_name = ("Crystal Scale", {"color":"aqua"})
     rarity = "rare"
@@ -338,7 +316,6 @@ class CrystalScale(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class Drumstick(GenesisItem):
     item_name = ("Drumstick", {"color":"white"})
     rarity = "uncommon"
@@ -349,7 +326,6 @@ class Drumstick(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class FloralNectar(GenesisItem):
     item_name = ("Floral Nectar", {"color":"white"})
     rarity = "uncommon"
@@ -360,7 +336,6 @@ class FloralNectar(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class HexedHailstone(GenesisItem):
     item_name = ("Hexed Hailstone", {"color":"white"})
     rarity = "epic"
@@ -371,7 +346,6 @@ class HexedHailstone(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class EverfrostCore(GenesisItem):
     item_name = ("Everfrost Core", {"color":"white"})
     rarity = "legendary"
@@ -382,7 +356,6 @@ class EverfrostCore(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class LivingwoodCore(GenesisItem):
     item_name = ("Livingwood Core", {"color":"green"})
     rarity = "legendary"
@@ -393,7 +366,6 @@ class LivingwoodCore(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class PyroclasticCore(GenesisItem):
     item_name = ("Pyroclastic Core", {"color":"red"})
     rarity = "legendary"
@@ -404,7 +376,6 @@ class PyroclasticCore(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class ManaCloth(GenesisItem):
     item_name = ("Mana Cloth", {"color":"white"})
     rarity = "uncommon"
@@ -415,7 +386,6 @@ class ManaCloth(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class MetalAlloy(GenesisItem):
     item_name = ("Metal Alloy", {"color":"white"})
     rarity = "uncommon"
@@ -426,7 +396,6 @@ class MetalAlloy(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class MutatedFlesh(GenesisItem):
     item_name = ("Mutated Flesh", {"color":"white"})
     rarity = "uncommon"
@@ -437,7 +406,6 @@ class MutatedFlesh(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class PrimeBeef(GenesisItem):
     item_name = ("Prime Beef", {"color":"white"})
     rarity = "rare"
@@ -448,7 +416,6 @@ class PrimeBeef(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class PureCrystalDust(GenesisItem):
     item_name = ("Pure Crystal Dust", {"color":"light_purple"})
     rarity = "epic"
@@ -459,7 +426,6 @@ class PureCrystalDust(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class ScrapscuttleEgg(GenesisItem):
     item_name = ("Scrapscuttle Egg", {"color":"white"})
     rarity = "epic"
@@ -470,7 +436,6 @@ class ScrapscuttleEgg(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class ShardOfTheCrimsonAbyss(GenesisItem):
     item_name = ("Shard Of The Crimson Abyss", {"color":"red"})
     rarity = "legendary"
@@ -481,7 +446,6 @@ class ShardOfTheCrimsonAbyss(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class ShardOfTheDepths(GenesisItem):
     item_name = ("Shard Of The Depths", {"color":"dark_purple"})
     rarity = "epic"
@@ -492,7 +456,6 @@ class ShardOfTheDepths(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class ShardOfTheWarpedEmpyrean(GenesisItem):
     item_name = ("Shard Of The Warped Empyrean", {"color":"dark_aqua"})
     rarity = "epic"
@@ -503,7 +466,6 @@ class ShardOfTheWarpedEmpyrean(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class TerraclodPearl(GenesisItem):
     item_name = ("Terraclod Pearl", {"color":"gold"})
     rarity = "legendary"
@@ -514,7 +476,6 @@ class TerraclodPearl(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class Truffle(GenesisItem):
     item_name = ("Truffle", {"color":"white"})
     rarity = "epic"
@@ -525,7 +486,6 @@ class Truffle(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class VenomSac(GenesisItem):
     item_name = ("Venom Sac", {"color":"white"})
     rarity = "rare"
@@ -536,7 +496,6 @@ class VenomSac(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class VerdantShard(GenesisItem):
     item_name = ("Verdant Shard", {"color":"white"})
     rarity = "uncommon"
@@ -547,7 +506,6 @@ class VerdantShard(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class WizardsTruffle(GenesisItem):
     item_name = ("Wizards Truffle", {"color":"blue"})
     rarity = "legendary"
@@ -558,7 +516,6 @@ class WizardsTruffle(GenesisItem):
         italic = True,
     )
 
-@add_loot_table
 class WolfFang(GenesisItem):
     item_name = ("Wolf Fang", {"color":"white"})
     rarity = "common"

@@ -1,4 +1,4 @@
-from genesis:utils import add_loot_table, texture_path_to_item_model
+from genesis:utils import texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
 from bolt_item:decorators import on_consume, on_tick
@@ -15,7 +15,6 @@ from genesis:item/dagger import HarbingerOfWinter
     ["iron_ingot", "iron_ingot", "iron_ingot"],
     [None, "stick", None],
 ])
-@add_loot_table
 class IronGreatsword(GenesisItem):
     item_name = ("Iron Greatsword", {"color":"white"})
     rarity = "common"
@@ -28,7 +27,6 @@ class IronGreatsword(GenesisItem):
     [VerdantTwig, "iron_block", VerdantTwig],
     [None, SteelHilt, None],
 ])
-@add_loot_table
 class OvergrownGreatsword(GenesisItem):
     item_name = ("OvergrownGreatsword", {"color":"green"})
     rarity = "uncommon"
@@ -41,7 +39,6 @@ class OvergrownGreatsword(GenesisItem):
     [MetalAlloy, MetalAlloy, MetalAlloy],
     [None, SteelHilt, None],
 ])
-@add_loot_table
 class Zweihander(GenesisItem):
     item_name = ("Zweihander", {"color":"white"})
     rarity = "rare"
@@ -62,7 +59,6 @@ class Zweihander(GenesisItem):
     [HarbingerOfWinter, EverfrostCore, HarbingerOfWinter],
     [None, BejeweledHilt, None],
 ])
-@add_loot_table
 class EverfrostTitanblade(GenesisItem):
     item_name = ("Everfrost Titanblade", {"color":"aqua"})
     rarity = "legendary"
@@ -78,7 +74,6 @@ class EverfrostTitanblade(GenesisItem):
         say WIP
 
 # SwashbucklersGlory
-@add_loot_table
 class SwashbucklersGlory(GenesisItem):
     item_name = ("Swashbucklers Glory", {"color":"blue"})
     rarity = "epic"
@@ -94,7 +89,6 @@ class SwashbucklersGlory(GenesisItem):
         say WIP
     
 # RoyalCleaver
-@add_loot_table
 class RoyalCleaver(GenesisItem):
     item_name = ("Royal Cleaver", {"color":"gold"})
     rarity = "epic"
@@ -102,7 +96,6 @@ class RoyalCleaver(GenesisItem):
     stats = ("mainhand", {"physical_power":150,"attack_speed":40,"armor":30,"knockback_resistance":30,"mana_regen":-10,"speed":-25})
 
 # Exetol
-@add_loot_table
 class Exetol(GenesisItem):
     item_name = ("Exetol", {"color":"red"})
     rarity = "legendary"

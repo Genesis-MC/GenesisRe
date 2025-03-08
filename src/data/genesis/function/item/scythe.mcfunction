@@ -1,4 +1,4 @@
-from genesis:utils import add_loot_table, texture_path_to_item_model
+from genesis:utils import texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
 from bolt_item:decorators import on_consume, on_tick
@@ -15,7 +15,6 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
     ["stick", None, "iron_ingot"],
     ["stick", None, None],
 ])
-@add_loot_table
 class IronScythe(GenesisItem):
     item_name = ("Iron Scythe", {"color":"white"})
     rarity = "common"
@@ -23,7 +22,6 @@ class IronScythe(GenesisItem):
     stats = ("mainhand", {"physical_power":85,"attack_speed":50})
 
 # RecluseFang
-@add_loot_table
 class RecluseFang(GenesisItem):
     item_name = ("Recluse Fang", {"color":"red"})
     rarity = "uncommon"
@@ -36,7 +34,6 @@ class RecluseFang(GenesisItem):
     ["diamond", RecluseFang, "diamond"],
     [VenomSac, "diamond", VenomSac],
 ])
-@add_loot_table
 class VenomlashFang(GenesisItem):
     item_name = ("Venomlash Fang", {"color":"dark_purple"})
     rarity = "rare"
@@ -44,7 +41,6 @@ class VenomlashFang(GenesisItem):
     stats = ("mainhand", {"physical_power":90,"attack_speed":60})
 
 # JackOReaper
-@add_loot_table
 class JackOReaper(GenesisItem):
     item_name = ("Jack O' Reaper", {"color":"white"})
     rarity = "rare"
@@ -52,7 +48,6 @@ class JackOReaper(GenesisItem):
     stats = ("mainhand", {"physical_power":88,"attack_speed":60})
 
 # PrismarineScythe
-@add_loot_table
 class PrismarineScythe(GenesisItem):
     item_name = ("Prismarine Scythe", {"color":"dark_aqua"})
     rarity = "rare"
@@ -60,7 +55,6 @@ class PrismarineScythe(GenesisItem):
     stats = ("mainhand", {"physical_power":90,"attack_speed":60,"mana_regen":10})
 
 # Riptide
-@add_loot_table
 class Riptide(GenesisItem):
     item_name = ("Riptide", {"color":"dark_aqua"})
     rarity = "epic"
@@ -76,7 +70,6 @@ class Riptide(GenesisItem):
         say WIP
 
 # CloudSail
-@add_loot_table
 class CloudSail(GenesisItem):
     item_name = ("Cloud Sail", {"color":"white"})
     rarity = "rare"

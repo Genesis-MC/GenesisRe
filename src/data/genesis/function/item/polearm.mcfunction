@@ -1,4 +1,4 @@
-from genesis:utils import add_loot_table, texture_path_to_item_model
+from genesis:utils import texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
 from bolt_item:decorators import on_consume, on_tick
@@ -15,7 +15,6 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
     [None, "stick", "iron_ingot"],
     ["stick", None, None],
 ])
-@add_loot_table
 class IronSpear(GenesisItem):
     item_name = ("Iron Spear", {"color":"white"})
     rarity = "common"
@@ -28,7 +27,6 @@ class IronSpear(GenesisItem):
     [None, SteelHilt, MetalAlloy],
     [SteelHilt, None, None],
 ])
-@add_loot_table
 class Glaive(GenesisItem):
     item_name = ("Glaive", {"color":"white"})
     rarity = "rare"
@@ -49,7 +47,6 @@ class Glaive(GenesisItem):
     [CrystalScale, SteelHilt, CrystalScale],
     [SteelHilt, CrystalScale, None],
 ])
-@add_loot_table
 class Halycon(GenesisItem):
     item_name = ("Halycon", {"color":"aqua"})
     rarity = "rare"
@@ -65,7 +62,6 @@ class Halycon(GenesisItem):
         say WIP
 
 # HelixSpear
-@add_loot_table
 class HelixSpear(GenesisItem):
     item_name = ("Helix Spear", {"color":"white"})
     rarity = "rare"
@@ -86,7 +82,6 @@ class HelixSpear(GenesisItem):
     [HelixSpear, "quartz", HelixSpear],
     [None, GildedHilt, None],
 ])
-@add_loot_table
 class HeavensThorn(GenesisItem):
     item_name = ("Heavens Thorn", {"color":"gold"})
     rarity = "epic"
@@ -107,7 +102,6 @@ class HeavensThorn(GenesisItem):
     [None, VerdantTwig, None],
     [VerdantTwig, None, None],
 ])
-@add_loot_table
 class VerdantStaff(GenesisItem):
     item_name = ("Verdant Staff", {"color":"green"})
     rarity = "uncommon"
@@ -128,7 +122,6 @@ class VerdantStaff(GenesisItem):
     [VerdantShard, VerdantStaff, VerdantShard],
     [VerdantShard, VerdantShard, VerdantShard],
 ])
-@add_loot_table
 class VerdantMasterstaff(GenesisItem):
     item_name = ("Verdant Masterstaff", {"color":"green"})
     rarity = "rare"
@@ -149,7 +142,6 @@ class VerdantMasterstaff(GenesisItem):
     [VerdantGem, VerdantMasterstaff, VerdantGem],
     [CrystalScale, VerdantGem, CrystalScale],
 ])
-@add_loot_table
 class VerdantSceptor(GenesisItem):
     item_name = ("Verdant Sceptor", {"color":"green"})
     rarity = "epic"
@@ -165,7 +157,6 @@ class VerdantSceptor(GenesisItem):
         say WIP
 
 # SceptorOfTheCrimsonEgg
-@add_loot_table
 class SceptorOfTheCrimsonEgg(GenesisItem):
     item_name = ("Sceptor Of The Crimson Egg", {"color":"red"})
     rarity = "epic"

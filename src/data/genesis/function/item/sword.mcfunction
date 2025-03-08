@@ -1,4 +1,4 @@
-from genesis:utils import add_loot_table, texture_path_to_item_model
+from genesis:utils import texture_path_to_item_model
 from genesis:right_click_ability import right_click_ability
 from tungsten:decorators import on_equip, on_unequip
 from bolt_item:decorators import on_consume, on_tick
@@ -15,7 +15,6 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
     [None, "obsidian", None],
     [SteelHilt, None, None],
 ])
-@add_loot_table
 class ObsidianBlade(GenesisItem):
     item_name = ("Obsidian Blade", {"color":"white"})
     rarity = "uncommon"
@@ -28,7 +27,6 @@ class ObsidianBlade(GenesisItem):
     ["obsidian", ObsidianBlade, "obsidian"],
     [ShadeFlux, ShadeFlux, ShadeFlux],
 ])
-@add_loot_table
 class FadingDusk(GenesisItem):
     item_name = ("Fading Dusk", {"color":"dark_purple"})
     rarity = "rare"
@@ -41,7 +39,6 @@ class FadingDusk(GenesisItem):
     [None, CrimsonAlloy, None],
     [BejeweledHilt, None, None],
 ])
-@add_loot_table
 class SaberCrimson(GenesisItem):
     item_name = ("Saber Crimson", {"color":"red"})
     rarity = "epic"
@@ -54,7 +51,6 @@ class SaberCrimson(GenesisItem):
     [None, WarpedAlloy, None],
     [BejeweledHilt, None, None],
 ])
-@add_loot_table
 class SaberWarped(GenesisItem):
     item_name = ("Saber Warped", {"color":"dark_aqua"})
     rarity = "epic"
@@ -62,7 +58,6 @@ class SaberWarped(GenesisItem):
     stats = ("mainhand", {"physical_power":85,"attack_speed":95,"mana_regen":-30})
 
 # HailstoneBlade
-@add_loot_table
 class HailstoneBlade(GenesisItem):
     item_name = ("Hailstone Blade", {"color":"aqua"})
     rarity = "epic"
@@ -78,7 +73,6 @@ class HailstoneBlade(GenesisItem):
         say WIP
 
 # Kopesh
-@add_loot_table
 class Kopesh(GenesisItem):
     item_name = ("Kopesh", {"color":"dark_red"})
     rarity = "rare"
@@ -94,7 +88,6 @@ class Kopesh(GenesisItem):
         say WIP
 
 # AcolyteBlade
-@add_loot_table
 class AcolyteBlade(GenesisItem):
     item_name = ("Acolyte Blade", {"color":"dark_red"})
     rarity = "rare"
@@ -102,7 +95,6 @@ class AcolyteBlade(GenesisItem):
     stats = ("mainhand", {"physical_power":85,"attack_speed":80})
 
 # Asophogheny
-@add_loot_table
 class Asophogeny(GenesisItem):
     item_name = ("Asophogeny", {"color":"dark_red"})
     rarity = "epic"
