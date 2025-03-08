@@ -8,6 +8,9 @@ function ~/reset_player_join:
     scoreboard players reset * genesis.player.id
     data remove storage genesis:player players
     advancement revoke @s only genesis:player/join
+    scoreboard players reset @s genesis.status.has_icon
+    scoreboard players reset @s genesis.status.has_visual_cooldown
+    scoreboard players reset @s genesis.hud.display
 
 
 class FrederickTheStatus(metaclass=GenesisStatus):

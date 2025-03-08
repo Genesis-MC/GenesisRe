@@ -1,3 +1,4 @@
+import genesis:status/hud as shud # This ensures that the cooldown gets calculated before the hud is displayed
 
 append function genesis:load:
     # This score is increased by 1 every time anything activates the hud and that same thing should reduce it by 1 if it is removed
@@ -6,7 +7,7 @@ append function genesis:load:
 
 
 append function genesis:tick:
-    as @a[tag=genesis.hud.display] function genesis:hud/tick
+    as @a[scores={genesis.hud.display=0..}] function genesis:hud/tick
 
 
 function ~/tick:
@@ -17,4 +18,4 @@ function ~/tick:
     execute function ~/../display_hud_macro with storage genesis:temp player:
         $title @s actionbar {nbt:"players[$(id)].hud",storage:"genesis:player",interpret:true}
     # We do this after and don't return so that it gets displayed the tick after everything has been removed
-    unless score @s genesis.hud.display matches 1.. tag @s remove genesis.hud.display
+    unless score @s genesis.hud.display matches 1.. scoreboard players reset @s genesis.hud.display
