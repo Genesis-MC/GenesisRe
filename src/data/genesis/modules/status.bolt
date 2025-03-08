@@ -1,5 +1,5 @@
 from ps_beet_bolt.bolt_item import _int_hash
-from genesis:utils import camel_case_to_snake_case, constant
+from genesis:utils import camel_case_to_snake_case, constant, smart_scoreboard_operation
 from beet import Font
 
 
@@ -178,20 +178,9 @@ class GenesisStatus(type):
         #> METHOD TO MODIFY DURATION
         def modify_duration(operation: str, duration: int|tuple[str,str]):
             scoreboard players operation @s (cls.until) -= .gametime genesis
-
-            if isinstance(duration, int):
-                if operation == '=':
-                    scoreboard players set @s (cls.until) (duration)
-                elif operation == '+=':
-                    scoreboard players add @s (cls.until) (duration)
-                elif operation == '-=':
-                    scoreboard players remove @s (cls.until) (duration)
-                else:
-                    raw (f'scoreboard players operation @s {cls.until} {operation} {constant(duration)} genesis')
-            else:
-                raw (f'scoreboard players operation @s {cls.until} {operation} {duration[0]} {duration[1]}')
-
+            smart_scoreboard_operation('@s', cls.until, operation, duration)
             scoreboard players operation @s (cls.until) += .gametime genesis
+
             scoreboard players set @s genesis.status.remove_next -1 # This makes sure that the remove_next function gets run next tick
         cls.modify_duration = modify_duration
 
@@ -201,17 +190,7 @@ class GenesisStatus(type):
                 if callable(v) and getattr(v, '__before_value_change_status__', False):
                     v(cls)
 
-            if isinstance(value, int):
-                if operation == '=':
-                    scoreboard players set @s (cls.value) (value)
-                elif operation == '+=':
-                    scoreboard players add @s (cls.value) (value)
-                elif operation == '-=':
-                    scoreboard players remove @s (cls.value) (value)
-                else:
-                    raw (f'scoreboard players operation @s {cls.value} {operation} {constant(value)} genesis')
-            else:
-                raw (f'scoreboard players operation @s {cls.value} {operation} {value[0]} {value[1]}')
+            smart_scoreboard_operation('@s', cls.value, operation, value)
 
             for k, v in cls.__dict__.items():
                 if callable(v) and getattr(v, '__after_value_change_status__', False):
@@ -221,17 +200,7 @@ class GenesisStatus(type):
         #> METHOD TO MODIFY MAX DURATION
         if hasattr(cls,'icon'):
             def modify_max_duration(operation: str, max_duration: int|tuple[str,str]):
-                if isinstance(max_duration, int):
-                    if operation == '=':
-                        scoreboard players set @s (cls.max_duration) (max_duration)
-                    elif operation == '+=':
-                        scoreboard players add @s (cls.max_duration) (max_duration)
-                    elif operation == '-=':
-                        scoreboard players remove @s (cls.max_duration) (max_duration)
-                    else:
-                        raw (f'scoreboard players operation @s {cls.max_duration} {operation} {constant(max_duration)} genesis')
-                else:
-                    raw (f'scoreboard players operation @s {cls.max_duration} {operation} {max_duration[0]} {max_duration[1]}')
+                smart_scoreboard_operation('@s', cls.max_duration, operation, max_duration)
             cls.modify_max_duration = modify_max_duration
 
         #> ICON STUFF

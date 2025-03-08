@@ -1,41 +1,29 @@
 from genesis:player import PerPlayerStorage
-from genesis:utils import constant
+from genesis:utils import constant, smart_scoreboard_operation
 
 
-def reduce_mana_or_return(amount: int, update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
-    if score @s genesis.mana.current matches (None, amount - 1) return 0
+def reduce_mana_or_return(amount: int|tuple[str,str], update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
+    if isinstance(amount, int):
+        if score @s genesis.mana.current matches (None, amount - 1) return 0
+    else:
+        raw (f'execute if score {name} {objective} > @s genesis.mana.current run return 0')
+
     if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
-    scoreboard players remove @s genesis.mana.current (amount)
+
+    smart_scoreboard_operation('@s','genesis.mana.current','-=',amount)
+
     if score @s genesis.mana.current matches 0 scoreboard players remove @s genesis.hud.display 1
     if update:
         function #genesis:mana/changed
         function genesis:mana/update_hud
 
 
-def reduce_mana_by_score_or_return(name: str, objective: str, update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
-    raw (f'execute if score {name} {objective} > @s genesis.mana.current run return 0')
-    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
-    raw (f'scoreboard players operation @s genesis.mana.current -= {name} {objective}')
-    if score @s genesis.mana.current matches 0 scoreboard players remove @s genesis.hud.display 1
-    if update:
-        function #genesis:mana/changed
-        function genesis:mana/update_hud
-
-
-def add_mana(amount: int, update = True):
+def add_mana(amount: int|tuple[str,str], update = True):
     if score @s genesis.mana.current matches 0 scoreboard players add @s genesis.hud.display 1
-    scoreboard players add @s genesis.mana.current (amount)
-    scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
-    if score @s genesis.mana.current = @s genesis.mana.max scoreboard players remove @s genesis.hud.display 1
-    if update:
-        function #genesis:mana/changed
-        function genesis:mana/update_hud
 
-
-def add_mana_by_score(name: str, objective: str, update = True):
-    if score @s genesis.mana.current matches 0 scoreboard players add @s genesis.hud.display 1
-    raw (f'scoreboard players operation @s genesis.mana.current += {name} {objective}')
+    smart_scoreboard_operation('@s','genesis.mana.current','+=',amount)
     scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
+
     if score @s genesis.mana.current = @s genesis.mana.max scoreboard players remove @s genesis.hud.display 1
     if update:
         function #genesis:mana/changed

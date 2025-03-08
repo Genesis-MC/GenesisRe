@@ -122,3 +122,18 @@ def to_nbt(obj):
             return Byte(0)
         raise RuntimeError(f"Type '{t}' is not supported")
     return r(obj)
+
+
+def smart_scoreboard_operation(name: str, board: str, operation: str, value: int|tuple[str,str]):
+    if isinstance(value, int):
+        if operation == '=':
+            cmd = f'scoreboard players set {name} {board} {value}'
+        elif operation == '+=':
+            cmd = f'scoreboard players add {name} {board} {value}'
+        elif operation == '-=':
+            cmd = f'scoreboard players remove {name} {board} {value}'
+        else:
+            cmd = f'scoreboard players operation {name} {board} {operation} {constant(value)} genesis'
+    else:
+        cmd = f'scoreboard players operation {name} {board} {operation} {value[0]} {value[1]}'
+    raw (cmd)
