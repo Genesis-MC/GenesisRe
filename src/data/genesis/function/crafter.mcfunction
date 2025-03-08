@@ -146,7 +146,7 @@ def add_custom_recipe(recipe: list[list[str|type|None]], reduce_durability = Fal
     ['#logs','#logs','#logs'],
 ])
 @add_loot_table
-class Crafter(metaclass=GenesisItem):
+class Crafter(GenesisItem):
     item_name = ("Genesis Crafter", {})
     item_model = "crafting_table"
     rarity = "common"

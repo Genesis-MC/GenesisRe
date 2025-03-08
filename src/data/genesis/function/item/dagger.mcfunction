@@ -15,7 +15,7 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
     ["stick", None, None],
 ])
 @add_loot_table
-class IronDagger(metaclass=GenesisItem):
+class IronDagger(GenesisItem):
     item_name = ("Iron Dagger", {"color":"white"})
     rarity = "common"
     category = ["dagger"]
@@ -28,7 +28,7 @@ class IronDagger(metaclass=GenesisItem):
     [BlizzardTear, BlizzardTear, BlizzardTear],
 ])
 @add_loot_table
-class Frostfang(metaclass=GenesisItem):
+class Frostfang(GenesisItem):
     item_name = ("Frostfang", {"color":"aqua"})
     rarity = "uncommon"
     category = ["dagger"]
@@ -41,7 +41,7 @@ class Frostfang(metaclass=GenesisItem):
     [SteelHilt, None, None],
 ])
 @add_loot_table
-class HarbingerOfWinter(metaclass=GenesisItem):
+class HarbingerOfWinter(GenesisItem):
     item_name = ("Harbinger Of Winter", {"color":"aqua"})
     rarity = "rare"
     category = ["dagger"]
@@ -54,7 +54,7 @@ class HarbingerOfWinter(metaclass=GenesisItem):
     [ShadeFlux, ShadeFlux, ShadeFlux],
 ])
 @add_loot_table
-class ShadedDagger(metaclass=GenesisItem):
+class ShadedDagger(GenesisItem):
     item_name = ("Shaded Dagger", {"color":"dark_purple"})
     rarity = "uncommon"
     category = ["dagger"]
@@ -67,7 +67,7 @@ class ShadedDagger(metaclass=GenesisItem):
     [VoidedFragment, "crying_obsidian", VoidedFragment],
 ])
 @add_loot_table
-class VoidRazor(metaclass=GenesisItem):
+class VoidRazor(GenesisItem):
     item_name = ("Void Razor", {"color":"dark_purple"})
     rarity = "epic"
     category = ["void", "dagger"]
@@ -80,7 +80,7 @@ class VoidRazor(metaclass=GenesisItem):
     [ShardOfTheWarpedEmpyrean, PyroclasticCore, ShardOfTheCrimsonAbyss],
 ])
 @add_loot_table
-class Vorpol(metaclass=GenesisItem):
+class Vorpol(GenesisItem):
     item_name = ("Vorpol", {"color":"light_purple"})
     rarity = "legendary"
     category = ["void", "dagger"]
@@ -101,7 +101,7 @@ class Vorpol(metaclass=GenesisItem):
     [ShardOfTheCrimsonAbyss, LivingwoodCore, ShardOfTheCrimsonAbyss],
 ])
 @add_loot_table
-class Vescherum(metaclass=GenesisItem):
+class Vescherum(GenesisItem):
     item_name = ("Vescherum", {"color":"light_purple"})
     rarity = "legendary"
     category = ["void", "dagger"]
@@ -122,7 +122,7 @@ class Vescherum(metaclass=GenesisItem):
     [ShardOfTheWarpedEmpyrean, EverfrostCore, ShardOfTheWarpedEmpyrean],
 ])
 @add_loot_table
-class Visharp(metaclass=GenesisItem):
+class Visharp(GenesisItem):
     item_name = ("Visharp", {"color":"light_purple"})
     rarity = "legendary"
     category = ["void", "dagger"]
@@ -143,7 +143,7 @@ class Visharp(metaclass=GenesisItem):
 
 # Hook
 @add_loot_table
-class Hook(metaclass=GenesisItem):
+class Hook(GenesisItem):
     item_name = ("Hook", {"color":"white"})
     rarity = "uncommon"
     category = ["dagger"]
@@ -151,7 +151,7 @@ class Hook(metaclass=GenesisItem):
 
 # LadyLuck
 @add_loot_table
-class LadyLuck(metaclass=GenesisItem):
+class LadyLuck(GenesisItem):
     item_name = ("LadyLuck", {"color":"gold"})
     rarity = "mythical"
     category = ["dagger"]
@@ -159,7 +159,7 @@ class LadyLuck(metaclass=GenesisItem):
 
 # VermillionGlove
 @add_loot_table
-class VermillionGlove(metaclass=GenesisItem):
+class VermillionGlove(GenesisItem):
     item_name = ("Vermillion Glove", {"color":"dark_red"})
     rarity = "uncommon"
     category = ["dagger"]
@@ -167,7 +167,7 @@ class VermillionGlove(metaclass=GenesisItem):
 
 # CrystalMoon
 @add_loot_table
-class CrystalMoon(metaclass=GenesisItem):
+class CrystalMoon(GenesisItem):
     item_name = ("Crystal Moon", {"color":"white"})
     rarity = "rare"
     category = ["dagger"]
@@ -175,7 +175,7 @@ class CrystalMoon(metaclass=GenesisItem):
 
 # PrismDagger
 @add_loot_table
-class PrismDagger(metaclass=GenesisItem):
+class PrismDagger(GenesisItem):
     item_name = ("Prism Dagger", {"color":"light_purple"})
     rarity = "epic"
     category = ["dagger"]

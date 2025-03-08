@@ -16,7 +16,7 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
     ["iron_ingot", "chain", "iron_ingot"],
 ])
 @add_loot_table
-class SteelAndureHelmet(metaclass=GenesisItem):
+class SteelAndureHelmet(GenesisItem):
     item_name = ("Steel Andure Helmet", {"color":"white"})
     rarity = "common"
     category = ["helmet"]
@@ -30,7 +30,7 @@ class SteelAndureHelmet(metaclass=GenesisItem):
     ["iron_ingot", "chain", "iron_ingot"],
 ])
 @add_loot_table
-class SteelAndureChestplate(metaclass=GenesisItem):
+class SteelAndureChestplate(GenesisItem):
     item_name = ("Steel Andure Chestplate", {"color":"white"})
     rarity = "common"
     category = ["chestplate"]
@@ -44,7 +44,7 @@ class SteelAndureChestplate(metaclass=GenesisItem):
     ["iron_ingot", "chain", "iron_ingot"],
 ])
 @add_loot_table
-class SteelAndureLeggings(metaclass=GenesisItem):
+class SteelAndureLeggings(GenesisItem):
     item_name = ("Steel Andure Leggings", {"color":"white"})
     rarity = "common"
     category = ["leggings"]
@@ -58,7 +58,7 @@ class SteelAndureLeggings(metaclass=GenesisItem):
     ["iron_ingot", "chain", "iron_ingot"],
 ])
 @add_loot_table
-class SteelAndureBoots(metaclass=GenesisItem):
+class SteelAndureBoots(GenesisItem):
     item_name = ("Steel Andure Boots", {"color":"white"})
     rarity = "common"
     category = ["boots"]
@@ -73,7 +73,7 @@ class SteelAndureBoots(metaclass=GenesisItem):
     ["chain", "chain", "chain"],
 ])
 @add_loot_table
-class ReinforcedandureHelmet(metaclass=GenesisItem):
+class ReinforcedandureHelmet(GenesisItem):
     item_name = ("Reinforcedandure Helmet", {"color":"white"})
     rarity = "uncommon"
     category = ["helmet"]
@@ -87,7 +87,7 @@ class ReinforcedandureHelmet(metaclass=GenesisItem):
     ["chain", "chain", "chain"],
 ])
 @add_loot_table
-class ReinforcedandureChestplate(metaclass=GenesisItem):
+class ReinforcedandureChestplate(GenesisItem):
     item_name = ("Reinforcedandure Chestplate", {"color":"white"})
     rarity = "uncommon"
     category = ["chestplate"]
@@ -101,7 +101,7 @@ class ReinforcedandureChestplate(metaclass=GenesisItem):
     ["chain", "chain", "chain"],
 ])
 @add_loot_table
-class ReinforcedandureLeggings(metaclass=GenesisItem):
+class ReinforcedandureLeggings(GenesisItem):
     item_name = ("Reinforcedandure Leggings", {"color":"white"})
     rarity = "uncommon"
     category = ["leggings"]
@@ -115,7 +115,7 @@ class ReinforcedandureLeggings(metaclass=GenesisItem):
     ["chain", "chain", "chain"],
 ])
 @add_loot_table
-class ReinforcedandureBoots(metaclass=GenesisItem):
+class ReinforcedandureBoots(GenesisItem):
     item_name = ("Reinforcedandure Boots", {"color":"white"})
     rarity = "uncommon"
     category = ["boots"]
@@ -130,7 +130,7 @@ class ReinforcedandureBoots(metaclass=GenesisItem):
     [Cloth, ManaCloth, Cloth],
 ])
 @add_loot_table
-class ApprenticeHat(metaclass=GenesisItem):
+class ApprenticeHat(GenesisItem):
     item_name = ("Apprentice Hat", {"color":"white"})
     rarity = "uncommon"
     category = ["helmet"]
@@ -144,7 +144,7 @@ class ApprenticeHat(metaclass=GenesisItem):
     [Cloth, ManaCloth, Cloth],
 ])
 @add_loot_table
-class ApprenticeRobe(metaclass=GenesisItem):
+class ApprenticeRobe(GenesisItem):
     item_name = ("Apprentice Robe", {"color":"white"})
     rarity = "uncommon"
     category = ["chestplate"]
@@ -158,7 +158,7 @@ class ApprenticeRobe(metaclass=GenesisItem):
     [Cloth, ManaCloth, Cloth],
 ])
 @add_loot_table
-class ApprenticeTrousers(metaclass=GenesisItem):
+class ApprenticeTrousers(GenesisItem):
     item_name = ("Apprentice Trousers", {"color":"white"})
     rarity = "uncommon"
     category = ["leggings"]
@@ -172,7 +172,7 @@ class ApprenticeTrousers(metaclass=GenesisItem):
     [Cloth, ManaCloth, Cloth],
 ])
 @add_loot_table
-class ApprenticeBoots(metaclass=GenesisItem):
+class ApprenticeBoots(GenesisItem):
     item_name = ("Apprentice Boots", {"color":"white"})
     rarity = "uncommon"
     category = ["boots"]
@@ -187,7 +187,7 @@ class ApprenticeBoots(metaclass=GenesisItem):
     [ManaCloth, ArcaneCloth, ManaCloth],
 ])
 @add_loot_table
-class MageHat(metaclass=GenesisItem):
+class MageHat(GenesisItem):
     item_name = ("Mage Hat", {"color":"blue"})
     rarity = "rare"
     category = ["helmet"]
@@ -201,7 +201,7 @@ class MageHat(metaclass=GenesisItem):
     [ManaCloth, ArcaneCloth, ManaCloth],
 ])
 @add_loot_table
-class MageRobe(metaclass=GenesisItem):
+class MageRobe(GenesisItem):
     item_name = ("Mage Robe", {"color":"blue"})
     rarity = "rare"
     category = ["chestplate"]
@@ -215,7 +215,7 @@ class MageRobe(metaclass=GenesisItem):
     [ManaCloth, ArcaneCloth, ManaCloth],
 ])
 @add_loot_table
-class MageTrousers(metaclass=GenesisItem):
+class MageTrousers(GenesisItem):
     item_name = ("Mage Trousers", {"color":"blue"})
     rarity = "rare"
     category = ["leggings"]
@@ -229,7 +229,7 @@ class MageTrousers(metaclass=GenesisItem):
     [ManaCloth, ArcaneCloth, ManaCloth],
 ])
 @add_loot_table
-class MageBoots(metaclass=GenesisItem):
+class MageBoots(GenesisItem):
     item_name = ("Mage Boots", {"color":"blue"})
     rarity = "rare"
     category = ["boots"]
@@ -244,7 +244,7 @@ class MageBoots(metaclass=GenesisItem):
     [ArcaneCloth, ArcaneCloth, ArcaneCloth],
 ])
 @add_loot_table
-class ArchmageHat(metaclass=GenesisItem):
+class ArchmageHat(GenesisItem):
     item_name = ("Archmage Hat", {"color":"dark_purple"})
     rarity = "epic"
     category = ["helmet"]
@@ -258,7 +258,7 @@ class ArchmageHat(metaclass=GenesisItem):
     [ArcaneCloth, ArcaneCloth, ArcaneCloth],
 ])
 @add_loot_table
-class ArchmageRobe(metaclass=GenesisItem):
+class ArchmageRobe(GenesisItem):
     item_name = ("Archmage Robe", {"color":"dark_purple"})
     rarity = "epic"
     category = ["chestplate"]
@@ -272,7 +272,7 @@ class ArchmageRobe(metaclass=GenesisItem):
     [ArcaneCloth, ArcaneCloth, ArcaneCloth],
 ])
 @add_loot_table
-class ArchmageTrousers(metaclass=GenesisItem):
+class ArchmageTrousers(GenesisItem):
     item_name = ("Archmage Trousers", {"color":"dark_purple"})
     rarity = "epic"
     category = ["leggings"]
@@ -286,7 +286,7 @@ class ArchmageTrousers(metaclass=GenesisItem):
     [ArcaneCloth, ArcaneCloth, ArcaneCloth],
 ])
 @add_loot_table
-class ArchmageBoots(metaclass=GenesisItem):
+class ArchmageBoots(GenesisItem):
     item_name = ("Archmage Boots", {"color":"dark_purple"})
     rarity = "epic"
     category = ["boots"]
@@ -296,7 +296,7 @@ class ArchmageBoots(metaclass=GenesisItem):
 
 # FrostveilHelmet
 @add_loot_table
-class FrostveilHelmet(metaclass=GenesisItem):
+class FrostveilHelmet(GenesisItem):
     item_name = ("Frostveil Helmet", {"color":"aqua"})
     rarity = "uncommon"
     category = ["helmet"]
@@ -305,7 +305,7 @@ class FrostveilHelmet(metaclass=GenesisItem):
 
 # FrostveilChestplate
 @add_loot_table
-class FrostveilChestplate(metaclass=GenesisItem):
+class FrostveilChestplate(GenesisItem):
     item_name = ("Frostveil Chestplate", {"color":"aqua"})
     rarity = "uncommon"
     category = ["chestplate"]
@@ -314,7 +314,7 @@ class FrostveilChestplate(metaclass=GenesisItem):
 
 # FrostveilLeggings
 @add_loot_table
-class FrostveilLeggings(metaclass=GenesisItem):
+class FrostveilLeggings(GenesisItem):
     item_name = ("Frostveil Leggings", {"color":"aqua"})
     rarity = "uncommon"
     category = ["leggings"]
@@ -323,7 +323,7 @@ class FrostveilLeggings(metaclass=GenesisItem):
 
 # FrostveilBoots
 @add_loot_table
-class FrostveilBoots(metaclass=GenesisItem):
+class FrostveilBoots(GenesisItem):
     item_name = ("Frostveil Boots", {"color":"aqua"})
     rarity = "uncommon"
     category = ["boots"]
@@ -333,7 +333,7 @@ class FrostveilBoots(metaclass=GenesisItem):
 
 # ShadedHelmet
 @add_loot_table
-class ShadedHelmet(metaclass=GenesisItem):
+class ShadedHelmet(GenesisItem):
     item_name = ("Shaded Helmet", {"color":"dark_purple"})
     rarity = "rare"
     category = ["helmet"]
@@ -342,7 +342,7 @@ class ShadedHelmet(metaclass=GenesisItem):
 
 # ShadedChestplate
 @add_loot_table
-class ShadedChestplate(metaclass=GenesisItem):
+class ShadedChestplate(GenesisItem):
     item_name = ("Shaded Chestplate", {"color":"dark_purple"})
     rarity = "rare"
     category = ["chestplate"]
@@ -351,7 +351,7 @@ class ShadedChestplate(metaclass=GenesisItem):
 
 # ShadedLeggings
 @add_loot_table
-class ShadedLeggings(metaclass=GenesisItem):
+class ShadedLeggings(GenesisItem):
     item_name = ("Shaded Leggings", {"color":"dark_purple"})
     rarity = "rare"
     category = ["leggings"]
@@ -360,7 +360,7 @@ class ShadedLeggings(metaclass=GenesisItem):
 
 # ShadedBoots
 @add_loot_table
-class ShadedBoots(metaclass=GenesisItem):
+class ShadedBoots(GenesisItem):
     item_name = ("Shaded Boots", {"color":"dark_purple"})
     rarity = "rare"
     category = ["boots"]
@@ -375,7 +375,7 @@ class ShadedBoots(metaclass=GenesisItem):
     ["crying_obsidian", VoidedFragment, "crying_obsidian"],
 ])
 @add_loot_table
-class VoidbreachHelmet(metaclass=GenesisItem):
+class VoidbreachHelmet(GenesisItem):
     item_name = ("Voidbreach Helmet", {"color":"light_purple"})
     rarity = "epic"
     category = ["void","helmet"]
@@ -389,7 +389,7 @@ class VoidbreachHelmet(metaclass=GenesisItem):
     ["crying_obsidian", VoidedFragment, "crying_obsidian"],
 ])
 @add_loot_table
-class VoidbreachChestplate(metaclass=GenesisItem):
+class VoidbreachChestplate(GenesisItem):
     item_name = ("Voidbreach Chestplate", {"color":"light_purple"})
     rarity = "epic"
     category = ["void","chestplate"]
@@ -403,7 +403,7 @@ class VoidbreachChestplate(metaclass=GenesisItem):
     ["crying_obsidian", VoidedFragment, "crying_obsidian"],
 ])
 @add_loot_table
-class VoidbreachLeggings(metaclass=GenesisItem):
+class VoidbreachLeggings(GenesisItem):
     item_name = ("Voidbreach Leggings", {"color":"light_purple"})
     rarity = "epic"
     category = ["void","leggings"]
@@ -417,7 +417,7 @@ class VoidbreachLeggings(metaclass=GenesisItem):
     ["crying_obsidian", VoidedFragment, "crying_obsidian"],
 ])
 @add_loot_table
-class VoidbreachBoots(metaclass=GenesisItem):
+class VoidbreachBoots(GenesisItem):
     item_name = ("Voidbreach Boots", {"color":"light_purple"})
     rarity = "epic"
     category = ["void","boots"]
@@ -432,7 +432,7 @@ class VoidbreachBoots(metaclass=GenesisItem):
     [None, "netherite_scrap", None],
 ])
 @add_loot_table
-class DreadnaughtHelmet(metaclass=GenesisItem):
+class DreadnaughtHelmet(GenesisItem):
     item_name = ("Dreadnaught Helmet", {"color":"dark_red"})
     rarity = "legendary"
     category = ["helmet"]
@@ -446,7 +446,7 @@ class DreadnaughtHelmet(metaclass=GenesisItem):
     [MetalAlloy, MetalAlloy, MetalAlloy],
 ])
 @add_loot_table
-class DreadnaughtChestplate(metaclass=GenesisItem):
+class DreadnaughtChestplate(GenesisItem):
     item_name = ("Dreadnaught Chestplate", {"color":"dark_red"})
     rarity = "legendary"
     category = ["chestplate"]
@@ -460,7 +460,7 @@ class DreadnaughtChestplate(metaclass=GenesisItem):
     ["netherite_scrap", None, "netherite_scrap"],
 ])
 @add_loot_table
-class DreadnaughtLeggings(metaclass=GenesisItem):
+class DreadnaughtLeggings(GenesisItem):
     item_name = ("Dreadnaught Leggings", {"color":"dark_red"})
     rarity = "legendary"
     category = ["leggings"]
@@ -474,7 +474,7 @@ class DreadnaughtLeggings(metaclass=GenesisItem):
     [MetalAlloy, PyroclasticCore, MetalAlloy],
 ])
 @add_loot_table
-class DreadnaughtBoots(metaclass=GenesisItem):
+class DreadnaughtBoots(GenesisItem):
     item_name = ("Dreadnaught Boots", {"color":"dark_red"})
     rarity = "legendary"
     category = ["boots"]

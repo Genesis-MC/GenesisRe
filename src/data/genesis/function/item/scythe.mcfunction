@@ -16,7 +16,7 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
     ["stick", None, None],
 ])
 @add_loot_table
-class IronScythe(metaclass=GenesisItem):
+class IronScythe(GenesisItem):
     item_name = ("Iron Scythe", {"color":"white"})
     rarity = "common"
     category = ["scythe"]
@@ -24,7 +24,7 @@ class IronScythe(metaclass=GenesisItem):
 
 # RecluseFang
 @add_loot_table
-class RecluseFang(metaclass=GenesisItem):
+class RecluseFang(GenesisItem):
     item_name = ("Recluse Fang", {"color":"red"})
     rarity = "uncommon"
     category = ["scythe"]
@@ -37,7 +37,7 @@ class RecluseFang(metaclass=GenesisItem):
     [VenomSac, "diamond", VenomSac],
 ])
 @add_loot_table
-class VenomlashFang(metaclass=GenesisItem):
+class VenomlashFang(GenesisItem):
     item_name = ("Venomlash Fang", {"color":"dark_purple"})
     rarity = "rare"
     category = ["scythe"]
@@ -45,7 +45,7 @@ class VenomlashFang(metaclass=GenesisItem):
 
 # JackOReaper
 @add_loot_table
-class JackOReaper(metaclass=GenesisItem):
+class JackOReaper(GenesisItem):
     item_name = ("Jack O' Reaper", {"color":"white"})
     rarity = "rare"
     category = ["scythe"]
@@ -53,7 +53,7 @@ class JackOReaper(metaclass=GenesisItem):
 
 # PrismarineScythe
 @add_loot_table
-class PrismarineScythe(metaclass=GenesisItem):
+class PrismarineScythe(GenesisItem):
     item_name = ("Prismarine Scythe", {"color":"dark_aqua"})
     rarity = "rare"
     category = ["scythe"]
@@ -61,7 +61,7 @@ class PrismarineScythe(metaclass=GenesisItem):
 
 # Riptide
 @add_loot_table
-class Riptide(metaclass=GenesisItem):
+class Riptide(GenesisItem):
     item_name = ("Riptide", {"color":"dark_aqua"})
     rarity = "epic"
     category = ["elemental","scythe"]
@@ -77,7 +77,7 @@ class Riptide(metaclass=GenesisItem):
 
 # CloudSail
 @add_loot_table
-class CloudSail(metaclass=GenesisItem):
+class CloudSail(GenesisItem):
     item_name = ("Cloud Sail", {"color":"white"})
     rarity = "rare"
     category = ["scythe"]

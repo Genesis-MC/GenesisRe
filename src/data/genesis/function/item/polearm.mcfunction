@@ -16,7 +16,7 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
     ["stick", None, None],
 ])
 @add_loot_table
-class IronSpear(metaclass=GenesisItem):
+class IronSpear(GenesisItem):
     item_name = ("Iron Spear", {"color":"white"})
     rarity = "common"
     category = ["polearm"]
@@ -29,7 +29,7 @@ class IronSpear(metaclass=GenesisItem):
     [SteelHilt, None, None],
 ])
 @add_loot_table
-class Glaive(metaclass=GenesisItem):
+class Glaive(GenesisItem):
     item_name = ("Glaive", {"color":"white"})
     rarity = "rare"
     category = ["polearm"]
@@ -50,7 +50,7 @@ class Glaive(metaclass=GenesisItem):
     [SteelHilt, CrystalScale, None],
 ])
 @add_loot_table
-class Halycon(metaclass=GenesisItem):
+class Halycon(GenesisItem):
     item_name = ("Halycon", {"color":"aqua"})
     rarity = "rare"
     category = ["polearm"]
@@ -66,7 +66,7 @@ class Halycon(metaclass=GenesisItem):
 
 # HelixSpear
 @add_loot_table
-class HelixSpear(metaclass=GenesisItem):
+class HelixSpear(GenesisItem):
     item_name = ("Helix Spear", {"color":"white"})
     rarity = "rare"
     category = ["polearm"]
@@ -87,7 +87,7 @@ class HelixSpear(metaclass=GenesisItem):
     [None, GildedHilt, None],
 ])
 @add_loot_table
-class HeavensThorn(metaclass=GenesisItem):
+class HeavensThorn(GenesisItem):
     item_name = ("Heavens Thorn", {"color":"gold"})
     rarity = "epic"
     category = ["polearm"]
@@ -108,7 +108,7 @@ class HeavensThorn(metaclass=GenesisItem):
     [VerdantTwig, None, None],
 ])
 @add_loot_table
-class VerdantStaff(metaclass=GenesisItem):
+class VerdantStaff(GenesisItem):
     item_name = ("Verdant Staff", {"color":"green"})
     rarity = "uncommon"
     category = ["polearm"]
@@ -129,7 +129,7 @@ class VerdantStaff(metaclass=GenesisItem):
     [VerdantShard, VerdantShard, VerdantShard],
 ])
 @add_loot_table
-class VerdantMasterstaff(metaclass=GenesisItem):
+class VerdantMasterstaff(GenesisItem):
     item_name = ("Verdant Masterstaff", {"color":"green"})
     rarity = "rare"
     category = ["polearm"]
@@ -150,7 +150,7 @@ class VerdantMasterstaff(metaclass=GenesisItem):
     [CrystalScale, VerdantGem, CrystalScale],
 ])
 @add_loot_table
-class VerdantSceptor(metaclass=GenesisItem):
+class VerdantSceptor(GenesisItem):
     item_name = ("Verdant Sceptor", {"color":"green"})
     rarity = "epic"
     category = ["polearm"]
@@ -166,7 +166,7 @@ class VerdantSceptor(metaclass=GenesisItem):
 
 # SceptorOfTheCrimsonEgg
 @add_loot_table
-class SceptorOfTheCrimsonEgg(metaclass=GenesisItem):
+class SceptorOfTheCrimsonEgg(GenesisItem):
     item_name = ("Sceptor Of The Crimson Egg", {"color":"red"})
     rarity = "epic"
     category = ["polearm"]

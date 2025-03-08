@@ -13,7 +13,7 @@ function ~/reset_player_join:
     scoreboard players reset @s genesis.hud.display
 
 
-class FrederickTheStatus(metaclass=GenesisStatus):
+class FrederickTheStatus(GenesisStatus):
     slot = "chest"
     category = ["bad","good","technical","slowing","stops_movement"]
 
@@ -30,7 +30,7 @@ function ~/test_apply_status:
     FrederickTheStatus.apply(200, 125)
 
 
-class UniqueStatus(metaclass=GenesisStatus):
+class UniqueStatus(GenesisStatus):
     category = ["buff","regeneration","bad"]
     icon = "genesis:font/status/poison_or_something"
 
@@ -54,7 +54,7 @@ function ~/increase_value_by_12:
     UniqueStatus.modify_value('+=', 12)
 
 
-class ChestTwo(metaclass=GenesisStatus):
+class ChestTwo(GenesisStatus):
     slot = "chest"
     permanent = True
     icon = "genesis:font/status/steadfast_cooldown"

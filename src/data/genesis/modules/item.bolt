@@ -4,9 +4,11 @@ from genesis:utils import add_translation, break_text_into_lines, camel_case_to_
 from tungsten:decorators import _add_tungsten_base, _add_tungsten_components
 
 
-class GenesisItem(type):
+class GenesisItemMetaclass(type):
     def __new__(mcs, name, bases, namespace):
         cls = super().__new__(mcs, name, bases, namespace)
+        if cls.__dict__.get('abstract', False):
+            return cls
 
         if not hasattr(cls, 'base_item'):
             if cls.category[-1] in ['polearm','sword','greatsword','dagger','scythe']:
@@ -57,6 +59,10 @@ class GenesisItem(type):
         cls.components = _get_mc_components(cls.component_proxy, cls.removed_components)
 
         return cls
+
+
+class GenesisItem(metaclass=GenesisItemMetaclass):
+    abstract = True
 
 
 def stats_handler(item: Components, stats_component: tuple[str,dict[str,int]]):

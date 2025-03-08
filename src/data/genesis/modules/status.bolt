@@ -24,10 +24,10 @@ append function genesis:player/join:
     scoreboard players set @s genesis.status.remove_next 2147483647
 
 
-class GenesisStatus(type):
+class GenesisStatusMetaclass(type):
     def __new__(mcs, name, bases, namespace):
         cls = super().__new__(mcs, name, bases, namespace)
-        if getattr(cls, 'abstract', False):
+        if cls.__dict__.get('abstract', False):
             return cls
 
         cls.id = camel_case_to_snake_case(cls.__name__)
@@ -281,6 +281,10 @@ class GenesisStatus(type):
                             if score #cooldown_sprite genesis matches i data modify storage genesis:player self.hud[2][1] append value f'|{hex(i)[-1].upper()}|'
                         data modify storage genesis:player self.hud[2][2] append value "#"
         return cls
+
+
+class GenesisStatus(metaclass=GenesisStatusMetaclass):
+    abstract = True
 
 
 def on_apply_status(func):

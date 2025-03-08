@@ -16,7 +16,7 @@ from genesis:item/dagger import HarbingerOfWinter
     [None, "stick", None],
 ])
 @add_loot_table
-class IronGreatsword(metaclass=GenesisItem):
+class IronGreatsword(GenesisItem):
     item_name = ("Iron Greatsword", {"color":"white"})
     rarity = "common"
     category = ["greatsword"]
@@ -29,7 +29,7 @@ class IronGreatsword(metaclass=GenesisItem):
     [None, SteelHilt, None],
 ])
 @add_loot_table
-class OvergrownGreatsword(metaclass=GenesisItem):
+class OvergrownGreatsword(GenesisItem):
     item_name = ("OvergrownGreatsword", {"color":"green"})
     rarity = "uncommon"
     category = ["greatsword"]
@@ -42,7 +42,7 @@ class OvergrownGreatsword(metaclass=GenesisItem):
     [None, SteelHilt, None],
 ])
 @add_loot_table
-class Zweihander(metaclass=GenesisItem):
+class Zweihander(GenesisItem):
     item_name = ("Zweihander", {"color":"white"})
     rarity = "rare"
     category = ["greatsword"]
@@ -63,7 +63,7 @@ class Zweihander(metaclass=GenesisItem):
     [None, BejeweledHilt, None],
 ])
 @add_loot_table
-class EverfrostTitanblade(metaclass=GenesisItem):
+class EverfrostTitanblade(GenesisItem):
     item_name = ("Everfrost Titanblade", {"color":"aqua"})
     rarity = "legendary"
     category = ["greatsword"]
@@ -79,7 +79,7 @@ class EverfrostTitanblade(metaclass=GenesisItem):
 
 # SwashbucklersGlory
 @add_loot_table
-class SwashbucklersGlory(metaclass=GenesisItem):
+class SwashbucklersGlory(GenesisItem):
     item_name = ("Swashbucklers Glory", {"color":"blue"})
     rarity = "epic"
     category = ["greatsword"]
@@ -95,7 +95,7 @@ class SwashbucklersGlory(metaclass=GenesisItem):
     
 # RoyalCleaver
 @add_loot_table
-class RoyalCleaver(metaclass=GenesisItem):
+class RoyalCleaver(GenesisItem):
     item_name = ("Royal Cleaver", {"color":"gold"})
     rarity = "epic"
     category = ["greatsword"]
@@ -103,7 +103,7 @@ class RoyalCleaver(metaclass=GenesisItem):
 
 # Exetol
 @add_loot_table
-class Exetol(metaclass=GenesisItem):
+class Exetol(GenesisItem):
     item_name = ("Exetol", {"color":"red"})
     rarity = "legendary"
     category = ["greatsword"]
