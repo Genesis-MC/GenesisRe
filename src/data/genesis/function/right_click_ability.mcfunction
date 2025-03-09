@@ -68,7 +68,7 @@ def right_click_ability(name: str, description: str, cooldown: float, mana = 0, 
         function consume_path:
             advancement revoke @s only consume_path
             if mana:
-                reduce_mana_or_return(mana * 20) #! add a way for the item to not go on full cooldown if mana isn't enough
+                reduce_mana_or_return(mana * 200) #! add a way for the item to not go on full cooldown if mana isn't enough
             unless items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_offhand
             if items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_mainhand
             func()

@@ -2,7 +2,7 @@ from genesis:player import PerPlayerStorage
 from genesis:utils import constant, smart_scoreboard_operation
 
 
-def reduce_mana_or_return(amount: int|tuple[str,str], update = True): # This is actual mana, so 20x higher than the mana_pool stat and the mana communicated to the player
+def reduce_mana_or_return(amount: int|tuple[str,str], update = True): # This is actual mana, so 200x higher than the mana_pool stat and the mana communicated to the player
     if isinstance(amount, int):
         if score @s genesis.mana.current matches (None, amount - 1) return 0
     else:
@@ -18,7 +18,7 @@ def reduce_mana_or_return(amount: int|tuple[str,str], update = True): # This is 
         function genesis:mana/update_hud
 
 
-def add_mana(amount: int|tuple[str,str], update = True):
+def add_mana(amount: int|tuple[str,str], update = True): # This is actual mana, so 200x higher than the mana_pool stat and the mana communicated to the player
     if score @s genesis.mana.current matches 0 scoreboard players add @s genesis.hud.display 1
 
     smart_scoreboard_operation('@s','genesis.mana.current','+=',amount)
@@ -38,7 +38,7 @@ append function genesis:load:
 
 append function_tag genesis:stat/update/mana_pool {"values":["genesis:mana/calculate_max_mana"]}
 function ~/calculate_max_mana:
-    scoreboard players set @s genesis.mana.max 20
+    scoreboard players set @s genesis.mana.max 200
     scoreboard players operation @s genesis.mana.max *= @s genesis.stat.mana_pool
     scoreboard players operation @s genesis.mana.current < @s genesis.mana.max
     unless score @s genesis.mana.current = @s genesis.mana.max scoreboard players add @s genesis.hud.display 1
@@ -157,7 +157,7 @@ function ~/update_hud:
             scoreboard players set #is_notch genesis 0
             scoreboard players set #next_notch genesis 79
             scoreboard players operation #next_notch genesis *= @s genesis.mana.max
-            scoreboard players operation #next_notch genesis %= constant(39500) genesis
+            scoreboard players operation #next_notch genesis %= constant(395000) genesis
             #> GO THROUGH EACH PIXEL OF THE BAR AND ADD THE CORRECT KIND TO STORAGE
             for i in range(79):
                 ri = 79 - i
@@ -167,7 +167,7 @@ function ~/update_hud:
                 if score #new genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis <= #next_notch genesis data modify storage genesis:player self.hud[0] append value "R|"
                 if score #new genesis.mana.filled_pixels matches (None, ri-1) if score #is_notch genesis >  #next_notch genesis data modify storage genesis:player self.hud[0] append value "N|"
 
-                if score #is_notch genesis >= #next_notch genesis scoreboard players add #next_notch genesis 39500
+                if score #is_notch genesis >= #next_notch genesis scoreboard players add #next_notch genesis 395000
                 scoreboard players operation #is_notch genesis += @s genesis.mana.max
             data modify storage genesis:player self.hud[0] append value "Bb-"
 
