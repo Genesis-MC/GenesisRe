@@ -55,7 +55,7 @@ class SaberWarped(GenesisItem):
     item_name = ("Saber Warped", {"color":"dark_aqua"})
     rarity = "epic"
     category = ["sword"]
-    stats = ("mainhand", {"physical_power":85,"attack_speed":95,"mana_regen":-30})
+    stats = ("mainhand", {"physical_power":85,"attack_speed":95,"mana_regen":-300})
 
 # HailstoneBlade
 class HailstoneBlade(GenesisItem):

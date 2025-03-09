@@ -63,7 +63,7 @@ class EverfrostTitanblade(GenesisItem):
     item_name = ("Everfrost Titanblade", {"color":"aqua"})
     rarity = "legendary"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":150,"attack_speed":30,"mana_pool":20,"mana_regen":5,"speed":-50})
+    stats = ("mainhand", {"physical_power":150,"attack_speed":30,"mana_pool":20,"mana_regen":50,"speed":-50})
     @right_click_ability(
         name = "polar_vortex",
         description = "WIP",
@@ -93,7 +93,7 @@ class RoyalCleaver(GenesisItem):
     item_name = ("Royal Cleaver", {"color":"gold"})
     rarity = "epic"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":150,"attack_speed":40,"armor":30,"knockback_resistance":30,"mana_regen":-10,"speed":-25})
+    stats = ("mainhand", {"physical_power":150,"attack_speed":40,"armor":30,"knockback_resistance":30,"mana_regen":-100,"speed":-25})
 
 # Exetol
 class Exetol(GenesisItem):

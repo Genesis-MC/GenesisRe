@@ -52,14 +52,14 @@ class PrismarineScythe(GenesisItem):
     item_name = ("Prismarine Scythe", {"color":"dark_aqua"})
     rarity = "rare"
     category = ["scythe"]
-    stats = ("mainhand", {"physical_power":90,"attack_speed":60,"mana_regen":10})
+    stats = ("mainhand", {"physical_power":90,"attack_speed":60,"mana_regen":100})
 
 # Riptide
 class Riptide(GenesisItem):
     item_name = ("Riptide", {"color":"dark_aqua"})
     rarity = "epic"
     category = ["elemental","scythe"]
-    stats = ("mainhand", {"physical_power":95,"attack_speed":65,"mana_regen":15})
+    stats = ("mainhand", {"physical_power":95,"attack_speed":65,"mana_regen":105})
     @right_click_ability(
         name = "mana_siphon",
         description = "WIP",

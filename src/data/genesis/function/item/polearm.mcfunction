@@ -87,7 +87,7 @@ class HeavensThorn(GenesisItem):
     item_name = ("Heavens Thorn", {"color":"gold"})
     rarity = "epic"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":90,"magic_power":90,"attack_speed":70,"mana_pool":30,"mana_regen":8})
+    stats = ("mainhand", {"physical_power":90,"magic_power":90,"attack_speed":70,"mana_pool":30,"mana_regen":80})
     @right_click_ability(
         name = "piercing_light",
         description = "WIP",

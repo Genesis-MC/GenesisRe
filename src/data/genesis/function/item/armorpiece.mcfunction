@@ -148,7 +148,7 @@ class WitchsRobe(GenesisItem):
     item_name = ("Witch's Robe", {"color":"dark_purple"})
     rarity = "rare"
     category = ["chestplate"]
-    stats = ("chest", {"physical_power":-20,"armor":40,"mana_pool":20,"mana_regen":10})
+    stats = ("chest", {"physical_power":-20,"armor":40,"mana_pool":20,"mana_regen":100})
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # CrystalCirclet

@@ -159,14 +159,14 @@ class CrystalMoon(GenesisItem):
     item_name = ("Crystal Moon", {"color":"white"})
     rarity = "rare"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":30,"attack_speed":100,"armor_toughness":-20,"mana_regen":5})
+    stats = ("mainhand", {"physical_power":30,"attack_speed":100,"armor_toughness":-20,"mana_regen":50})
 
 # PrismDagger
 class PrismDagger(GenesisItem):
     item_name = ("Prism Dagger", {"color":"light_purple"})
     rarity = "epic"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":50,"magic_power":100,"attack_speed":105,"mana_regen":10})
+    stats = ("mainhand", {"physical_power":50,"magic_power":100,"attack_speed":105,"mana_regen":100})
     @right_click_ability(
         name = "prism_shatter",
         description = "WIP",

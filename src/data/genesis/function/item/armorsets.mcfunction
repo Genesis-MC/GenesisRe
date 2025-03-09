@@ -178,7 +178,7 @@ class MageHat(GenesisItem):
     item_name = ("Mage Hat", {"color":"blue"})
     rarity = "rare"
     category = ["helmet"]
-    stats = ("head", {"magic_power":10,"armor":25,"mana_pool":20,"mana_regen":4})
+    stats = ("head", {"magic_power":10,"armor":25,"mana_pool":20,"mana_regen":40})
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # MageRobe
@@ -191,7 +191,7 @@ class MageRobe(GenesisItem):
     item_name = ("Mage Robe", {"color":"blue"})
     rarity = "rare"
     category = ["chestplate"]
-    stats = ("chest", {"magic_power":15,"armor":60,"mana_pool":30,"mana_regen":5})
+    stats = ("chest", {"magic_power":15,"armor":60,"mana_pool":30,"mana_regen":50})
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # MageTrousers
@@ -204,7 +204,7 @@ class MageTrousers(GenesisItem):
     item_name = ("Mage Trousers", {"color":"blue"})
     rarity = "rare"
     category = ["leggings"]
-    stats = ("legs", {"magic_power":15,"armor":50,"mana_pool":30,"mana_regen":5})
+    stats = ("legs", {"magic_power":15,"armor":50,"mana_pool":30,"mana_regen":50})
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # MageBoots
@@ -217,7 +217,7 @@ class MageBoots(GenesisItem):
     item_name = ("Mage Boots", {"color":"blue"})
     rarity = "rare"
     category = ["boots"]
-    stats = ("feet", {"magic_power":10,"armor":25,"mana_pool":20,"mana_regen":4})
+    stats = ("feet", {"magic_power":10,"armor":25,"mana_pool":20,"mana_regen":40})
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 
@@ -231,7 +231,7 @@ class ArchmageHat(GenesisItem):
     item_name = ("Archmage Hat", {"color":"dark_purple"})
     rarity = "epic"
     category = ["helmet"]
-    stats = ("head", {"magic_power":15,"armor":30,"mana_pool":40,"mana_regen":5})
+    stats = ("head", {"magic_power":15,"armor":30,"mana_pool":40,"mana_regen":50})
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # ArchmageRobe
@@ -244,7 +244,7 @@ class ArchmageRobe(GenesisItem):
     item_name = ("Archmage Robe", {"color":"dark_purple"})
     rarity = "epic"
     category = ["chestplate"]
-    stats = ("chest", {"magic_power":25,"armor":70,"mana_pool":50,"mana_regen":8})
+    stats = ("chest", {"magic_power":25,"armor":70,"mana_pool":50,"mana_regen":80})
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # ArchmageTrousers
@@ -257,7 +257,7 @@ class ArchmageTrousers(GenesisItem):
     item_name = ("Archmage Trousers", {"color":"dark_purple"})
     rarity = "epic"
     category = ["leggings"]
-    stats = ("legs", {"magic_power":25,"armor":60,"mana_pool":50,"mana_regen":8})
+    stats = ("legs", {"magic_power":25,"armor":60,"mana_pool":50,"mana_regen":80})
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # ArchmageBoots
@@ -270,7 +270,7 @@ class ArchmageBoots(GenesisItem):
     item_name = ("Archmage Boots", {"color":"dark_purple"})
     rarity = "epic"
     category = ["boots"]
-    stats = ("feet", {"magic_power":15,"armor":30,"mana_pool":40,"mana_regen":5})
+    stats = ("feet", {"magic_power":15,"armor":30,"mana_pool":40,"mana_regen":50})
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
 
 
