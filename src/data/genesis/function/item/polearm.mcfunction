@@ -67,6 +67,7 @@ class HelixSpear(GenesisItem):
     rarity = "rare"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":85,"magic_power":60,"attack_speed":70})
+    item_model = texture_path_to_item_model("genesis:item/polearm/helix_spear", True)
     @right_click_ability(
         name = "piercing_light",
         description = "WIP",
