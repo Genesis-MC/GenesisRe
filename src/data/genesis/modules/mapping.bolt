@@ -71,7 +71,6 @@ stat_names = [
     "armor_toughness",
     "knockback_resistance",
 
-    "artifact_power",
     "mana_pool",
     "mana_regen",
 
