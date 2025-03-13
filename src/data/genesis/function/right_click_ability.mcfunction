@@ -1,7 +1,7 @@
 from ps_beet_bolt.bolt_item import event_decorator
 from genesis:utils import add_translation, break_text_into_lines, camel_case_to_snake_case
 from tungsten:decorators import _add_tungsten_base, _add_tungsten_components
-from genesis:mapping import item_display_uuid, rarity_text_color
+from genesis:mapping import rarity_text_color
 from genesis:mana import reduce_mana_or_return
 from genesis:utils import constant
 
@@ -67,8 +67,8 @@ def right_click_ability(name: str, description: str, cooldown: float, mana = 0, 
 
         function consume_path:
             advancement revoke @s only consume_path
-            unless items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_offhand
-            if items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_mainhand
+            unless items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_offhand_macro with entity @s equipment.offhand
+            if items entity @s weapon.mainhand (item.base_item)[minecraft:custom_data~{bolt-item:{id:(f'{item.namespace}:{item.id}')}}] function genesis:right_click_ability/regive_mainhand_macro with entity @s SelectedItem
             if mana:
                 reduce_mana_or_return(mana * 200) #! add a way for the item to not go on full cooldown if mana isn't enough
             func()
@@ -140,13 +140,11 @@ function ~/update_cooldown/mana_check:
             function ~/../ability_haste_{slot}
 
 
-function ~/regive_mainhand:
-    item replace entity item_display_uuid["hex"] contents from entity @s weapon.mainhand
+function ~/regive_mainhand_macro:
     item replace entity @s weapon.mainhand with air
-    item replace entity @s weapon.mainhand from entity item_display_uuid["hex"] contents
+    $loot replace entity @s weapon.mainhand loot {"pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"$(id)","functions":[{"function":"minecraft:set_count","count":$(count)},{"function":"minecraft:set_components","components":$(components)}]}]}]}
 
 
-function ~/regive_offhand:
-    item replace entity item_display_uuid["hex"] contents from entity @s weapon.offhand
+function ~/regive_offhand_macro:
     item replace entity @s weapon.offhand with air
-    item replace entity @s weapon.offhand from entity item_display_uuid["hex"] contents
+    $loot replace entity @s weapon.offhand loot {"pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"$(id)","functions":[{"function":"minecraft:set_count","count":$(count)},{"function":"minecraft:set_components","components":$(components)}]}]}]}
