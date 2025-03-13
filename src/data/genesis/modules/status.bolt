@@ -4,6 +4,7 @@ from beet import Font
 
 added_slots = []
 added_slots_remove_next = []
+added_slots_synced_tick = []
 added_categories = []
 current_icon = 192
 
@@ -11,6 +12,7 @@ current_icon = 192
 append function genesis:load:
     scoreboard objectives add genesis.status.remove_next dummy
     scoreboard objectives add genesis.status.has_visual_cooldown dummy
+    scoreboard objectives add genesis.status.synced_tick.next dummy
     scoreboard objectives add genesis.status.has_status dummy
     scoreboard objectives add genesis.status.has_icon dummy
 
@@ -35,13 +37,36 @@ predicate genesis:status/remove_next {
 }
 
 
+predicate genesis:status/synced_tick_next {
+    "condition": "minecraft:value_check",
+    "value": {
+        "type": "minecraft:score",
+        "target": {
+            "type": "minecraft:fixed",
+            "name": ".gametime"
+        },
+        "score": "genesis"
+    },
+    "range": {
+        "min": {
+            "type": "minecraft:score",
+            "target": "this",
+            "score": "genesis.status.synced_tick.next"
+        }
+    }
+}
+
+
 append function genesis:tick:
     as @e[type=!#genesis:non_living,tag=genesis.status.has_status,predicate=genesis:status/remove_next] function genesis:status/remove_next:
         scoreboard players set @s genesis.status.remove_next 2147483647
+    as @e[type=!#genesis:non_living,tag=genesis.status.has_status,predicate=genesis:status/synced_tick_next] at @s function genesis:status/synced_tick_next:
+        scoreboard players set @s genesis.status.synced_tick.next 2147483647
 
 
 append function genesis:player/join:
     scoreboard players set @s genesis.status.remove_next 2147483647
+    scoreboard players set @s genesis.status.synced_tick.next 2147483647
 
 
 class GenesisStatusMetaclass(type):
@@ -66,16 +91,27 @@ class GenesisStatusMetaclass(type):
             global current_icon
             cls.icon_chr = chr(current_icon)
             current_icon += 1
+        # stuff for synced tick function
+        synced_tick_func = None
+        for k in dir(cls):
+            v = getattr(cls, k, None)
+            if callable(v) and getattr(v, '__synced_tick_status__', False):
+                synced_tick_func = v
+                break
 
         #> SET SCOREBOARD VARIABLES
         if has_slot:
             cls.until = f'genesis.status.slot.{cls.slot}.until'
             cls.value = f'genesis.status.slot.{cls.slot}.value'
             cls.max_duration = f'genesis.status.slot.{cls.slot}.max_duration'
+            cls.synced_tick = f'genesis.status.slot.{cls.slot}.synced_tick'
+            cls.synced_tick_interval = f'genesis.status.slot.{cls.slot}.synced_tick_interval'
         else:
             cls.until = f'genesis.status.unique.{cls.id}.until'
             cls.value = f'genesis.status.unique.{cls.id}.value'
             cls.max_duration = f'genesis.status.unique.{cls.id}.max_duration'
+            cls.synced_tick = f'genesis.status.unique.{cls.id}.synced_tick'
+            cls.synced_tick_interval = f'genesis.status.unique.{cls.id}.synced_tick_interval'
 
         #> REGISTER SCOREBOARDS
         global added_slots
@@ -90,12 +126,19 @@ class GenesisStatusMetaclass(type):
                 if (cls.slot + ';max_duration') not in added_slots and not is_permanent and has_icon:
                     added_slots.append(cls.slot + ';max_duration')
                     scoreboard objectives add (cls.max_duration) dummy
+                if (cls.slot + ';synced_tick') not in added_slots and synced_tick_func != None:
+                    added_slots.append(cls.slot + ';synced_tick')
+                    scoreboard objectives add (cls.synced_tick) dummy
+                    scoreboard objectives add (cls.synced_tick_interval) dummy
             else:
                 scoreboard objectives add (cls.value) dummy
                 if not is_permanent:
                     scoreboard objectives add (cls.until) dummy
                 if has_icon and not is_permanent:
                     scoreboard objectives add (cls.max_duration) dummy
+                if synced_tick_func != None:
+                    scoreboard objectives add (cls.synced_tick) dummy
+                    scoreboard objectives add (cls.synced_tick_interval) dummy
 
         #> SET UP STUFF FOR TIMING OUT
         if not is_permanent:
@@ -105,7 +148,7 @@ class GenesisStatusMetaclass(type):
             global added_slots_remove_next
             append function genesis:status/remove_next:
                 if not has_slot:
-                    if score @s (cls.until) matches 1.. scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
+                    if entity @s[tag=(cls.tag)] scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
                 elif cls.slot not in added_slots_remove_next:
                     added_slots_remove_next.append(cls.slot)
                     if score @s (cls.until) matches 1.. scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
@@ -153,11 +196,36 @@ class GenesisStatusMetaclass(type):
                 v = getattr(cls, k, None)
                 if callable(v) and getattr(v, '__on_apply_status__', False):
                     v(cls)
+            if synced_tick_func != None:
+                scoreboard players operation @s (cls.synced_tick) = .gametime genesis
+                scoreboard players add @s (cls.synced_tick) ((synced_tick_func.__data__['offset'] % synced_tick_func.__data__['interval']) + 1)
+                scoreboard players set @s (cls.synced_tick_interval) (synced_tick_func.__data__['interval'])
+                unless score @s genesis.status.synced_tick.next = @s genesis.status.synced_tick.next scoreboard players set @s genesis.status.synced_tick.next 2147483647
+                scoreboard players operation @s genesis.status.synced_tick.next < @s (cls.synced_tick)
+
         cls.apply = apply
         if is_permanent:
             def apply2(value: int|tuple[str,str] = 0):
                 apply(0, value)
             cls.apply = apply2
+
+        #> SET UP SYNCED TICK
+        if synced_tick_func != None:
+            prepend function genesis:status/synced_tick_next:
+                if entity @s[tag=(cls.tag)] if score .gametime genesis >= @s (cls.synced_tick) function f'genesis:status/synced_tick/{cls.id}':
+                    store result score #next_synced_tick_check genesis scoreboard players operation @s (cls.synced_tick) += @s (cls.synced_tick_interval)
+                    scoreboard players operation @s (cls.synced_tick) = @s (cls.synced_tick_interval)
+                    scoreboard players operation @s (cls.synced_tick) += .gametime genesis
+                    if score #next_synced_tick_check genesis < .gametime genesis return 0
+                    synced_tick_func(cls)
+
+            global added_slots_synced_tick
+            append function genesis:status/synced_tick_next:
+                if not has_slot:
+                    if entity @s[tag=(cls.tag)] scoreboard players operation @s genesis.status.synced_tick.next < @s (cls.synced_tick)
+                elif cls.slot not in added_slots_synced_tick:
+                    added_slots_synced_tick.append(cls.slot)
+                    if score @s (cls.synced_tick) matches 1.. scoreboard players operation @s genesis.status.synced_tick.next < @s (cls.synced_tick)
 
         #> SET UP REMOVE "METHOD"
         function f'genesis:status/remove/{cls.id}':
@@ -165,6 +233,9 @@ class GenesisStatusMetaclass(type):
                 scoreboard players reset @s (cls.max_duration)
             if not is_permanent:
                 scoreboard players reset @s (cls.until)
+            if synced_tick_func != None:
+                scoreboard players reset @s (cls.synced_tick)
+                scoreboard players reset @s (cls.synced_tick_interval)
             scoreboard players reset @s (cls.value)
 
             tag @s remove (cls.tag)
@@ -320,3 +391,10 @@ def before_value_change_status(func):
 def after_value_change_status(func):
     func.__after_value_change_status__ = True
     return func
+
+def synced_tick_status(interval, offset = 0):
+    def decorator(func):
+        func.__data__ = {'interval': interval, 'offset': offset}
+        func.__synced_tick_status__ = True
+        return func
+    return decorator

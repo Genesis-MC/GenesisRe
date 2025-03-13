@@ -1,6 +1,6 @@
 #> THIS FILE IS FOR EVERYTHING ONLY USED FOR DEVELOPMENT THAT SHOULD NOT BE IN THE FINAL RELEASE
 
-from genesis:status import GenesisStatus, on_apply_status, on_remove_status, before_value_change_status, after_value_change_status
+from genesis:status import GenesisStatus, on_apply_status, on_remove_status, before_value_change_status, after_value_change_status, synced_tick_status
 
 
 function ~/reset_player_join:
@@ -61,3 +61,22 @@ class ChestTwo(GenesisStatus):
 
 function ~/chest_two_apply:
     ChestTwo.apply()
+
+
+class NewStatus(GenesisStatus):
+    icon = "genesis:font/status/poison_or_something"
+
+    @synced_tick_status(20)
+    def synced_status_thingy(cls):
+        tellraw @a [
+            "this_next:",
+            {"score":{"name":"@s","objective":(cls.synced_tick)}},
+            " - next_global:",
+            {"score":{"name":"@s","objective":"genesis.status.synced_tick.next"}},
+            " - gt:",
+            {"score":{"name":".gametime","objective":"genesis"}},
+        ]
+
+
+function ~/znew_status_apply:
+    NewStatus.apply(15*20)
