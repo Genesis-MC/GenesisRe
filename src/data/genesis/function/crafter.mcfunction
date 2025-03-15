@@ -123,8 +123,7 @@ def add_custom_recipe(recipe: list[list[str|type|None]], reduce_durability = Fal
         if type(output) == str:
             command += f'run return run item replace block ~ ~-1 ~ container.15 with {output}'
         else: # assume item is bolt-item
-            loot_table = {"pools": [{"rolls": 1,"entries": [{"type": "minecraft:item","name": f'minecraft:{output.base_item}',"functions": [{"function": "minecraft:set_components","components": output.components}]}]}]}
-            command += f'run return run loot replace block ~ ~-1 ~ container.15 loot {loot_table}'
+            command += f'run return run loot replace block ~ ~-1 ~ container.15 loot {output.loot_table}'
         prepend function genesis:crafter/recipes:
             if reduce_durability:
                 tag @s add genesis.crafter.on_craft_reduce_durability
