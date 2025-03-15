@@ -1,4 +1,4 @@
-from genesis:utils import camel_case_to_snake_case, constant, smart_scoreboard_operation
+from genesis:utils import camel_case_to_snake_case, constant, smart_scoreboard_operation, player_schedule_loop
 from beet import Font
 
 
@@ -91,13 +91,29 @@ class GenesisStatusMetaclass(type):
             global current_icon
             cls.icon_chr = chr(current_icon)
             current_icon += 1
-        # stuff for synced tick function
+        # gather callables
         synced_tick_func = None
+        scheduled_tick_funcs = []
+        on_apply_funcs = []
+        on_remove_funcs = []
+        before_value_change_funcs = []
+        after_value_change_funcs = []
         for k in dir(cls):
             v = getattr(cls, k, None)
-            if callable(v) and getattr(v, '__synced_tick_status__', False):
-                synced_tick_func = v
-                break
+            if callable(v):
+                if getattr(v, '__synced_tick_status__', False):
+                    synced_tick_func = v
+                elif getattr(v, '__scheduled_tick_status__', False):
+                    scheduled_tick_funcs.append(v)
+                elif getattr(v, '__on_apply_status__', False):
+                    on_apply_funcs.append(v)
+                elif getattr(v, '__on_remove_status__', False):
+                    on_remove_funcs.append(v)
+                elif getattr(v, '__before_value_change_status__', False):
+                    before_value_change_funcs.append(v)
+                elif getattr(v, '__after_value_change_status__', False):
+                    after_value_change_funcs.append(v)
+
 
         #> SET SCOREBOARD VARIABLES
         if has_slot:
@@ -192,10 +208,8 @@ class GenesisStatusMetaclass(type):
                 function genesis:status/hud/update_icons
                 scoreboard players add @s genesis.hud.display 1
 
-            for k in dir(cls):
-                v = getattr(cls, k, None)
-                if callable(v) and getattr(v, '__on_apply_status__', False):
-                    v(cls)
+            for func in on_apply_funcs:
+                func(cls)
             if synced_tick_func != None:
                 scoreboard players operation @s (cls.synced_tick) = .gametime genesis
                 scoreboard players add @s (cls.synced_tick) ((synced_tick_func.__data__['offset'] % synced_tick_func.__data__['interval']) + 1)
@@ -253,10 +267,8 @@ class GenesisStatusMetaclass(type):
                 function genesis:status/hud/update_icons
                 scoreboard players remove @s genesis.hud.display 1
 
-            for k in dir(cls):
-                v = getattr(cls, k, None)
-                if callable(v) and getattr(v, '__on_remove_status__', False):
-                    v(cls)
+            for func in on_remove_funcs:
+                func(cls)
 
         def remove():
             if entity @s[tag=(cls.tag)] function f'genesis:status/remove/{cls.id}'
@@ -289,17 +301,13 @@ class GenesisStatusMetaclass(type):
 
         #> METHOD TO MODIFY VALUE
         def modify_value(operation: str, value: int|tuple[str,str]):
-            for k in dir(cls):
-                v = getattr(cls, k, None)
-                if callable(v) and getattr(v, '__before_value_change_status__', False):
-                    v(cls)
+            for func in before_value_change_funcs:
+                func(cls)
 
             smart_scoreboard_operation('@s', cls.value, operation, value)
 
-            for k in dir(cls):
-                v = getattr(cls, k, None)
-                if callable(v) and getattr(v, '__after_value_change_status__', False):
-                    v(cls)
+            for func in after_value_change_funcs:
+                func(cls)
         cls.modify_value = modify_value
 
         #> METHOD TO MODIFY MAX DURATION
@@ -369,6 +377,16 @@ class GenesisStatusMetaclass(type):
                             if score #cooldown_sprite genesis matches (i) data modify storage genesis:player self.hud[2][1] append value f'|{hex(i)[-1].upper()}|'
                         if score #cooldown_sprite genesis matches 12.. data modify storage genesis:player self.hud[2][1] append value f'|C|'
                         data modify storage genesis:player self.hud[2][2] append value "#"
+
+        #> SCHEDULED TICK
+        for func in scheduled_tick_funcs:
+            interval = func.__data__['interval']
+            path = f'genesis:status/scheduled_tick/{cls.id}/tick_{interval}'
+
+            append function player_schedule_loop(interval):
+                if entity @s[tag=(cls.tag)] function path:
+                    func(cls)
+
         return cls
 
 
@@ -396,5 +414,12 @@ def synced_tick_status(interval, offset = 0):
     def decorator(func):
         func.__data__ = {'interval': interval, 'offset': offset}
         func.__synced_tick_status__ = True
+        return func
+    return decorator
+
+def scheduled_tick_status(interval: int):
+    def decorator(func):
+        func.__data__ = {'interval': interval}
+        func.__scheduled_tick_status__ = True
         return func
     return decorator

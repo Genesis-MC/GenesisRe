@@ -124,3 +124,26 @@ def smart_scoreboard_operation(name: str, board: str, operation: str, value: int
     else:
         cmd = f'scoreboard players operation {name} {board} {operation} {value[0]} {value[1]}'
     raw (cmd)
+
+
+registered_schedule_loops = []
+def schedule_loop(ticks: int):
+    global registered_schedule_loops
+    path = f'genesis:tick_{ticks}'
+    if path in registered_schedule_loops:
+        return path
+    append function genesis:load:
+        execute function path:
+            schedule function path (ticks)
+    return path
+
+
+registered_player_schedule_loops = []
+def player_schedule_loop(ticks: int):
+    global registered_player_schedule_loops
+    path = f'genesis:player/tick_{ticks}'
+    if path in registered_player_schedule_loops:
+        return path
+    append function schedule_loop(ticks):
+        as @a at @s function path
+    return path

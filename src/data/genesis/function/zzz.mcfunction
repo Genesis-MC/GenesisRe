@@ -1,6 +1,6 @@
 #> THIS FILE IS FOR EVERYTHING ONLY USED FOR DEVELOPMENT THAT SHOULD NOT BE IN THE FINAL RELEASE
 
-from genesis:status import GenesisStatus, on_apply_status, on_remove_status, before_value_change_status, after_value_change_status, synced_tick_status
+from genesis:status import GenesisStatus, on_apply_status, on_remove_status, before_value_change_status, after_value_change_status, synced_tick_status, scheduled_tick_status
 
 
 function ~/reset_player_join:
@@ -74,6 +74,13 @@ class NewStatus(GenesisStatus):
             " - next_global:",
             {"score":{"name":"@s","objective":"genesis.status.synced_tick.next"}},
             " - gt:",
+            {"score":{"name":".gametime","objective":"genesis"}},
+        ]
+
+    @scheduled_tick_status(20)
+    def schjedule_ticks(cls):
+        tellraw @a [
+            "gt:",
             {"score":{"name":".gametime","objective":"genesis"}},
         ]
 
