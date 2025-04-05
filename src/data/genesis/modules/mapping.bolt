@@ -35,6 +35,7 @@ categories = [
     "confectionery", # do we need "snack" AND "confectionery"? To me they seem similar. Or this should be changed to "pastries"?
 
     "crop",
+    "seed",
 ]
 
 category_modifiers = [
