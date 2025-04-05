@@ -53,16 +53,15 @@ function genesis:stat/score_to_attribute/attack_speed:
     # If attack speed is 0, dont calculate or add anyhting
     if score @s genesis.stat.attack_speed matches 0 return 0
     # Calculate attribute from score
-    # (14.3*x)/(1000+x) + 0.3 | amplified by 100x to get precision up to 0.01
+    # (12.2*x)/(1000+x) | amplified by 100x to get precision up to 0.01
     scoreboard players set #denominator genesis 1000
     scoreboard players operation #denominator genesis += @s genesis.stat.attack_speed
-    scoreboard players operation #stat genesis = @s genesis.stat.attack_speed 
-    scoreboard players operation #stat genesis *= constant(2860) genesis
+    scoreboard players operation #stat genesis = @s genesis.stat.attack_speed
+    scoreboard players operation #stat genesis *= constant(2440) genesis
     execute store result score #temp genesis run scoreboard players operation #stat genesis /= #denominator genesis
     scoreboard players operation #stat genesis /= constant(2) genesis
     scoreboard players operation #temp genesis %= constant(2) genesis
     scoreboard players operation #stat genesis += #temp genesis
-    scoreboard players operation #stat genesis += constant(30) genesis # add 0.3 attack speed
     # Remove the base 4 attack speed
     store result storage genesis:temp stat.attack_speed.value float 0.01 scoreboard players remove #stat genesis 400
     # Run macro to add attribute with correct value
