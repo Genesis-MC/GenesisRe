@@ -18,14 +18,14 @@ class IronScythe(GenesisItem):
     item_name = ("Iron Scythe", {"color":"white"})
     rarity = "common"
     category = ["scythe"]
-    stats = ("mainhand", {"physical_power":85,"attack_speed":50})
+    stats = ("mainhand", {"physical_power":85,"attack_speed":85})
 
 # RecluseFang
 class RecluseFang(GenesisItem):
     item_name = ("Recluse Fang", {"color":"red"})
     rarity = "uncommon"
     category = ["scythe"]
-    stats = ("mainhand", {"physical_power":85,"attack_speed":50})
+    stats = ("mainhand", {"physical_power":85,"attack_speed":85})
 
 # VenomlashFang
 @add_custom_recipe([
@@ -37,28 +37,28 @@ class VenomlashFang(GenesisItem):
     item_name = ("Venomlash Fang", {"color":"dark_purple"})
     rarity = "rare"
     category = ["scythe"]
-    stats = ("mainhand", {"physical_power":90,"attack_speed":60})
+    stats = ("mainhand", {"physical_power":90,"attack_speed":100})
 
 # JackOReaper
 class JackOReaper(GenesisItem):
     item_name = ("Jack O' Reaper", {"color":"white"})
     rarity = "rare"
     category = ["scythe"]
-    stats = ("mainhand", {"physical_power":88,"attack_speed":60})
+    stats = ("mainhand", {"physical_power":88,"attack_speed":100})
 
 # PrismarineScythe
 class PrismarineScythe(GenesisItem):
     item_name = ("Prismarine Scythe", {"color":"dark_aqua"})
     rarity = "rare"
     category = ["scythe"]
-    stats = ("mainhand", {"physical_power":90,"attack_speed":60,"mana_regen":100})
+    stats = ("mainhand", {"physical_power":90,"attack_speed":100,"mana_regen":100})
 
 # Riptide
 class Riptide(GenesisItem):
     item_name = ("Riptide", {"color":"dark_aqua"})
     rarity = "epic"
     category = ["elemental","scythe"]
-    stats = ("mainhand", {"physical_power":95,"attack_speed":65,"mana_regen":105})
+    stats = ("mainhand", {"physical_power":95,"attack_speed":110,"mana_regen":105})
     @right_click_ability(
         name = "mana_siphon",
         description = "WIP",
@@ -73,7 +73,7 @@ class CloudSail(GenesisItem):
     item_name = ("Cloud Sail", {"color":"white"})
     rarity = "rare"
     category = ["scythe"]
-    stats = ("mainhand", {"physical_power":80,"attack_speed":50})
+    stats = ("mainhand", {"physical_power":80,"attack_speed":85})
     @right_click_ability(
         name = "cloud_drift",
         description = "WIP",

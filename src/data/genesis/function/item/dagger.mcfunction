@@ -18,7 +18,7 @@ class IronDagger(GenesisItem):
     item_name = ("Iron Dagger", {"color":"white"})
     rarity = "common"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":35,"attack_speed":100})
+    stats = ("mainhand", {"physical_power":35,"attack_speed":175})
 
 # Frostfang
 @add_custom_recipe([
@@ -30,7 +30,7 @@ class Frostfang(GenesisItem):
     item_name = ("Frostfang", {"color":"aqua"})
     rarity = "uncommon"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":25,"attack_speed":100})
+    stats = ("mainhand", {"physical_power":25,"attack_speed":175})
 
 # HarbingerOfWinter
 @add_custom_recipe([
@@ -42,7 +42,7 @@ class HarbingerOfWinter(GenesisItem):
     item_name = ("Harbinger Of Winter", {"color":"aqua"})
     rarity = "rare"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":30,"attack_speed":120,"speed":30})
+    stats = ("mainhand", {"physical_power":30,"attack_speed":210,"speed":30})
 
 # ShadedDagger
 @add_custom_recipe([
@@ -54,7 +54,7 @@ class ShadedDagger(GenesisItem):
     item_name = ("Shaded Dagger", {"color":"dark_purple"})
     rarity = "uncommon"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":40,"attack_speed":100,"speed":15})
+    stats = ("mainhand", {"physical_power":40,"attack_speed":175,"speed":15})
 
 # VoidRazor
 @add_custom_recipe([
@@ -66,7 +66,7 @@ class VoidRazor(GenesisItem):
     item_name = ("Void Razor", {"color":"dark_purple"})
     rarity = "epic"
     category = ["void", "dagger"]
-    stats = ("mainhand", {"physical_power":45,"attack_speed":110,"speed":25})
+    stats = ("mainhand", {"physical_power":45,"attack_speed":195,"speed":25})
 
 # Vorpol
 @add_custom_recipe([
@@ -78,7 +78,7 @@ class Vorpol(GenesisItem):
     item_name = ("Vorpol", {"color":"light_purple"})
     rarity = "legendary"
     category = ["void", "dagger"]
-    stats = ("mainhand", {"physical_power":50,"attack_speed":100,"speed":100})
+    stats = ("mainhand", {"physical_power":50,"attack_speed":175,"speed":100})
     @right_click_ability(
         name = "blitzkrieg",
         description = "WIP",
@@ -98,7 +98,7 @@ class Vescherum(GenesisItem):
     item_name = ("Vescherum", {"color":"light_purple"})
     rarity = "legendary"
     category = ["void", "dagger"]
-    stats = ("mainhand", {"physical_power":50,"attack_speed":110,"armor_toughness":60,"speed":30})
+    stats = ("mainhand", {"physical_power":50,"attack_speed":195,"armor_toughness":60,"speed":30})
     @right_click_ability(
         name = "hallowed_field",
         description = "WIP",
@@ -118,7 +118,7 @@ class Visharp(GenesisItem):
     item_name = ("Visharp", {"color":"light_purple"})
     rarity = "legendary"
     category = ["void", "dagger"]
-    stats = ("mainhand", {"physical_power":60,"attack_speed":110})
+    stats = ("mainhand", {"physical_power":60,"attack_speed":195})
     @right_click_ability(
         name = "Voidrend",
         description = "Teleport up to 5 blocks ahead of you and deal 40% Physical Power to opponents in a 3-block radius from your initial position",
@@ -138,35 +138,35 @@ class Hook(GenesisItem):
     item_name = ("Hook", {"color":"white"})
     rarity = "uncommon"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":35,"attack_speed":110,"luck":10})
+    stats = ("mainhand", {"physical_power":35,"attack_speed":195,"luck":10})
 
 # LadyLuck
 class LadyLuck(GenesisItem):
     item_name = ("LadyLuck", {"color":"gold"})
     rarity = "mythical"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":30,"attack_speed":130,"luck":50})
+    stats = ("mainhand", {"physical_power":30,"attack_speed":230,"luck":50})
 
 # VermillionGlove
 class VermillionGlove(GenesisItem):
     item_name = ("Vermillion Glove", {"color":"dark_red"})
     rarity = "uncommon"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":45,"attack_speed":100})
+    stats = ("mainhand", {"physical_power":45,"attack_speed":175})
 
 # CrystalMoon
 class CrystalMoon(GenesisItem):
     item_name = ("Crystal Moon", {"color":"white"})
     rarity = "rare"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":30,"attack_speed":100,"armor_toughness":-20,"mana_regen":50})
+    stats = ("mainhand", {"physical_power":30,"attack_speed":175,"armor_toughness":-20,"mana_regen":50})
 
 # PrismDagger
 class PrismDagger(GenesisItem):
     item_name = ("Prism Dagger", {"color":"light_purple"})
     rarity = "epic"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":50,"magic_power":100,"attack_speed":105,"mana_regen":100})
+    stats = ("mainhand", {"physical_power":50,"magic_power":100,"attack_speed":185,"mana_regen":100})
     @right_click_ability(
         name = "prism_shatter",
         description = "WIP",

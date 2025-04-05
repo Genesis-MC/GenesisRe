@@ -18,7 +18,7 @@ class IronSpear(GenesisItem):
     item_name = ("Iron Spear", {"color":"white"})
     rarity = "common"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":65,"attack_speed":80})
+    stats = ("mainhand", {"physical_power":65,"attack_speed":138})
 
 # Glaive
 @add_custom_recipe([
@@ -30,7 +30,7 @@ class Glaive(GenesisItem):
     item_name = ("Glaive", {"color":"white"})
     rarity = "rare"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":75,"attack_speed":85})
+    stats = ("mainhand", {"physical_power":75,"attack_speed":147})
     @right_click_ability(
         name = "stance_swap_onslaught",
         description = "WIP",
@@ -50,7 +50,7 @@ class Halycon(GenesisItem):
     item_name = ("Halycon", {"color":"aqua"})
     rarity = "rare"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":75,"attack_speed":90,"speed":40})
+    stats = ("mainhand", {"physical_power":75,"attack_speed":155,"speed":40})
     @right_click_ability(
         name = "windcharmer",
         description = "WIP",
@@ -65,7 +65,7 @@ class HelixSpear(GenesisItem):
     item_name = ("Helix Spear", {"color":"white"})
     rarity = "rare"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":85,"magic_power":60,"attack_speed":70})
+    stats = ("mainhand", {"physical_power":85,"magic_power":60,"attack_speed":120})
     item_model = "genesis:polearm/helix_spear"
     @right_click_ability(
         name = "piercing_light",
@@ -86,7 +86,7 @@ class HeavensThorn(GenesisItem):
     item_name = ("Heavens Thorn", {"color":"gold"})
     rarity = "epic"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":90,"magic_power":90,"attack_speed":70,"mana_pool":30,"mana_regen":80})
+    stats = ("mainhand", {"physical_power":90,"magic_power":90,"attack_speed":120,"mana_pool":30,"mana_regen":80})
     @right_click_ability(
         name = "piercing_light",
         description = "WIP",
@@ -106,7 +106,7 @@ class VerdantStaff(GenesisItem):
     item_name = ("Verdant Staff", {"color":"green"})
     rarity = "uncommon"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":50,"attack_speed":70})
+    stats = ("mainhand", {"physical_power":50,"attack_speed":120})
     @right_click_ability(
         name = "revitalize1",
         description = "WIP",
@@ -126,7 +126,7 @@ class VerdantMasterstaff(GenesisItem):
     item_name = ("Verdant Masterstaff", {"color":"green"})
     rarity = "rare"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":55,"attack_speed":70})
+    stats = ("mainhand", {"physical_power":55,"attack_speed":120})
     @right_click_ability(
         name = "revitalize2",
         description = "WIP",
@@ -146,7 +146,7 @@ class VerdantSceptor(GenesisItem):
     item_name = ("Verdant Sceptor", {"color":"green"})
     rarity = "epic"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":60,"attack_speed":70})
+    stats = ("mainhand", {"physical_power":60,"attack_speed":120})
     @right_click_ability(
         name = "revitalize3",
         description = "WIP",
@@ -161,7 +161,7 @@ class SceptorOfTheCrimsonEgg(GenesisItem):
     item_name = ("Sceptor Of The Crimson Egg", {"color":"red"})
     rarity = "epic"
     category = ["polearm"]
-    stats = ("mainhand", {"magic_power":100,"attack_speed":70,"mana_pool":50})
+    stats = ("mainhand", {"magic_power":100,"attack_speed":120,"mana_pool":50})
     @right_click_ability(
         name = "firebird",
         description = "WIP",

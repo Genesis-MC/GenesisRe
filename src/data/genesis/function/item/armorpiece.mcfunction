@@ -160,7 +160,7 @@ class CrystalCirclet(GenesisItem):
     item_name = ("Crystal Circlet", {"color":"aqua"})
     rarity = "epic"
     category = ["helmet"]
-    stats = ("head", {"magic_power":25,"attack_speed":10,"armor":30,"armor_toughness":10})
+    stats = ("head", {"magic_power":25,"attack_speed":16,"armor":30,"armor_toughness":10})
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # GhastlyChestplate
@@ -304,7 +304,7 @@ class TreantTrousers(GenesisItem):
     item_name = ("Treant Trousers", {"color":"green"})
     rarity = "rare"
     category = ["leggings"]
-    stats = ("legs", {"attack_speed":-8,"armor":50,"armor_toughness":10,"knockback_resistance":15})
+    stats = ("legs", {"attack_speed":-13,"armor":50,"armor_toughness":10,"knockback_resistance":15})
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # PerfectStrategy

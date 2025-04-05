@@ -402,7 +402,7 @@ class DreadnaughtHelmet(GenesisItem):
     item_name = ("Dreadnaught Helmet", {"color":"dark_red"})
     rarity = "legendary"
     category = ["helmet"]
-    stats = ("head", {"attack_speed":-4,"armor":40,"armor_toughness":40,"speed":-5})
+    stats = ("head", {"attack_speed":-7,"armor":40,"armor_toughness":40,"speed":-5})
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}
 
 # DreadnaughtChestplate
@@ -415,7 +415,7 @@ class DreadnaughtChestplate(GenesisItem):
     item_name = ("Dreadnaught Chestplate", {"color":"dark_red"})
     rarity = "legendary"
     category = ["chestplate"]
-    stats = ("chest", {"attack_speed":-5,"armor":90,"armor_toughness":40,"speed":-6})
+    stats = ("chest", {"attack_speed":-8,"armor":90,"armor_toughness":40,"speed":-6})
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
 
 # DreadnaughtLeggings
@@ -428,7 +428,7 @@ class DreadnaughtLeggings(GenesisItem):
     item_name = ("Dreadnaught Leggings", {"color":"dark_red"})
     rarity = "legendary"
     category = ["leggings"]
-    stats = ("legs", {"attack_speed":-5,"armor":70,"armor_toughness":40,"speed":-6})
+    stats = ("legs", {"attack_speed":-8,"armor":70,"armor_toughness":40,"speed":-6})
     equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
 
 # DreadnaughtBoots
@@ -441,5 +441,5 @@ class DreadnaughtBoots(GenesisItem):
     item_name = ("Dreadnaught Boots", {"color":"dark_red"})
     rarity = "legendary"
     category = ["boots"]
-    stats = ("feet", {"attack_speed":-4,"armor":40,"armor_toughness":40,"speed":-5})
+    stats = ("feet", {"attack_speed":-7,"armor":40,"armor_toughness":40,"speed":-5})
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}

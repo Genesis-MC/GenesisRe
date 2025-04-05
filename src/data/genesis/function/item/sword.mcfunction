@@ -18,7 +18,7 @@ class ObsidianBlade(GenesisItem):
     item_name = ("Obsidian Blade", {"color":"white"})
     rarity = "uncommon"
     category = ["sword"]
-    stats = ("mainhand", {"physical_power":80,"attack_speed":85,"armor":-10})
+    stats = ("mainhand", {"physical_power":80,"attack_speed":140,"armor":-10})
 
 # FadingDusk
 @add_custom_recipe([
@@ -30,7 +30,7 @@ class FadingDusk(GenesisItem):
     item_name = ("Fading Dusk", {"color":"dark_purple"})
     rarity = "rare"
     category = ["sword"]
-    stats = ("mainhand", {"physical_power":80,"attack_speed":85,"armor":-10})
+    stats = ("mainhand", {"physical_power":80,"attack_speed":140,"armor":-10})
 
 # SaberCrimson
 @add_custom_recipe([
@@ -42,7 +42,7 @@ class SaberCrimson(GenesisItem):
     item_name = ("Saber Crimson", {"color":"red"})
     rarity = "epic"
     category = ["sword"]
-    stats = ("mainhand", {"physical_power":85,"attack_speed":95,"health":-40})
+    stats = ("mainhand", {"physical_power":85,"attack_speed":165,"health":-40})
 
 # SaberWarped
 @add_custom_recipe([
@@ -54,14 +54,14 @@ class SaberWarped(GenesisItem):
     item_name = ("Saber Warped", {"color":"dark_aqua"})
     rarity = "epic"
     category = ["sword"]
-    stats = ("mainhand", {"physical_power":85,"attack_speed":95,"mana_regen":-300})
+    stats = ("mainhand", {"physical_power":85,"attack_speed":165,"mana_regen":-300})
 
 # HailstoneBlade
 class HailstoneBlade(GenesisItem):
     item_name = ("Hailstone Blade", {"color":"aqua"})
     rarity = "epic"
     category = ["sword"]
-    stats = ("mainhand", {"physical_power":75,"attack_speed":100})
+    stats = ("mainhand", {"physical_power":75,"attack_speed":175})
     @right_click_ability(
         name = "hailslash",
         description = "WIP",
@@ -76,7 +76,7 @@ class Kopesh(GenesisItem):
     item_name = ("Kopesh", {"color":"dark_red"})
     rarity = "rare"
     category = ["sword"]
-    stats = ("mainhand", {"physical_power":80,"attack_speed":85})
+    stats = ("mainhand", {"physical_power":80,"attack_speed":150})
     @right_click_ability(
         name = "cleave1",
         description = "WIP",
@@ -91,14 +91,14 @@ class AcolyteBlade(GenesisItem):
     item_name = ("Acolyte Blade", {"color":"dark_red"})
     rarity = "rare"
     category = ["sword"]
-    stats = ("mainhand", {"physical_power":85,"attack_speed":80})
+    stats = ("mainhand", {"physical_power":80,"attack_speed":140})
 
 # Asophogheny
 class Asophogeny(GenesisItem):
     item_name = ("Asophogeny", {"color":"dark_red"})
     rarity = "epic"
     category = ["sword"]
-    stats = ("mainhand", {"physical_power":100,"magic_power":90,"attack_speed":80})
+    stats = ("mainhand", {"physical_power":100,"magic_power":90,"attack_speed":140})
     @right_click_ability(
         name = "blood_root",
         description = "WIP",

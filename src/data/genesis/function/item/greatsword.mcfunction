@@ -19,7 +19,7 @@ class IronGreatsword(GenesisItem):
     item_name = ("Iron Greatsword", {"color":"white"})
     rarity = "common"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":110,"attack_speed":38})
+    stats = ("mainhand", {"physical_power":110,"attack_speed":65})
 
 # OvergrownGreatsword
 @add_custom_recipe([
@@ -31,7 +31,7 @@ class OvergrownGreatsword(GenesisItem):
     item_name = ("OvergrownGreatsword", {"color":"green"})
     rarity = "uncommon"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":125,"attack_speed":40,"health":40})
+    stats = ("mainhand", {"physical_power":125,"attack_speed":67,"health":40})
 
 # Zweihander
 @add_custom_recipe([
@@ -43,7 +43,7 @@ class Zweihander(GenesisItem):
     item_name = ("Zweihander", {"color":"white"})
     rarity = "rare"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":120,"attack_speed":45})
+    stats = ("mainhand", {"physical_power":120,"attack_speed":75})
     item_model = "iron_sword" #! change to custom texture
     @right_click_ability(
         name = "Stance Swap - Onslaught",
@@ -63,7 +63,7 @@ class EverfrostTitanblade(GenesisItem):
     item_name = ("Everfrost Titanblade", {"color":"aqua"})
     rarity = "legendary"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":150,"attack_speed":30,"mana_pool":20,"mana_regen":50,"speed":-50})
+    stats = ("mainhand", {"physical_power":150,"attack_speed":50,"mana_pool":20,"mana_regen":50,"speed":-50})
     @right_click_ability(
         name = "polar_vortex",
         description = "WIP",
@@ -78,7 +78,7 @@ class SwashbucklersGlory(GenesisItem):
     item_name = ("Swashbucklers Glory", {"color":"blue"})
     rarity = "epic"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":140,"attack_speed":35,"armor_toughness":30})
+    stats = ("mainhand", {"physical_power":140,"attack_speed":60,"armor_toughness":30})
     @right_click_ability(
         name = "cleave2",
         description = "WIP",
@@ -93,11 +93,11 @@ class RoyalCleaver(GenesisItem):
     item_name = ("Royal Cleaver", {"color":"gold"})
     rarity = "epic"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":150,"attack_speed":40,"armor":30,"knockback_resistance":30,"mana_regen":-100,"speed":-25})
+    stats = ("mainhand", {"physical_power":150,"attack_speed":67,"armor":30,"knockback_resistance":30,"mana_regen":-100,"speed":-25})
 
 # Exetol
 class Exetol(GenesisItem):
     item_name = ("Exetol", {"color":"red"})
     rarity = "legendary"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":150,"attack_speed":40})
+    stats = ("mainhand", {"physical_power":150,"attack_speed":67})
