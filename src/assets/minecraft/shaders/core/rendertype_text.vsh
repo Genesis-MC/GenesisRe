@@ -27,7 +27,7 @@ bool roughlyEquals(float a, float b) {
     return abs(a - b) < 0.01;
 }
 
-bool isRegularTextDepth(float depth) {
+bool isRegularTextDepth(float depth) { // BROKEN AS OF 25w16a
     return (
         roughlyEquals(depth, 2200.03) || // Actionbar
         roughlyEquals(depth, 2400.06) || // Subtitle
@@ -42,7 +42,7 @@ bool isRegularTextDepth(float depth) {
     );
 }
 
-bool isShadowDepth(float depth) {
+bool isShadowDepth(float depth) { // BROKEN AS OF 25w16a
     return (
         roughlyEquals(depth, 2200) || // Actionbar
         roughlyEquals(depth, 2400) || // Subtitle | Title
