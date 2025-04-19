@@ -1,6 +1,6 @@
 from ps_beet_bolt.bolt_item import event_decorator
 from genesis:utils import add_translation, break_text_into_lines, camel_case_to_snake_case
-from tungsten:decorators import _add_tungsten_base, _add_tungsten_components
+from genesis:tungsten import add_tungsten_components
 from genesis:mapping import rarity_text_color
 from genesis:mana import reduce_mana_or_return
 from genesis:utils import constant
@@ -50,9 +50,8 @@ def right_click_ability(name: str, description: str, cooldown: float, mana = 0, 
         item.merge("custom_data", {"genesis": {"right_click_ability": {"cooldown": cooldown, "mana": mana}}})
 
         # Add tungsten components
-        _add_tungsten_base()
-        _add_tungsten_components(item, "mainhand")
-        _add_tungsten_components(item, "offhand")
+        add_tungsten_components(item, "mainhand")
+        add_tungsten_components(item, "offhand")
 
         # Add function to be ran on consume
         consume_path = f'{item.namespace}:bolt-item/item/{item.id}/right_click_ability/{func.__name__}'

@@ -1,7 +1,7 @@
 from ps_beet_bolt.bolt_item import component_names, Components, _int_hash, _get_mc_components
 from genesis:mapping import stat_wrapper_characters, rarity_text_color, categories, rarities, stat_names, category_modifiers, slots, stat_attribute_to_score
 from genesis:utils import add_translation, break_text_into_lines, camel_case_to_snake_case
-from tungsten:decorators import _add_tungsten_base, _add_tungsten_components
+from genesis:tungsten import add_tungsten_components
 
 
 class GenesisItemMetaclass(type):
@@ -88,6 +88,7 @@ def stats_handler(item: Components, stats_component: tuple[str,dict[str,int]]):
                 "amount": (amount),
                 "operation": "add_value",
                 "slot": (slot),
+                "display": {"type": "hidden"},
             }])
 
         # Add to lore line
@@ -103,8 +104,7 @@ def stats_handler(item: Components, stats_component: tuple[str,dict[str,int]]):
     item.lore = [line,""] + item.get('lore', [])
 
     # Add tungsten components
-    _add_tungsten_base()
-    _add_tungsten_components(item, slot)
+    add_tungsten_components(item, slot)
     item.max_stack_size = 1
 
     # Add stats to custom data
