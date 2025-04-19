@@ -1,6 +1,8 @@
 #version 150
 
 #moj_import <minecraft:fog.glsl>
+#moj_import <minecraft:dynamictransforms.glsl>
+#moj_import <minecraft:projection.glsl>
 
 in vec3 Position;
 in vec4 Color;
@@ -9,17 +11,12 @@ in ivec2 UV2;
 
 uniform sampler2D Sampler2;
 
-uniform mat4 ModelViewMat;
-uniform mat4 ProjMat;
-uniform int FogShape;
-
 out float vertexDistance;
 out vec4 vertexColor;
 out vec2 texCoord0;
-// genesis
-out float height;
-out float isShadow;
-out float customType;
+out float height; // genesis
+out float isShadow; // genesis
+out float customType; // genesis
 
 void custom(int type) {
     customType = type;
