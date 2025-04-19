@@ -52,13 +52,21 @@ class Halycon(GenesisItem):
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":75,"attack_speed":155,"speed":40})
     @right_click_ability(
-        name = "windcharmer",
-        description = "WIP",
-        mana = 10,
-        cooldown = 1,
+        name = "Windcharmer",
+        description = "If used while on the ground, summon a gust of wind which knocks up everything in a 3-block radius. If used while in the air, instead grant yourself slow-falling for 4 seconds.",
+        mana = 60,
+        cooldown = 6,
     )
     def windcharmer():
-        say WIP
+        execute if block ~ ~-1 ~ air:
+            effect give @s minecraft:slow_falling 4
+            function genesis:particles/circle_rad2 {particle:"cloud", ydirection:-1, speed:0.3}
+            function genesis:particles/circle_rad3 {particle:"cloud", ydirection:-1, speed:0.3}
+        execute unless block ~ ~-1 ~ air:
+            execute as @e[distance=..3,tag=!genesis.player,tag=!non_living] run data merge entity @s {Motion:[0d,1d,0d]}
+            summon minecraft:wind_charge ~ ~ ~ {Motion:[0d,-0.1,0d]}
+            function genesis:particles/circle_rad2 {particle:"cloud", ydirection:1, speed:0.3}
+            function genesis:particles/circle_rad3 {particle:"cloud", ydirection:1, speed:0.6}
 
 # HelixSpear
 class HelixSpear(GenesisItem):

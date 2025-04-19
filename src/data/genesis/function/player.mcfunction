@@ -34,6 +34,7 @@ function ~/join:
     # Set current mana to maximum
     scoreboard players operation @s genesis.mana.current = @s genesis.mana.max
     function genesis:mana/update_hud
+    tag @s add genesis.player
 
 
 function ~/storage/get_self_macro:

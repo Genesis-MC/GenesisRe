@@ -122,15 +122,13 @@ class Visharp(GenesisItem):
     @right_click_ability(
         name = "Voidrend",
         description = "Teleport up to 5 blocks ahead of you and deal 40% Physical Power to opponents in a 3-block radius from your initial position",
-        mana = 12, #! not sure how much mana this costs, not visible in the discord screenshot im using as a reference ^^
+        mana = 25,
         cooldown = 4,
     )
     def voidrend():
-        tag @s add genesis.caster
         store result storage genesis:temp item.voidrend.damage float 0.04 scoreboard players get @s genesis.stat.physical_power
         execute function ~/../voidrend_macro with storage genesis:temp item.voidrend: #! we could make use of custom damage types
-            $execute as @e[distance=..3,tag=!genesis.caster] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
-        tag @s remove genesis.caster
+            $execute as @e[distance=..3,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
         tp ^ ^ ^5 #! This is obviously not final lol
 
 # Hook
