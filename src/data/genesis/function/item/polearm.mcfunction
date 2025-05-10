@@ -60,13 +60,14 @@ class Halycon(GenesisItem):
     def windcharmer():
         execute if block ~ ~-1 ~ air:
             effect give @s minecraft:slow_falling 4
-            function genesis:particles/circle_rad2 {particle:"cloud", ydirection:-1, speed:0.3}
-            function genesis:particles/circle_rad3 {particle:"cloud", ydirection:-1, speed:0.3}
+            playsound minecraft:entity.breeze.slide player @a ~ ~ ~ 1 0
+            function genesis:utils/particles/circle_rad2 {particle:"cloud", ydirection:-1, speed:0.3}
+            function genesis:utils/particles/circle_rad3 {particle:"cloud", ydirection:-1, speed:0.3}
         execute unless block ~ ~-1 ~ air:
             execute as @e[distance=..3,tag=!genesis.player,tag=!non_living] run data merge entity @s {Motion:[0d,1d,0d]}
             summon minecraft:wind_charge ~ ~ ~ {Motion:[0d,-0.1,0d]}
-            function genesis:particles/circle_rad2 {particle:"cloud", ydirection:1, speed:0.3}
-            function genesis:particles/circle_rad3 {particle:"cloud", ydirection:1, speed:0.6}
+            function genesis:utils/particles/circle_rad2 {particle:"cloud", ydirection:1, speed:0.3}
+            function genesis:utils/particles/circle_rad3 {particle:"cloud", ydirection:1, speed:0.6}
 
 # HelixSpear
 class HelixSpear(GenesisItem):
