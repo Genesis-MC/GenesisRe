@@ -1,6 +1,8 @@
 
 append function genesis:load:
     scoreboard objectives add genesis.player.id dummy
+    # Add scoreboards for passives
+    scoreboard objectives add genesis.passive.arcane_edge_statboost dummy
 
 
 append function genesis:tick:

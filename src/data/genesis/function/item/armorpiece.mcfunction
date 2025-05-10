@@ -333,8 +333,17 @@ class Atmosphere(GenesisItem):
 
 # CowlOfTheOverseer
 class CowlOfTheOverseer(GenesisItem):
-    item_name = ("CowlOfTheOverseer", {"color":"dark_red"})
+    item_name = ("Cowl Of The Overseer", {"color":"dark_red"})
     rarity = "legendary"
     category = ["helmet"]
     stats = ("head", {"armor":30,"mana_pool":70,"ability_haste":10})
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
+
+
+# DEV TESTING HELPMET
+class DevHelmet(GenesisItem):
+    item_name = ("dev ability testing helmet", {"color":"gold"})
+    rarity = "transcendent"
+    category = ["helmet"]
+    stats = ("head", {"mana_pool":1000,"mana_regen":500,"ability_haste":1000})
     equippable = {"slot":"head","asset_id":"minecraft:diamond"}

@@ -5,6 +5,7 @@ from bolt_item:decorators import on_consume, on_tick
 from argon:decorators import on_attack, on_attacked
 from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
+from genesis:mana import add_mana
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, BlizzardTear, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, HexedHailstone, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 
@@ -121,15 +122,27 @@ class Visharp(GenesisItem):
     stats = ("mainhand", {"physical_power":60,"attack_speed":195})
     @right_click_ability(
         name = "Voidrend",
-        description = "Teleport up to 5 blocks ahead of you and deal 40% Physical Power to opponents in a 3-block radius from your initial position",
+        description = "Teleport up to 5 blocks ahead of you and deal 40% Physical Power to opponents in a 2-block radius from both your initial and landing position.",
         mana = 25,
         cooldown = 4,
     )
     def voidrend():
+        playsound entity.enderman.teleport player @a ~ ~ ~
+        function genesis:utils/particles/transition_circle {particle:"reverse_portal", ydirection:0, speed:0.1}
+        function genesis:utils/particles/transition_circle {particle:"reverse_portal", ydirection:0, speed:0.15}
+        function genesis:utils/particles/transition_circle {particle:"reverse_portal", ydirection:0, speed:0.05}
         store result storage genesis:temp item.voidrend.damage float 0.04 scoreboard players get @s genesis.stat.physical_power
         execute function ~/../voidrend_macro with storage genesis:temp item.voidrend: #! we could make use of custom damage types
             $execute as @e[distance=..3,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
-        tp ^ ^ ^5 #! This is obviously not final lol
+        execute anchored eyes if block ^ ^ ^5 air if block ^ ^ ^4 air if block ^ ^ ^3 air if block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^5
+        execute anchored eyes unless block ^ ^ ^5 air if block ^ ^ ^4 air if block ^ ^ ^3 air if block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^4
+        execute anchored eyes unless block ^ ^ ^4 air if block ^ ^ ^3 air if block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^3
+        execute anchored eyes unless block ^ ^ ^3 air if block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^2
+        execute anchored eyes unless block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^1
+        execute at @s positioned ~ ~-1 ~:
+            function genesis:utils/particles/transition_circle {particle:"portal", ydirection:0, speed:1}
+            function genesis:utils/particles/transition_circle {particle:"portal", ydirection:0, speed:1.2}
+            function genesis:utils/particles/transition_circle {particle:"portal", ydirection:0, speed:0.8}
 
 # Hook
 class Hook(GenesisItem):
@@ -164,12 +177,35 @@ class PrismDagger(GenesisItem):
     item_name = ("Prism Dagger", {"color":"light_purple"})
     rarity = "epic"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":50,"magic_power":100,"attack_speed":185,"mana_regen":100})
-    @right_click_ability(
-        name = "prism_shatter",
-        description = "WIP",
-        mana = 10,
-        cooldown = 1,
-    )
-    def prism_shatter():
-        say WIP
+    stats = ("mainhand", {"physical_power":50,"magic_power":100,"attack_speed":185})
+    passives = [{
+        "name": "Arcane Edge",
+        "description": "Gain 40% of your Magic Power as Physical Power.",
+    }, {
+        "name": "Manalust",
+        "description": "Restore 3% of your max mana on hit.",
+    }]
+
+    @on_attack(slot = 'mainhand')
+    def manalust():
+        execute on attacker:
+            scoreboard players set #denominator genesis 67
+            execute store result score #mana genesis run scoreboard players get @s genesis.mana.max
+            scoreboard players operation #mana genesis /= #denominator genesis
+            add_mana(amount = ["#mana", "genesis"])
+
+    @on_equip(slot = 'mainhand') # Btw any way for on_equip/unequip to trigger for all slots instead of one
+    def arcane_edge_add():
+        execute store result score @s genesis.passive.arcane_edge_statboost run scoreboard players get @s genesis.stat.magic_power # This works fine, the weapons magic power (100) is stored; If you try to store the physical power, 10 isntead of 50 is stored
+        scoreboard players set #multiplier genesis 4
+        scoreboard players set #denominator genesis 10
+        scoreboard players operation @s genesis.passive.arcane_edge_statboost *= #multiplier genesis
+        scoreboard players operation @s genesis.passive.arcane_edge_statboost /= #denominator genesis
+        scoreboard players operation @s genesis.passive.arcane_edge_statboost += @s genesis.stat.physical_power # Instead of adding 50, it adds 10
+        scoreboard players operation @s genesis.passive.arcane_edge_statboost /= #denominator genesis
+        execute store result storage genesis:temp stat.physical_power.value float 1 run scoreboard players get @s genesis.passive.arcane_edge_statboost
+        function genesis:utils/macros/physical_power with storage genessi:temp stat.physical_power.value
+
+    @on_unequip(slot = 'mainhand')
+    def arcane_edge_remove():
+        scoreboard players reset @s genesis.passive.arcane_edge_statboost
