@@ -1,4 +1,4 @@
-from genesis:utils import texture_path_to_item_model
+from genesis:utils import texture_path_to_item_model, constant
 from genesis:right_click_ability import right_click_ability
 from genesis:tungsten import on_equip, on_unequip
 from bolt_item:decorators import on_consume, on_tick
@@ -6,6 +6,7 @@ from argon:decorators import on_attack, on_attacked
 from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 from genesis:mana import add_mana
+from genesis:stat import modify_attribute_stat, remove_attribute_stat
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, BlizzardTear, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, HexedHailstone, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 
@@ -196,16 +197,30 @@ class PrismDagger(GenesisItem):
 
     @on_equip(slot = 'mainhand') # Btw any way for on_equip/unequip to trigger for all slots instead of one
     def arcane_edge_add():
-        execute store result score @s genesis.passive.arcane_edge_statboost run scoreboard players get @s genesis.stat.magic_power # This works fine, the weapons magic power (100) is stored; If you try to store the physical power, 10 isntead of 50 is stored
-        scoreboard players set #multiplier genesis 4
-        scoreboard players set #denominator genesis 10
-        scoreboard players operation @s genesis.passive.arcane_edge_statboost *= #multiplier genesis
-        scoreboard players operation @s genesis.passive.arcane_edge_statboost /= #denominator genesis
-        scoreboard players operation @s genesis.passive.arcane_edge_statboost += @s genesis.stat.physical_power # Instead of adding 50, it adds 10
-        scoreboard players operation @s genesis.passive.arcane_edge_statboost /= #denominator genesis
-        execute store result storage genesis:temp stat.physical_power.value float 1 run scoreboard players get @s genesis.passive.arcane_edge_statboost
-        function genesis:utils/macros/physical_power with storage genessi:temp stat.physical_power.value
+        # execute store result score @s genesis.passive.arcane_edge_statboost run scoreboard players get @s genesis.stat.magic_power # This works fine, the weapons magic power (100) is stored; If you try to store the physical power, 10 isntead of 50 is stored
+        # scoreboard players set #multiplier genesis 4
+        # scoreboard players set #denominator genesis 10
+        # scoreboard players operation @s genesis.passive.arcane_edge_statboost *= #multiplier genesis
+        # scoreboard players operation @s genesis.passive.arcane_edge_statboost /= #denominator genesis
+        # scoreboard players operation @s genesis.passive.arcane_edge_statboost += @s genesis.stat.physical_power # Instead of adding 50, it adds 10
+        # scoreboard players operation @s genesis.passive.arcane_edge_statboost /= #denominator genesis
+        # execute store result storage genesis:temp stat.physical_power.value float 1 run scoreboard players get @s genesis.passive.arcane_edge_statboost
+        # function genesis:utils/macros/physical_power with storage genessi:temp stat.physical_power.value
+
+        scoreboard players operation @s genesis.passive.arcane_edge_statboost = @s genesis.stat.magic_power
+        scoreboard players operation @s genesis.passive.arcane_edge_statboost *= constant(40 * 2) genesis
+        store result score #round genesis scoreboard players operation @s genesis.passive.arcane_edge_statboost /= constant(100) genesis
+        scoreboard players operation @s genesis.passive.arcane_edge_statboost /= constant(2) genesis
+        scoreboard players operation #round genesis %= constant(2) genesis
+        scoreboard players operation @s genesis.passive.arcane_edge_statboost += #round genesis
+        # modify_attribute_stat(stat_name: str, add_type: str, value: float|tuple[str,str], id: str)
+        modify_attribute_stat('physical_power', 'add_value', ('@s', 'genesis.passive.arcane_edge_statboost'), 'passive/arcane_edge_statboost')
+
+
 
     @on_unequip(slot = 'mainhand')
     def arcane_edge_remove():
-        scoreboard players reset @s genesis.passive.arcane_edge_statboost
+        # scoreboard players reset @s genesis.passive.arcane_edge_statboost
+
+        # remove_attribute_stat(stat_name: str, id: str)
+        remove_attribute_stat('physical_power', 'passive/arcane_edge_statboost')

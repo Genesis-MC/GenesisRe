@@ -7,6 +7,28 @@ def modify_score_stat(stat_name: str, operation: str, value: int|tuple[str,str])
     function f'#genesis:stat/update/{stat_name}'
 
 
+def modify_attribute_stat(stat_name: str, add_type: str, value: float|tuple[str,str], id: str):
+    attribute_ratio = stat_attribute_to_score[stat_name]
+
+    if isinstance(value, tuple):
+        raw (f'execute store result storage genesis:temp stat.modify.value double {1 / attribute_ratio["ratio"]} run scoreboard players get {value[0]} {value[1]}')
+        data modify storage genesis:temp stat.modify.attribute set value (attribute_ratio['attribute'])
+        data modify storage genesis:temp stat.modify.id set value f'genesis:stat/{stat_name}/{id}'
+        data modify storage genesis:temp stat.modify.add_type set value (add_type)
+        function genesis:stat/modify_attribute_stat_macro with storage genesis:temp stat.modify
+    else:
+        raw (f'attribute @s {attribute_ratio["attribute"]} modifier add genesis:stat/{stat_name}/{id} {value / attribute_ratio["ratio"]} {add_type}')
+
+
+def remove_attribute_stat(stat_name: str, id: str):
+    attribute_ratio = stat_attribute_to_score[stat_name]
+    attribute @s (attribute_ratio['attribute']) modifier remove f'genesis:stat/{stat_name}/{id}'
+
+
+# Macro function to update an attribute stat
+function genesis:stat/modify_attribute_stat_macro:
+    $attribute @s $(attribute) modifier add $(id) $(value) $(add_type)
+
 # Set up variables
 score_first_stats = []
 for stat_name in stat_names:
@@ -23,10 +45,22 @@ append function genesis:load:
 
 # Attribute to Score stats
 append function genesis:player/tick:
+    function genesis:stat/attribute_to_score_checks
+
+function genesis:stat/attribute_to_score_checks:
     for stat_name, attribute_ratio in stat_attribute_to_score.items():
         scoreboard players operation .prev f'genesis.stat.{stat_name}' = @s f'genesis.stat.{stat_name}'
         store result score @s f'genesis.stat.{stat_name}' attribute @s attribute_ratio['attribute'] get attribute_ratio['ratio']
+    for stat_name, attribute_ratio in stat_attribute_to_score.items():
         unless score .prev f'genesis.stat.{stat_name}' = @s f'genesis.stat.{stat_name}' function f'#genesis:stat/update/{stat_name}'
+
+# Ensure stats are updated when on_equip and on_unequip run
+prepend function_tag tungsten:swap/mainhand {"values":["genesis:stat/attribute_to_score_checks"]}
+prepend function_tag tungsten:swap/offhand {"values":["genesis:stat/attribute_to_score_checks"]}
+prepend function_tag tungsten:swap/head {"values":["genesis:stat/attribute_to_score_checks"]}
+prepend function_tag tungsten:swap/chest {"values":["genesis:stat/attribute_to_score_checks"]}
+prepend function_tag tungsten:swap/legs {"values":["genesis:stat/attribute_to_score_checks"]}
+prepend function_tag tungsten:swap/feet {"values":["genesis:stat/attribute_to_score_checks"]}
 
 # Read all other stats from equipment
 for slot in slots:
