@@ -1,6 +1,6 @@
 #> DISPLAYS A CIRCLE WITH A RADIUS OF 2
 # Takes in 3 inputs: particle(name of particle), ydirection(Vertical direction for circle to travel), speed(how fast the particle travels)
-# Ex: function genesis:particles/circle_rad2 {particle:"flame", ydirection:1, speed:0.1}
+# Ex: function genesis:utils/particles/circle_rad2 {particle:"flame", ydirection:1, speed:0.1}
 
 $particle minecraft:$(particle) ~0.0 ~ ~2.0 0 $(ydirection) 0 $(speed) 0
 $particle minecraft:$(particle) ~0.0 ~ ~-2.0 0 $(ydirection) 0 $(speed) 0
@@ -83,5 +83,5 @@ $particle minecraft:$(particle) ~-1.59 ~ ~-1.2 0 $(ydirection) 0 $(speed) 0
 $particle minecraft:$(particle) ~-1.79 ~ ~0.88 0 $(ydirection) 0 $(speed) 0
 $particle minecraft:$(particle) ~-1.79 ~ ~-0.87 0 $(ydirection) 0 $(speed) 0
 $particle minecraft:$(particle) ~-1.99 ~ ~0 0 $(ydirection) 0 $(speed) 0
-$particle minecraft:$(particle) ~-1.99 ~ ~-0 0 $(ydirection) 0 $(speed) 0
+$particle minecraft:$(particle) ~-1.99 ~ ~0 0 $(ydirection) 0 $(speed) 0
 

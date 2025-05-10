@@ -1,6 +1,6 @@
 #> DISPLAYS A CIRCLE WITH A RADIUS OF 3
 # Takes in 3 inputs: particle(name of particle), ydirection(Vertical direction for circle to travel), speed(how fast the particle travels)
-# Ex: function genesis:particles/circle_rad3 {particle:"flame", ydirection:1, speed:0.1}
+# Ex: function genesis:utils/particles/circle_rad3 {particle:"flame", ydirection:1, speed:0.1}
 
 $particle minecraft:$(particle) ~0.0 ~ ~3.0 0 $(ydirection) 0 $(speed) 0
 $particle minecraft:$(particle) ~0.0 ~ ~-3.0 0 $(ydirection) 0 $(speed) 0

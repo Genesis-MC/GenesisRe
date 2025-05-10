@@ -1,4 +1,6 @@
 append function_tag minecraft:load { "values": [ "genesis:load" ] }
+#> REMOVE THIS ON RELEASE:
+say GENESIS:RE RELOADED
 
 scoreboard objectives add genesis dummy
 
