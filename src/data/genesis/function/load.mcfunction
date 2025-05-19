@@ -8,3 +8,6 @@ function genesis:tick
 prepend function genesis:tick: # prepend so that order of compiling doesn't matter
     schedule function ~/ 1t
     store result score .gametime genesis time query gametime
+
+# Load libraries
+function custom_heal:load

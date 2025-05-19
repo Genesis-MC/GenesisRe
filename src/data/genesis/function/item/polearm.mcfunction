@@ -53,7 +53,7 @@ class Halycon(GenesisItem):
     stats = ("mainhand", {"physical_power":75,"attack_speed":155,"speed":40})
     @right_click_ability(
         name = "Windcharmer",
-        description = "If used while on the ground, summon a gust of wind which knocks up everything in a 3-block radius. If used while in the air, instead grant yourself slow-falling for 4 seconds.",
+        description = "If used while on the ground, summon a gust of wind which knocks up all enemies in a 3-block radius. If used while in the air, instead grant yourself slow-falling for 4 seconds.",
         mana = 60,
         cooldown = 6,
     )

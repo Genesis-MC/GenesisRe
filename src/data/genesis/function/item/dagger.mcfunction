@@ -82,13 +82,19 @@ class Vorpol(GenesisItem):
     category = ["void", "dagger"]
     stats = ("mainhand", {"physical_power":50,"attack_speed":175,"speed":100})
     @right_click_ability(
-        name = "blitzkrieg",
-        description = "WIP",
-        mana = 10,
-        cooldown = 1,
+        name = "Void Bellow",
+        description = "Release a shockwave in front of you, dealing 8 damage to all enemies caught in the blast.",
+        mana = 25,
+        cooldown = 7,
     )
-    def blitzkrieg():
-        say WIP
+    def void_bellow():
+        tag @s add genesis.caster
+        playsound entity.lightning_bolt.impact player @a ~ ~ ~ 0.5 1.5
+        execute anchored eyes positioned ^ ^-1 ^1 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+        execute anchored eyes positioned ^ ^-1 ^3 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+        execute anchored eyes positioned ^ ^-1 ^5 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+        tag @s remove genesis.caster
+
 
 # Vescherum
 @add_custom_recipe([
@@ -102,13 +108,16 @@ class Vescherum(GenesisItem):
     category = ["void", "dagger"]
     stats = ("mainhand", {"physical_power":50,"attack_speed":195,"armor_toughness":60,"speed":30})
     @right_click_ability(
-        name = "hallowed_field",
-        description = "WIP",
-        mana = 10,
-        cooldown = 1,
+        name = "Void Cage",
+        description = "Summon a cage around you which teleports enemies to its center when they touch its walls. When the cage expires, heal 1 heart for each enemy trapped inside.",
+        mana = 45,
+        cooldown = 18,
     )
-    def hallowed_field():
-        say WIP
+    def void_cage():
+        playsound block.portal.ambient player @a ~ ~ ~ 1 0
+        summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.voidcage"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
+        data modify entity @e[tag=genesis.ability.voidcage,sort=nearest,limit=1] interaction.player set from entity @s UUID
+        
 
 # Visharp
 @add_custom_recipe([
@@ -128,13 +137,15 @@ class Visharp(GenesisItem):
         cooldown = 4,
     )
     def voidrend():
+        tag @s add genesis.caster
         playsound entity.enderman.teleport player @a ~ ~ ~
         function genesis:utils/particles/transition_circle {particle:"reverse_portal", ydirection:0, speed:0.1}
         function genesis:utils/particles/transition_circle {particle:"reverse_portal", ydirection:0, speed:0.15}
         function genesis:utils/particles/transition_circle {particle:"reverse_portal", ydirection:0, speed:0.05}
         store result storage genesis:temp item.voidrend.damage float 0.04 scoreboard players get @s genesis.stat.physical_power
-        execute function ~/../voidrend_macro with storage genesis:temp item.voidrend: #! we could make use of custom damage types
-            $execute as @e[distance=..3,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
+        # Damage @ starting position
+        execute function ~/../voidrend_macro with storage genesis:temp item.voidrend:
+            $execute as @e[distance=..2,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
         execute anchored eyes if block ^ ^ ^5 air if block ^ ^ ^4 air if block ^ ^ ^3 air if block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^5
         execute anchored eyes unless block ^ ^ ^5 air if block ^ ^ ^4 air if block ^ ^ ^3 air if block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^4
         execute anchored eyes unless block ^ ^ ^4 air if block ^ ^ ^3 air if block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^3
@@ -144,6 +155,9 @@ class Visharp(GenesisItem):
             function genesis:utils/particles/transition_circle {particle:"portal", ydirection:0, speed:1}
             function genesis:utils/particles/transition_circle {particle:"portal", ydirection:0, speed:1.2}
             function genesis:utils/particles/transition_circle {particle:"portal", ydirection:0, speed:0.8}
+            # Damage @ landing position
+            execute function ~/../voidrend_macro with storage genesis:temp item.voidrend
+        tag @s remove genesis.caster
 
 # Hook
 class Hook(GenesisItem):
@@ -178,10 +192,10 @@ class PrismDagger(GenesisItem):
     item_name = ("Prism Dagger", {"color":"light_purple"})
     rarity = "epic"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":50,"magic_power":100,"attack_speed":185})
+    stats = ("mainhand", {"physical_power":30,"attack_speed":175})
     passives = [{
         "name": "Arcane Edge",
-        "description": "Gain 40% of your Magic Power as Physical Power.",
+        "description": "Gain 30% of your Magic Power as Physical Power.",
     }, {
         "name": "Manalust",
         "description": "Restore 3% of your max mana on hit.",
@@ -195,32 +209,16 @@ class PrismDagger(GenesisItem):
             scoreboard players operation #mana genesis /= #denominator genesis
             add_mana(amount = ["#mana", "genesis"])
 
-    @on_equip(slot = 'mainhand') # Btw any way for on_equip/unequip to trigger for all slots instead of one
+    @on_equip(slot = 'mainhand')
     def arcane_edge_add():
-        # execute store result score @s genesis.passive.arcane_edge_statboost run scoreboard players get @s genesis.stat.magic_power # This works fine, the weapons magic power (100) is stored; If you try to store the physical power, 10 isntead of 50 is stored
-        # scoreboard players set #multiplier genesis 4
-        # scoreboard players set #denominator genesis 10
-        # scoreboard players operation @s genesis.passive.arcane_edge_statboost *= #multiplier genesis
-        # scoreboard players operation @s genesis.passive.arcane_edge_statboost /= #denominator genesis
-        # scoreboard players operation @s genesis.passive.arcane_edge_statboost += @s genesis.stat.physical_power # Instead of adding 50, it adds 10
-        # scoreboard players operation @s genesis.passive.arcane_edge_statboost /= #denominator genesis
-        # execute store result storage genesis:temp stat.physical_power.value float 1 run scoreboard players get @s genesis.passive.arcane_edge_statboost
-        # function genesis:utils/macros/physical_power with storage genessi:temp stat.physical_power.value
-
         scoreboard players operation @s genesis.passive.arcane_edge_statboost = @s genesis.stat.magic_power
-        scoreboard players operation @s genesis.passive.arcane_edge_statboost *= constant(40 * 2) genesis
+        scoreboard players operation @s genesis.passive.arcane_edge_statboost *= constant(30 * 2) genesis
         store result score #round genesis scoreboard players operation @s genesis.passive.arcane_edge_statboost /= constant(100) genesis
         scoreboard players operation @s genesis.passive.arcane_edge_statboost /= constant(2) genesis
         scoreboard players operation #round genesis %= constant(2) genesis
         scoreboard players operation @s genesis.passive.arcane_edge_statboost += #round genesis
-        # modify_attribute_stat(stat_name: str, add_type: str, value: float|tuple[str,str], id: str)
         modify_attribute_stat('physical_power', 'add_value', ('@s', 'genesis.passive.arcane_edge_statboost'), 'passive/arcane_edge_statboost')
-
-
 
     @on_unequip(slot = 'mainhand')
     def arcane_edge_remove():
-        # scoreboard players reset @s genesis.passive.arcane_edge_statboost
-
-        # remove_attribute_stat(stat_name: str, id: str)
         remove_attribute_stat('physical_power', 'passive/arcane_edge_statboost')
