@@ -18,6 +18,7 @@ append function genesis:5tick:
             execute as @e[distance=..4,tag=!genesis.player,tag=!non_living,tag=!genesis.ability.voidcage] run scoreboard players add #temp genesis 10000
             execute on target run scoreboard players operation @s c.heal = #temp genesis
             execute on target run function custom_heal:apply_heal
+            execute unless score #temp genesis = constant(0) genesis on target at @s run particle minecraft:heart ~ ~1 ~ 0.5 0.5 0.5 0 10
             kill @s
 
 function genesis:5tick

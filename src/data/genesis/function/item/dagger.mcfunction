@@ -81,6 +81,26 @@ class Vorpol(GenesisItem):
     rarity = "legendary"
     category = ["void", "dagger"]
     stats = ("mainhand", {"physical_power":50,"attack_speed":175,"speed":100})
+    passives = [{
+        "name": "Time Dilation",
+        "description": "Gain 35% of your Speed as Ability Haste.",
+    }]
+
+    @on_equip(slot = 'mainhand')
+    def time_dilation_add():
+        scoreboard players operation @s genesis.passive.time_dilation_statboost = @s genesis.stat.speed
+        scoreboard players operation @s genesis.passive.time_dilation_statboost *= constant(35 * 2) genesis
+        store result score #round genesis scoreboard players operation @s genesis.passive.time_dilation_statboost /= constant(100) genesis
+        scoreboard players operation @s genesis.passive.time_dilation_statboost /= constant(2) genesis
+        scoreboard players operation #round genesis %= constant(2) genesis
+        scoreboard players operation @s genesis.passive.time_dilation_statboost += #round genesis
+        scoreboard players operation @s genesis.stat.ability_haste += @s genesis.passive.time_dilation_statboost
+
+    @on_unequip(slot = 'mainhand')
+    def time_dilation_remove():
+        scoreboard players operation @s genesis.stat.ability_haste -= @s genesis.passive.time_dilation_statboost
+        scoreboard players reset @s genesis.passive.time_dilation_statboost
+
     @right_click_ability(
         name = "Void Bellow",
         description = "Release a shockwave in front of you, dealing 8 damage to all enemies caught in the blast.",
@@ -89,10 +109,19 @@ class Vorpol(GenesisItem):
     )
     def void_bellow():
         tag @s add genesis.caster
-        playsound entity.lightning_bolt.impact player @a ~ ~ ~ 0.5 1.5
-        execute anchored eyes positioned ^ ^-1 ^1 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
-        execute anchored eyes positioned ^ ^-1 ^3 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
-        execute anchored eyes positioned ^ ^-1 ^5 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+        playsound entity.generic.explode player @a ~ ~ ~ 1 1
+        playsound entity.ravager.hurt player @a ~ ~ ~ 1 0
+        execute anchored eyes:
+            particle minecraft:gust_emitter_small ^ ^-0.4 ^2 0.2 0.2 0.2 0 5
+            particle minecraft:gust_emitter_small ^ ^-0.4 ^3.5 0.2 0.2 0.2 0 5
+            particle minecraft:gust_emitter_small ^ ^-0.4 ^5 0.2 0.2 0.2 0 5
+            particle minecraft:sonic_boom ^ ^-0.4 ^2 0.1 0.1 0.1 0 5
+            particle minecraft:sonic_boom ^ ^-0.4 ^3.5 0.1 0.1 0.1 0 5
+            particle minecraft:sonic_boom ^ ^-0.4 ^5 0.1 0.1 0.1 0 5
+            particle minecraft:campfire_cosy_smoke ^ ^-1 ^3.5 0.3 0.3 0.3 0.3 10
+            positioned ^ ^-0.5 ^1 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+            positioned ^ ^-0.5 ^3 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+            positioned ^ ^-0.5 ^5 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
         tag @s remove genesis.caster
 
 
@@ -109,9 +138,9 @@ class Vescherum(GenesisItem):
     stats = ("mainhand", {"physical_power":50,"attack_speed":195,"armor_toughness":60,"speed":30})
     @right_click_ability(
         name = "Void Cage",
-        description = "Summon a cage around you which teleports enemies to its center when they touch its walls. When the cage expires, heal 1 heart for each enemy trapped inside.",
-        mana = 45,
-        cooldown = 18,
+        description = "Summon a cage around you for 8 seconds which teleports enemies to its center when they touch its walls. When the cage expires, heal 1 heart for each enemy trapped inside.",
+        mana = 60,
+        cooldown = 20,
     )
     def void_cage():
         playsound block.portal.ambient player @a ~ ~ ~ 1 0
