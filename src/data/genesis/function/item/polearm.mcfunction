@@ -77,13 +77,37 @@ class HelixSpear(GenesisItem):
     stats = ("mainhand", {"physical_power":85,"magic_power":60,"attack_speed":120})
     item_model = "genesis:polearm/helix_spear"
     @right_click_ability(
-        name = "piercing_light",
-        description = "WIP",
-        mana = 10,
-        cooldown = 1,
+        name = "Piercing Light",
+        description = "Release a piercing ray of light in front of you, dealing 15% of your Magic Power to all hit enemies.",
+        mana = 30,
+        cooldown = 3.5,
     )
     def piercing_light():
-        say WIP
+        tag @s add genesis.caster
+        playsound block.beacon.power_select player @a ~ ~ ~ 1 2
+        playsound minecraft:block.amethyst_cluster.break player @a ~ ~ ~ 1 0
+        execute store result storage genesis:temp item.piercing_light.damage float 0.15 run scoreboard players get @s genesis.stat.magic_power
+        execute anchored eyes:
+            particle minecraft:end_rod ^ ^ ^2 0 0 0 0 3
+            particle minecraft:end_rod ^ ^ ^3 0 0 0 0 3
+            particle minecraft:end_rod ^ ^ ^4 0 0 0 0 3
+            particle minecraft:end_rod ^ ^ ^5 0 0 0 0 3
+            particle minecraft:end_rod ^ ^ ^6 0 0 0 0 3
+            particle minecraft:end_rod ^ ^ ^7 0 0 0 0 3
+            particle minecraft:end_rod ^ ^ ^8 0 0 0 0 3
+            particle minecraft:end_rod ^ ^ ^9 0 0 0 0 3
+            execute function ~/../piercing_light_macro with storage genesis:temp item.piercing_light:
+                $execute as @e[distance=..1,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
+            execute positioned ^ ^-0.5 ^1 run function ~/../piercing_light_macro with storage genesis:temp item.piercing_light
+            execute positioned ^ ^-0.5 ^2 run function ~/../piercing_light_macro with storage genesis:temp item.piercing_light
+            execute positioned ^ ^-0.5 ^3 run function ~/../piercing_light_macro with storage genesis:temp item.piercing_light
+            execute positioned ^ ^-0.5 ^4 run function ~/../piercing_light_macro with storage genesis:temp item.piercing_light
+            execute positioned ^ ^-0.5 ^5 run function ~/../piercing_light_macro with storage genesis:temp item.piercing_light
+            execute positioned ^ ^-0.5 ^6 run function ~/../piercing_light_macro with storage genesis:temp item.piercing_light
+            execute positioned ^ ^-0.5 ^7 run function ~/../piercing_light_macro with storage genesis:temp item.piercing_light
+            execute positioned ^ ^-0.5 ^8 run function ~/../piercing_light_macro with storage genesis:temp item.piercing_light
+            execute positioned ^ ^-0.5 ^9 run function ~/../piercing_light_macro with storage genesis:temp item.piercing_light
+        tag @s remove genesis.caster
 
 # HeavensThorn
 @add_custom_recipe([
