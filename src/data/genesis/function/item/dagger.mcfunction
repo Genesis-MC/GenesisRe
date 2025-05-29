@@ -33,6 +33,24 @@ class Frostfang(GenesisItem):
     rarity = "uncommon"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":25,"attack_speed":175})
+    passives = [{
+            "name": "Frostbite",
+            "description": "Striking an enemy grants them 1 stack of Frostbite. Once an enemy reaches 10 stacks, they take 8 damage and receive Slowness V for 2 seconds.",
+        }]
+
+    @on_attack(slot = 'mainhand')
+    def frostbite():
+        scoreboard players add @s genesis.passive.frostbite 1
+        execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.5 0.5 0.5 0 10
+        execute if score @s genesis.passive.frostbite matches 10..:
+            playsound block.glass.break player @a ~ ~ ~ 1 1
+            playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
+            execute anchored eyes positioned ^ ^ ^ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:-1, speed:0.05}
+            execute on attacker run tag @s add genesis.caster
+            damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+            effect give @s minecraft:slowness 8 4 true
+            scoreboard players reset @s genesis.passive.frostbite
+            execute on attacker run tag @s remove genesis.caster
 
 # HarbingerOfWinter
 @add_custom_recipe([
@@ -45,7 +63,25 @@ class HarbingerOfWinter(GenesisItem):
     rarity = "rare"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":30,"attack_speed":210,"speed":30})
+    passives = [{
+            "name": "Frostbite",
+            "description": "Striking an enemy grants them 1 stack of Frostbite. Once an enemy reaches 10 stacks, they take 8 damage and receive Slowness V for 2 seconds.",
+        }]
 
+    @on_attack(slot = 'mainhand')
+    def frostbite():
+        scoreboard players add @s genesis.passive.frostbite 1
+        execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.5 0.5 0.5 0 10
+        execute if score @s genesis.passive.frostbite matches 10..:
+            playsound block.glass.break player @a ~ ~ ~ 1 1
+            playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
+            execute anchored eyes positioned ^ ^ ^ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:-1, speed:0.05}
+            execute on attacker run tag @s add genesis.caster
+            damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+            effect give @s minecraft:slowness 8 4 true
+            scoreboard players reset @s genesis.passive.frostbite
+            execute on attacker run tag @s remove genesis.caster
+            
 # ShadedDagger
 @add_custom_recipe([
     [ShadeFlux, ShadeFlux, ShadeFlux],
@@ -143,6 +179,7 @@ class Vescherum(GenesisItem):
         cooldown = 20,
     )
     def void_cage():
+        playsound entity.evoker.prepare_summon player @a ~ ~ ~ 1 0.5
         playsound block.portal.ambient player @a ~ ~ ~ 1 0
         summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.voidcage"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
         data modify entity @e[tag=genesis.ability.voidcage,sort=nearest,limit=1] interaction.player set from entity @s UUID
