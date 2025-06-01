@@ -84,17 +84,23 @@ class HailstoneBlade(GenesisItem):
 
     @right_click_ability(
         name = "Hailslash",
-        description = "Slash all enemies in a 3-block radius, dealing 15% of your Physical Power and granting +4 Frostbite.",
+        description = "Slash all enemies in a 3-block radius, dealing 50% of your Physical Power and granting +4 Frostbite.",
         mana = 30,
         cooldown = 10,
     )
     def hailslash():
-        say hailslash
-        #tag @s add genesis.caster
-        #store result storage genesis:temp item.hailslash.damage float 0.04 scoreboard players get @s genesis.stat.physical_power
-        #execute function ~/../voidrend_macro with storage genesis:temp item.voidrend:
-        #    $execute as @e[distance=..2,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
-
+        tag @s add genesis.caster
+        playsound minecraft:entity.player.attack.sweep player @a ~ ~ ~ 1 0
+        playsound minecraft:entity.player.hurt_freeze player @a ~ ~ ~ 1 0.5
+        execute positioned ~ ~1 ~ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:0, speed:0.2}
+        execute positioned ~ ~1 ~ run function genesis:utils/particles/circle_rad2 {particle:"sweep_attack", ydirection:0, speed:0}
+        schedule function ~/../hailslash_particle1 10t
+        schedule function ~/../hailslash_particle2 1s
+        store result storage genesis:temp item.hailslash.damage float 0.05 scoreboard players get @s genesis.stat.physical_power
+        execute function ~/../hailslash_macro with storage genesis:temp item.hailslash:
+            $execute as @e[distance=..3,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
+            execute as @e[distance=..3,tag=!genesis.player] run scoreboard players add @s genesis.passive.frostbite 4
+        tag @s remove genesis.caster
 
 # Kopesh
 class Kopesh(GenesisItem):
