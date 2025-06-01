@@ -141,7 +141,7 @@ class Vorpol(GenesisItem):
 
     @right_click_ability(
         name = "Void Bellow",
-        description = "Release a shockwave in front of you, dealing 8 damage to all enemies caught in the blast.",
+        description = "Release a shockwave in front of you, dealing 80 damage to all enemies caught in the blast.",
         mana = 25,
         cooldown = 7,
     )
@@ -200,7 +200,7 @@ class Visharp(GenesisItem):
     stats = ("mainhand", {"physical_power":60,"attack_speed":195})
     @right_click_ability(
         name = "Voidrend",
-        description = "Teleport up to 5 blocks ahead of you and deal 40% Physical Power to opponents in a 2-block radius from both your initial and landing position.",
+        description = "Teleport up to 5 blocks ahead of you and deal 50% Physical Power to opponents in a 2-block radius from both your initial and landing position.",
         mana = 25,
         cooldown = 4,
     )
@@ -210,7 +210,7 @@ class Visharp(GenesisItem):
         function genesis:utils/particles/transition_circle {particle:"reverse_portal", ydirection:0, speed:0.1}
         function genesis:utils/particles/transition_circle {particle:"reverse_portal", ydirection:0, speed:0.15}
         function genesis:utils/particles/transition_circle {particle:"reverse_portal", ydirection:0, speed:0.05}
-        store result storage genesis:temp item.voidrend.damage float 0.04 scoreboard players get @s genesis.stat.physical_power
+        store result storage genesis:temp item.voidrend.damage float 0.05 scoreboard players get @s genesis.stat.physical_power
         # Damage @ starting position
         execute function ~/../voidrend_macro with storage genesis:temp item.voidrend:
             $execute as @e[distance=..2,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
