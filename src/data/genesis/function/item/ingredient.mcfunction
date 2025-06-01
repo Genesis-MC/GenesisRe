@@ -406,6 +406,16 @@ class MutatedFlesh(GenesisItem):
         italic = True,
     )
 
+class Octopus(GenesisItem):
+    item_name = ("Octopus", {"color":"white"})
+    rarity = "rare"
+    category = ["ingredient"]
+    lore = [{"text":"","color":"red"}] + break_text_into_lines(
+        "LORE",
+        "item.genesis.octopus.lore",
+        italic = True,
+    )
+
 class PrimeBeef(GenesisItem):
     item_name = ("Prime Beef", {"color":"white"})
     rarity = "rare"
