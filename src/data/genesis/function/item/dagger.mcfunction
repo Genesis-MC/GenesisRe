@@ -8,7 +8,7 @@ from genesis:item import GenesisItem
 from genesis:mana import add_mana
 from genesis:stat import modify_attribute_stat, remove_attribute_stat
 
-from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, BlizzardTear, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, HexedHailstone, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
+from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 
 # IronDagger
 @add_custom_recipe([
@@ -24,9 +24,9 @@ class IronDagger(GenesisItem):
 
 # Frostfang
 @add_custom_recipe([
-    [BlizzardTear, BlizzardTear, BlizzardTear],
-    [BlizzardTear, WolfFang, BlizzardTear],
-    [BlizzardTear, BlizzardTear, BlizzardTear],
+    [Frostflake, Frostflake, Frostflake],
+    [Frostflake, WolfFang, Frostflake],
+    [Frostflake, Frostflake, Frostflake],
 ])
 class Frostfang(GenesisItem):
     item_name = ("Frostfang", {"color":"aqua"})
@@ -41,14 +41,15 @@ class Frostfang(GenesisItem):
     @on_attack(slot = 'mainhand')
     def frostbite():
         scoreboard players add @s genesis.passive.frostbite 1
-        execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.5 0.5 0.5 0 10
+        execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
         execute if score @s genesis.passive.frostbite matches 10..:
             playsound block.glass.break player @a ~ ~ ~ 1 1
             playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
             execute anchored eyes positioned ^ ^ ^ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:-1, speed:0.05}
+            execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.5 0.5 0.5 0 20
             execute on attacker run tag @s add genesis.caster
             damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
-            effect give @s minecraft:slowness 8 4 true
+            effect give @s minecraft:slowness 2 4 true
             scoreboard players reset @s genesis.passive.frostbite
             execute on attacker run tag @s remove genesis.caster
 
@@ -71,14 +72,15 @@ class HarbingerOfWinter(GenesisItem):
     @on_attack(slot = 'mainhand')
     def frostbite():
         scoreboard players add @s genesis.passive.frostbite 1
-        execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.5 0.5 0.5 0 10
+        execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
         execute if score @s genesis.passive.frostbite matches 10..:
             playsound block.glass.break player @a ~ ~ ~ 1 1
             playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
             execute anchored eyes positioned ^ ^ ^ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:-1, speed:0.05}
+            execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.5 0.5 0.5 0 20
             execute on attacker run tag @s add genesis.caster
             damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
-            effect give @s minecraft:slowness 8 4 true
+            effect give @s minecraft:slowness 2 4 true
             scoreboard players reset @s genesis.passive.frostbite
             execute on attacker run tag @s remove genesis.caster
             

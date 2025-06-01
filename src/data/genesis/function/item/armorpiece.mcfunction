@@ -8,7 +8,7 @@ from genesis:crafter import add_custom_recipe
 from genesis:stat import modify_score_stat
 from genesis:item import GenesisItem
 
-from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, BlizzardTear, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, HexedHailstone, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
+from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
         
 #! add passives
 
@@ -66,9 +66,9 @@ class ForesttreaderBoots(GenesisItem):
 
 # MountaintreaderBoots
 @add_custom_recipe([
-    [BlizzardTear, BlizzardTear, BlizzardTear],
-    [BlizzardTear, ForesttreaderBoots, BlizzardTear],
-    [BlizzardTear, BlizzardTear, BlizzardTear],
+    [Frostflake, Frostflake, Frostflake],
+    [Frostflake, ForesttreaderBoots, Frostflake],
+    [Frostflake, Frostflake, Frostflake],
 ])
 class MountaintreaderBoots(GenesisItem):
     item_name = ("Mountaintreader Boots", {"color":"gray"})

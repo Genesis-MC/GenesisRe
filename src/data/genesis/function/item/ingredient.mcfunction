@@ -256,13 +256,13 @@ class ArcaneCloth(GenesisItem):
         italic = True,
     )
 
-class BlizzardTear(GenesisItem):
-    item_name = ("Blizzard Tear", {"color":"white"})
-    rarity = "uncommon"
+class Frostflake(GenesisItem):
+    item_name = ("Frostflake", {"color":"white"})
+    rarity = "common"
     category = ["ingredient"]
     lore = [{"text":"","color":"red"}] + break_text_into_lines(
         "LORE",
-        "item.genesis.blizzard_tear.lore",
+        "item.genesis.frostflake.lore",
         italic = True,
     )
 
@@ -336,13 +336,13 @@ class FloralNectar(GenesisItem):
         italic = True,
     )
 
-class HexedHailstone(GenesisItem):
-    item_name = ("Hexed Hailstone", {"color":"white"})
+class FrozenWisp(GenesisItem):
+    item_name = ("Frozen Wisp", {"color":"white"})
     rarity = "epic"
     category = ["ingredient"]
     lore = [{"text":"","color":"red"}] + break_text_into_lines(
         "LORE",
-        "item.genesis.hexed_hailstone.lore",
+        "item.genesis.frozen_wisp.lore",
         italic = True,
     )
 
