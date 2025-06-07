@@ -71,16 +71,7 @@ class HailstoneBlade(GenesisItem):
     def frostbite():
         scoreboard players add @s genesis.passive.frostbite 1
         execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
-        execute if score @s genesis.passive.frostbite matches 10..:
-            playsound block.glass.break player @a ~ ~ ~ 1 1
-            playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
-            execute anchored eyes positioned ^ ^ ^ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:-1, speed:0.05}
-            execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.5 0.5 0.5 0 20
-            execute on attacker run tag @s add genesis.caster
-            damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
-            effect give @s minecraft:slowness 2 4 true
-            scoreboard players reset @s genesis.passive.frostbite
-            execute on attacker run tag @s remove genesis.caster
+        execute if score @s genesis.passive.frostbite matches 10.. run function genesis:bolt-item/item/frostfang/on_attack/frostbite_damage
 
     @right_click_ability(
         name = "Hailslash",
@@ -97,7 +88,7 @@ class HailstoneBlade(GenesisItem):
         store result storage genesis:temp item.hailslash.damage float 0.05 scoreboard players get @s genesis.stat.physical_power
         execute function ~/../hailslash_macro with storage genesis:temp item.hailslash:
             $execute as @e[distance=..3,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
-            execute as @e[distance=..3,tag=!genesis.player,tag=!non_living] run scoreboard players add @s genesis.passive.frostbite 3
+            execute as @e[distance=..3,type=!#genesis:non_living,tag=!genesis.player] run scoreboard players add @s genesis.passive.frostbite 3
         tag @s remove genesis.caster
 
 # Kopesh

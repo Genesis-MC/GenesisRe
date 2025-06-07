@@ -42,7 +42,7 @@ class Frostfang(GenesisItem):
     def frostbite():
         scoreboard players add @s genesis.passive.frostbite 1
         execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
-        execute if score @s genesis.passive.frostbite matches 10..:
+        execute if score @s genesis.passive.frostbite matches 10.. function ~/../frostbite_damage:
             playsound block.glass.break player @a ~ ~ ~ 1 1
             playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
             execute anchored eyes positioned ^ ^ ^ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:-1, speed:0.05}
@@ -73,16 +73,7 @@ class HarbingerOfWinter(GenesisItem):
     def frostbite():
         scoreboard players add @s genesis.passive.frostbite 1
         execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
-        execute if score @s genesis.passive.frostbite matches 10..:
-            playsound block.glass.break player @a ~ ~ ~ 1 1
-            playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
-            execute anchored eyes positioned ^ ^ ^ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:-1, speed:0.05}
-            execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.5 0.5 0.5 0 20
-            execute on attacker run tag @s add genesis.caster
-            damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
-            effect give @s minecraft:slowness 2 4 true
-            scoreboard players reset @s genesis.passive.frostbite
-            execute on attacker run tag @s remove genesis.caster
+        execute if score @s genesis.passive.frostbite matches 10.. run function genesis:bolt-item/item/frostfang/on_attack/frostbite_damage
             
 # ShadedDagger
 @add_custom_recipe([
@@ -149,7 +140,7 @@ class Vorpol(GenesisItem):
         tag @s add genesis.caster
         playsound entity.generic.explode player @a ~ ~ ~ 1 1
         playsound entity.ravager.hurt player @a ~ ~ ~ 1 0
-        execute anchored eyes:
+        execute anchored eyes function ~/../void_bellow_helper:
             particle minecraft:gust_emitter_small ^ ^-0.4 ^2 0.2 0.2 0.2 0 5
             particle minecraft:gust_emitter_small ^ ^-0.4 ^3.5 0.2 0.2 0.2 0 5
             particle minecraft:gust_emitter_small ^ ^-0.4 ^5 0.2 0.2 0.2 0 5
@@ -185,14 +176,14 @@ class Vescherum(GenesisItem):
         playsound block.portal.ambient player @a ~ ~ ~ 1 0
         summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.voidcage"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
         data modify entity @e[tag=genesis.ability.voidcage,sort=nearest,limit=1] interaction.player set from entity @s UUID
-        summon item_display ~ ~0.5 ~5 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[0F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
-        summon item_display ~-5 ~0.5 ~ {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[90F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
-        summon item_display ~ ~0.5 ~-5 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[180F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
-        summon item_display ~5 ~0.5 ~ {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[270F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
-        summon item_display ~-3.53 ~0.5 ~3.53 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[45F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
-        summon item_display ~-3.53 ~0.5 ~-3.53 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[135F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
-        summon item_display ~3.53 ~0.5 ~-3.53 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[225F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
-        summon item_display ~3.53 ~0.5 ~3.53 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[315F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~ ~0.5 ~5 {Tags:["genesis.ability.voidcage_flair"],Rotation:[0F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~-5 ~0.5 ~ {Tags:["genesis.ability.voidcage_flair"],Rotation:[90F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~ ~0.5 ~-5 {Tags:["genesis.ability.voidcage_flair"],Rotation:[180F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~5 ~0.5 ~ {Tags:["genesis.ability.voidcage_flair"],Rotation:[270F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~-3.53 ~0.5 ~3.53 {Tags:["genesis.ability.voidcage_flair"],Rotation:[45F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~-3.53 ~0.5 ~-3.53 {Tags:["genesis.ability.voidcage_flair"],Rotation:[135F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~3.53 ~0.5 ~-3.53 {Tags:["genesis.ability.voidcage_flair"],Rotation:[225F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~3.53 ~0.5 ~3.53 {Tags:["genesis.ability.voidcage_flair"],Rotation:[315F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
         
 
 # Visharp

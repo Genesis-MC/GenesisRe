@@ -58,13 +58,13 @@ class Halycon(GenesisItem):
         cooldown = 6,
     )
     def windcharmer():
-        execute if block ~ ~-1 ~ air:
+        execute if block ~ ~-1 ~ air function ~/../slowfall:
             effect give @s minecraft:slow_falling 4
             playsound minecraft:entity.breeze.slide player @a ~ ~ ~ 1 0
             function genesis:utils/particles/circle_rad2 {particle:"cloud", ydirection:-1, speed:0.3}
             function genesis:utils/particles/circle_rad3 {particle:"cloud", ydirection:-1, speed:0.3}
-        execute unless block ~ ~-1 ~ air:
-            execute as @e[distance=..3,tag=!genesis.player,tag=!non_living] run data merge entity @s {Motion:[0d,1d,0d]}
+        execute unless block ~ ~-1 ~ air function ~/../knock_up:
+            execute as @e[distance=..3,type=!#genesis:non_living,tag=!genesis.player] run data merge entity @s {Motion:[0d,1d,0d]}
             summon minecraft:wind_charge ~ ~ ~ {Motion:[0d,-0.1,0d]}
             function genesis:utils/particles/circle_rad2 {particle:"cloud", ydirection:1, speed:0.3}
             function genesis:utils/particles/circle_rad3 {particle:"cloud", ydirection:1, speed:0.6}
@@ -87,7 +87,7 @@ class HelixSpear(GenesisItem):
         playsound block.beacon.power_select player @a ~ ~ ~ 1 2
         playsound minecraft:block.amethyst_cluster.break player @a ~ ~ ~ 1 0
         execute store result storage genesis:temp item.piercing_light.damage float 0.15 run scoreboard players get @s genesis.stat.magic_power
-        execute anchored eyes:
+        execute anchored eyes function ~/../piercing_light_helper:
             particle minecraft:end_rod ^ ^ ^2 0 0 0 0 3
             particle minecraft:end_rod ^ ^ ^3 0 0 0 0 3
             particle minecraft:end_rod ^ ^ ^4 0 0 0 0 3
@@ -131,7 +131,7 @@ class HeavensThorn(GenesisItem):
         playsound block.beacon.power_select player @a ~ ~ ~ 1 2
         playsound minecraft:block.amethyst_cluster.break player @a ~ ~ ~ 1 0
         execute store result storage genesis:temp item.piercing_light.damage float 0.15 run scoreboard players get @s genesis.stat.magic_power
-        execute anchored eyes:
+        execute anchored eyes function ~/../piercing_light_helper:
             particle minecraft:end_rod ^ ^ ^2 0 0 0 0 3
             particle minecraft:end_rod ^ ^ ^3 0 0 0 0 3
             particle minecraft:end_rod ^ ^ ^4 0 0 0 0 3
