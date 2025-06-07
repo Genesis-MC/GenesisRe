@@ -35,7 +35,7 @@ class Frostfang(GenesisItem):
     stats = ("mainhand", {"physical_power":25,"attack_speed":175})
     passives = [{
             "name": "Frostbite",
-            "description": "Striking an enemy grants them 1 stack of Frostbite. Once an enemy reaches 10 stacks, they take 8 damage and receive Slowness V for 2 seconds.",
+            "description": "Striking an enemy grants them +1 Frostbite. Once an enemy reaches 10 Frostbite, they take 8 damage and receive Slowness V for 2 seconds.",
         }]
 
     @on_attack(slot = 'mainhand')
@@ -66,7 +66,7 @@ class HarbingerOfWinter(GenesisItem):
     stats = ("mainhand", {"physical_power":30,"attack_speed":210,"speed":30})
     passives = [{
             "name": "Frostbite",
-            "description": "Striking an enemy grants them 1 stack of Frostbite. Once an enemy reaches 10 stacks, they take 8 damage and receive Slowness V for 2 seconds.",
+            "description": "Striking an enemy grants them +1 Frostbite. Once an enemy reaches 10 Frostbite, they take 8 damage and receive Slowness V for 2 seconds.",
         }]
 
     @on_attack(slot = 'mainhand')
@@ -185,6 +185,14 @@ class Vescherum(GenesisItem):
         playsound block.portal.ambient player @a ~ ~ ~ 1 0
         summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.voidcage"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
         data modify entity @e[tag=genesis.ability.voidcage,sort=nearest,limit=1] interaction.player set from entity @s UUID
+        summon item_display ~ ~0.5 ~5 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[0F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~-5 ~0.5 ~ {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[90F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~ ~0.5 ~-5 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[180F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~5 ~0.5 ~ {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[270F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~-3.53 ~0.5 ~3.53 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[45F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~-3.53 ~0.5 ~-3.53 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[135F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~3.53 ~0.5 ~-3.53 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[225F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
+        summon item_display ~3.53 ~0.5 ~3.53 {Tags:["genesis.ability.voidcage_flair","genesis.static"],Rotation:[315F,0F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:fern",count:1,components:{"minecraft:item_model":"genesis:ability/void_cage"}}}
         
 
 # Visharp

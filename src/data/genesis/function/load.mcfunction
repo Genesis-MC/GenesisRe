@@ -11,3 +11,5 @@ prepend function genesis:tick: # prepend so that order of compiling doesn't matt
 
 # Load libraries
 function custom_heal:load
+
+function genesis:persistant_abilities

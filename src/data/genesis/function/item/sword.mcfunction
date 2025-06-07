@@ -64,7 +64,7 @@ class HailstoneBlade(GenesisItem):
     stats = ("mainhand", {"physical_power":75,"attack_speed":175})
     passives = [{
             "name": "Frostbite",
-            "description": "Striking an enemy grants them 1 stack of Frostbite. Once an enemy reaches 10 stacks, they take 8 damage and receive Slowness V for 2 seconds.",
+            "description": "Striking an enemy grants them +1 Frostbite. Once an enemy reaches 10 Frostbite, they take 8 damage and receive Slowness V for 2 seconds.",
         }]
 
     @on_attack(slot = 'mainhand')
@@ -89,17 +89,15 @@ class HailstoneBlade(GenesisItem):
         cooldown = 10,
     )
     def hailslash():
-        tag @s add genesis.caster
+        tag @s add genesis.caster 
         playsound minecraft:entity.player.attack.sweep player @a ~ ~ ~ 1 0
         playsound minecraft:entity.player.hurt_freeze player @a ~ ~ ~ 1 0.5
         execute positioned ~ ~1 ~ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:0, speed:0.2}
         execute positioned ~ ~1 ~ run function genesis:utils/particles/circle_rad2 {particle:"sweep_attack", ydirection:0, speed:0}
-        schedule function ~/../hailslash_particle1 10t
-        schedule function ~/../hailslash_particle2 1s
         store result storage genesis:temp item.hailslash.damage float 0.05 scoreboard players get @s genesis.stat.physical_power
         execute function ~/../hailslash_macro with storage genesis:temp item.hailslash:
             $execute as @e[distance=..3,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
-            execute as @e[distance=..3,tag=!genesis.player] run scoreboard players add @s genesis.passive.frostbite 4
+            execute as @e[distance=..3,tag=!genesis.player,tag=!non_living] run scoreboard players add @s genesis.passive.frostbite 3
         tag @s remove genesis.caster
 
 # Kopesh
