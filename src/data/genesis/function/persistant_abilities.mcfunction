@@ -12,6 +12,10 @@ function genesis:right_click_ability/persistant_abilities/5tick:
     schedule function genesis:right_click_ability/persistant_abilities/5tick 5t
 
 append function genesis:right_click_ability/persistant_abilities/10tick:
+    execute as @e[tag=genesis.ability.persist_sec] run scoreboard players add @s genesis 1
+    execute as @e[tag=genesis.ability.persist_sec] if score @s genesis matches 3.. run kill @s
+
+append function genesis:right_click_ability/persistant_abilities/10tick:
     # Polar Vortex
     execute as @a[tag=genesis.ability.polar_vortex] function ~/../polar_vortex_checkmana:
         execute if score @s genesis.mana.current matches 2000.. at @s function ~/../polar_vortex_tick:
@@ -36,11 +40,11 @@ append function genesis:right_click_ability/persistant_abilities/10tick:
 append function genesis:right_click_ability/persistant_abilities/5tick:
     # Void Cage
     execute as @e[type=interaction,tag=genesis.ability.voidcage] at @s function ~/../void_cage_tick:
-        scoreboard players add @s genesis.ability.void_cage_duration 1
+        scoreboard players add @s genesis 1
         function genesis:utils/particles/transition_circle {particle:"portal", ydirection:0, speed:2.5}
         function genesis:utils/particles/circle_rad5 {particle:"witch", ydirection:1, speed:0.3}
         teleport @e[distance=4..6,type=!#genesis:non_living,tag=!genesis.player] @s
-        execute if score @s genesis.ability.void_cage_duration matches 40.. function ~/../void_cage_finish:
+        execute if score @s genesis matches 40.. function ~/../void_cage_finish:
             scoreboard players set #temp genesis 0
             execute as @e[distance=..4,type=!#genesis:non_living,tag=!genesis.player] run scoreboard players add #temp genesis 10000
             execute on target run scoreboard players operation @s c.heal = #temp genesis
@@ -48,8 +52,8 @@ append function genesis:right_click_ability/persistant_abilities/5tick:
             execute unless score #temp genesis = constant(0) genesis on target at @s run particle minecraft:heart ~ ~1 ~ 0.5 0.5 0.5 0 10
             kill @s
     execute as @e[type=item_display,tag=genesis.ability.voidcage_flair] function ~/../void_cage_spike_tick:
-        scoreboard players add @s genesis.ability.void_cage_duration 1
-        execute if score @s genesis.ability.void_cage_duration matches 42.. run kill @s
+        scoreboard players add @s genesis 1
+        execute if score @s genesis matches 42.. run kill @s
 
 function genesis:right_click_ability/persistant_abilities/sectick
 function genesis:right_click_ability/persistant_abilities/10tick

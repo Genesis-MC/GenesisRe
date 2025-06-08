@@ -96,6 +96,10 @@ class HelixSpear(GenesisItem):
             particle minecraft:end_rod ^ ^ ^7 0 0 0 0 3
             particle minecraft:end_rod ^ ^ ^8 0 0 0 0 3
             particle minecraft:end_rod ^ ^ ^9 0 0 0 0 3
+            particle minecraft:firework ^ ^ ^1 0.2 0.2 0.2 0.2 10
+            summon item_display ^ ^ ^1 {Tags:["genesis.ability.persist_sec","genesis.temp"],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1f,1f,0.01f]},item:{id:"minecraft:dead_bush",count:1,components:{"minecraft:item_model":"genesis:ability/piercing_light_magic_circle"}}}
+            rotate @e[tag=genesis.temp,limit=1] facing entity @s eyes 
+            execute as @e[tag=genesis.temp] run tag @s remove genesis.temp
             execute function ~/../piercing_light_macro with storage genesis:temp item.piercing_light:
                 $execute as @e[distance=..1,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
             execute positioned ^ ^-0.5 ^1 run function ~/../piercing_light_macro with storage genesis:temp item.piercing_light
@@ -140,6 +144,10 @@ class HeavensThorn(GenesisItem):
             particle minecraft:end_rod ^ ^ ^7 0 0 0 0 3
             particle minecraft:end_rod ^ ^ ^8 0 0 0 0 3
             particle minecraft:end_rod ^ ^ ^9 0 0 0 0 3
+            particle minecraft:firework ^ ^ ^1 0.2 0.2 0.2 0.2 10
+            summon item_display ^ ^ ^1 {Tags:["genesis.ability.persist_sec","genesis.temp"],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1f,1f,0.01f]},item:{id:"minecraft:dead_bush",count:1,components:{"minecraft:item_model":"genesis:ability/piercing_light_magic_circle"}}}
+            rotate @e[tag=genesis.temp,limit=1] facing entity @s eyes 
+            execute as @e[tag=genesis.temp] run tag @s remove genesis.temp
             execute function ~/../piercing_light_macro with storage genesis:temp item.piercing_light:
                 $execute as @e[distance=..1,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
             execute positioned ^ ^-0.5 ^1 run function ~/../piercing_light_macro with storage genesis:temp item.piercing_light
