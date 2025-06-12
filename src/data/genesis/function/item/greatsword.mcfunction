@@ -66,12 +66,16 @@ class EverfrostTitanblade(GenesisItem):
     stats = ("mainhand", {"physical_power":150,"attack_speed":50,"mana_pool":20,"mana_regen":50,"speed":-50})
     @right_click_ability(
         name = "Polar Vortex",
-        description = "Summon a localized blizzard which follows you around. While this ability is active, 10 mana will be consumed every 0.5 seconds and all enemies in a 6-block radius will be granted +1 Frostbite. This ability can be toggled on and off, and will automatically end if you run out of mana.",
+        description = "Summon a localized blizzard which follows you around. While this ability is active, 10 mana will be consumed every 0.5 seconds and all enemies in a 6-block radius will be granted +1 Frostbite and Slowness I. This ability can be toggled on and off, and will automatically end if you run out of mana.",
         mana = 0,
         cooldown = 1,
     )
     def polar_vortex():
+        # If ability is already active, turn it off
         execute if entity @s[tag=genesis.ability.polar_vortex] run return run tag @s remove genesis.ability.polar_vortex
+        # Else if player does not have enough mana, do nothing
+        execute if score @s genesis.mana.current matches ..1999 run return 0
+        # Else activate the ability
         playsound item.elytra.flying player @a ~ ~ ~ 1 0
         tag @s add genesis.ability.polar_vortex
 
