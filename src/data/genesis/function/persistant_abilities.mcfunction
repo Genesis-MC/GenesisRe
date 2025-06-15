@@ -12,17 +12,37 @@ function ~/5tick:
     schedule function ~/ 5t
 
 append function ~/sectick:
+    # --Revitalize-- #
+    execute as @e[type=interaction,tag=genesis.ability.revitalize] run scoreboard players add @s genesis 1
+    execute as @e[type=interaction,tag=genesis.ability.revitalize] if score @s genesis matches 4.. function ~/../revitalize_finish:
+        tag @s add genesis.temp
+        # Revitalize 1
+        execute if entity @s[tag=genesis.ability.revitalize1] on target at @s function ~/../revitalize_1:
+            execute if entity @e[tag=genesis.temp,limit=1,distance=..2] run scoreboard players set @s c.heal 30000
+            execute if entity @e[tag=genesis.temp,limit=1,distance=..2] run function custom_heal:apply_heal
+            execute if entity @e[tag=genesis.temp,limit=1,distance=..2] run particle minecraft:heart ~ ~1 ~ 0.5 0.5 0.5 0 10
+        # Revitalize 2
+        execute if entity @s[tag=genesis.ability.revitalize2] on target at @s function ~/../revitalize_2:
+            execute if entity @e[tag=genesis.temp,limit=1,distance=..3] run scoreboard players set @s c.heal 50000
+            execute if entity @e[tag=genesis.temp,limit=1,distance=..3] run function custom_heal:apply_heal
+            execute if entity @e[tag=genesis.temp,limit=1,distance=..3] run particle minecraft:heart ~ ~1 ~ 0.5 0.5 0.5 0 10
+        # Revitalize 3
+        execute if entity @s[tag=genesis.ability.revitalize3] on target at @s function ~/../revitalize_3:
+            execute if entity @e[tag=genesis.temp,limit=1,distance=..4] run scoreboard players set @s c.heal 80000
+            execute if entity @e[tag=genesis.temp,limit=1,distance=..4] run function custom_heal:apply_heal
+            execute if entity @e[tag=genesis.temp,limit=1,distance=..4] run particle minecraft:heart ~ ~1 ~ 0.5 0.5 0.5 0 10
+        kill @s
+
     # --Persistant Cosmetics-- #
     execute as @e[tag=genesis.ability.persist_sec] run scoreboard players add @s genesis 1
     execute as @e[tag=genesis.ability.persist_sec] if score @s genesis matches 2.. run kill @s
-    # ---------- #
 
 append function ~/10tick:
     # --Polar Vortex-- #
     execute as @a[tag=genesis.ability.polar_vortex] at @s function ~/../polar_vortex_tick:
         reduce_mana_or_return(amount = 2000)
         execute positioned ~ ~0.1 ~ run function genesis:utils/particles/circle_rad6 {particle:"snowflake", ydirection:1, speed:0.3}
-        summon area_effect_cloud ~ ~-2 ~ {custom_particle:{type:"block_crumble",block_state:"minecraft:ice"},Radius:2f,Duration:40,Tags:["genesis.polar_vortex_particle"]}
+        summon area_effect_cloud ~ ~-2 ~ {custom_particle:{type:"block_crumble",block_state:"minecraft:ice"},Radius:2f,Duration:40,Tags:["genesis.ability.polar_vortex_particle"]}
         tag @s add genesis.caster
         # Frostbite
         execute as @e[distance=..6,tag=!genesis.player,type=!#genesis:non_living] function ~/../polar_vortex_frostbite:
@@ -39,7 +59,6 @@ append function ~/10tick:
                 scoreboard players reset @s genesis.passive.frostbite
         tag @s remove genesis.caster
         execute if score @s genesis.mana.current matches ..1999 run tag @s remove genesis.ability.polar_vortex
-    # ---------- #
 
 append function ~/5tick:
     # --Void Cage-- #
@@ -58,17 +77,30 @@ append function ~/5tick:
     execute as @e[type=item_display,tag=genesis.ability.voidcage_flair] function ~/../void_cage_spike_tick:
         scoreboard players add @s genesis 1
         execute if score @s genesis matches 42.. run kill @s
-    # ---------- #
 
 append function genesis:tick:
+    # --Cryorazor-- # 
+    execute as @a[tag=genesis.ability.cryorazor] run tag @s remove genesis.ability.cryorazor
+    execute as @e[type=item_display,tag=genesis.ability.cryorazor] at @s function ~/../cryorazor:
+        particle minecraft:trial_spawner_detection_ominous ~ ~ ~ 0 0 0 0 2
+        scoreboard players add @s genesis 3
+        execute if score @s genesis matches 150.. run kill @s
+        execute as @e[distance=..2,tag=!genesis.player] run damage @s 4 minecraft:generic
+        execute store result storage genesis:temp item.cryorazor.distance float 0.01 run scoreboard players get @s genesis
+        execute function ~/../cryorazor_macro with storage genesis:temp item.cryorazor:
+            $execute rotated ~ 0 run teleport @s ^ ^ ^$(distance) ~12 90
+
     # --Persistant Cosmetics-- #
-    execute as @e[tag=genesis.polar_vortex_particle] at @s run tp @s ~ ~0.12 ~ ~8 ~
-    execute as @e[tag=genesis.polar_vortex_particle] at @s function genesis:persistant_abilities/polar_vortex_particle:
+    execute as @e[tag=genesis.ability.polar_vortex_particle] at @s function genesis:persistant_abilities/polar_vortex_particle:
+        tp @s ~ ~0.12 ~ ~8 ~
         particle minecraft:end_rod ^ ^ ^2 0 0 0 0 1
         particle minecraft:trial_spawner_detection_ominous ^ ^ ^-2 0 0 0 0 1
         particle minecraft:end_rod ^ ^ ^-4 0 0 0 0 1
         particle minecraft:trial_spawner_detection_ominous ^ ^ ^4 0 0 0 0 1
-    # ---------- #
+    execute as @e[tag=genesis.ability.revitalize_particle] at @s function genesis:persistant_abilities/revitalize_particle:
+        tp @s ~ ~ ~ ~6 ~
+        particle minecraft:happy_villager ^ ^ ^2 0 0 0 0 1
+    
 
 append function genesis:load:
     function genesis:persistant_abilities/sectick

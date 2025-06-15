@@ -76,7 +76,6 @@ class EverfrostTitanblade(GenesisItem):
         # Else if player does not have enough mana, do nothing
         execute if score @s genesis.mana.current matches ..1999 run return 0
         # Else activate the ability
-        playsound item.elytra.flying player @a ~ ~ ~ 1 0
         tag @s add genesis.ability.polar_vortex
 
 # SwashbucklersGlory

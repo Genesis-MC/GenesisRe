@@ -40,6 +40,40 @@ class Glaive(GenesisItem):
     def stance_swap_onslaught():
         say WIP
 
+# Ice Pike
+@add_custom_recipe([
+    [None, CrystalScale, "diamond_block"],
+    [CrystalScale, SteelHilt, CrystalScale],
+    [SteelHilt, CrystalScale, None],
+])
+class IcePike(GenesisItem):
+    item_name = ("Ice Pike", {"color":"aqua"})
+    rarity = "rare"
+    category = ["polearm"]
+    stats = ("mainhand", {"physical_power":75,"attack_speed":155,"speed":40})
+    item_model = "genesis:polearm/ice_pike"
+    passives = [{
+            "name": "Cryorazor",
+            "description": "Striking an enemy grants them +1 Frostbite. Once an enemy reaches 10 Frostbite, they take 8 damage and receive Slowness V for 2 seconds.",
+        }]
+
+    @on_attack(slot = 'mainhand')
+    def cryorazor():
+        tag @s add genesis.temp
+        execute on attacker if entity @s[tag=!genesis.ability.cryorazor] at @e[tag=genesis.temp,limit=1] run summon item_display ~ ~1 ~ {Tags:["genesis.ability.cryorazor"],Rotation:[0F,90F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,0.01f]},item:{id:"minecraft:paper",count:1,components:{"minecraft:item_model":"genesis:ability/frostbite"}}}
+        tag @s remove genesis.temp
+        # Limit player to only spawn 1 cryorazor each hit, immediately remove tag next tick
+        execute on attacker run tag @s add genesis.ability.cryorazor 
+
+    @right_click_ability(
+        name = "Windcharmer",
+        description = "to be decided",
+        mana = 60,
+        cooldown = 6,
+    )
+    def windcharmer():
+        say temp
+
 # Halycon
 @add_custom_recipe([
     [None, CrystalScale, "diamond_block"],
@@ -173,14 +207,16 @@ class VerdantStaff(GenesisItem):
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":50,"attack_speed":120})
     @right_click_ability(
-        name = "revitalize1",
-        description = "WIP",
-        mana = 10,
-        cooldown = 1,
+        name = "Revitalize I",
+        description = "Summon a small circle for 4 seconds which grants Regeneration I. If you are inside the circle when it expires, you will be healed for 30 health.",
+        mana = 50,
+        cooldown = 13,
     )
     def revitalize1():
-        say WIP
-
+        summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize1"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
+        data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
+        summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle"],custom_particle:{type:"totem_of_undying"},Radius:2f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:0,duration:40,show_particles:0b}]}}
+        
 # VerdantMasterstaff
 @add_custom_recipe([
     [VerdantShard, VerdantShard, VerdantShard],
@@ -193,13 +229,15 @@ class VerdantMasterstaff(GenesisItem):
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":55,"attack_speed":120})
     @right_click_ability(
-        name = "revitalize2",
-        description = "WIP",
-        mana = 10,
-        cooldown = 1,
+        name = "Revitalize II",
+        description = "Summon a medium circle for 4 seconds which grants Regeneration I. If you are inside the circle when it expires, you will be healed for 50 health.",
+        mana = 60,
+        cooldown = 15,
     )
     def revitalize2():
-        say WIP
+        summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize2"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
+        data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
+        summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle"],custom_particle:{type:"totem_of_undying"},Radius:3f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:0,duration:40,show_particles:0b}]}}
 
 # VerdantSceptor
 @add_custom_recipe([
@@ -213,13 +251,15 @@ class VerdantSceptor(GenesisItem):
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":60,"attack_speed":120})
     @right_click_ability(
-        name = "revitalize3",
-        description = "WIP",
-        mana = 10,
-        cooldown = 1,
+        name = "Revitalize III",
+        description = "Summon a large circle for 4 seconds which grants Regeneration II. If you are inside the circle when it expires, you will be healed for 80 health.",
+        mana = 70,
+        cooldown = 18,
     )
     def revitalize3():
-        say WIP
+        summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize3"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
+        data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
+        summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle"],custom_particle:{type:"totem_of_undying"},Radius:4f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:1,duration:40,show_particles:0b}]}}
 
 # SceptorOfTheCrimsonEgg
 class SceptorOfTheCrimsonEgg(GenesisItem):
