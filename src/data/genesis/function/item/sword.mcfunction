@@ -16,9 +16,9 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
 ])
 class ObsidianBlade(GenesisItem):
     item_name = ("Obsidian Blade", {"color":"white"})
-    rarity = "uncommon"
+    rarity = "common"
     category = ["sword"]
-    stats = ("mainhand", {"physical_power":80,"attack_speed":140,"armor":-10})
+    stats = ("mainhand", {"physical_power":70,"attack_speed":140,"armor":-10})
 
 # FadingDusk
 @add_custom_recipe([
@@ -28,7 +28,7 @@ class ObsidianBlade(GenesisItem):
 ])
 class FadingDusk(GenesisItem):
     item_name = ("Fading Dusk", {"color":"dark_purple"})
-    rarity = "rare"
+    rarity = "uncommon"
     category = ["sword"]
     stats = ("mainhand", {"physical_power":80,"attack_speed":140,"armor":-10})
 
@@ -56,12 +56,20 @@ class SaberWarped(GenesisItem):
     category = ["sword"]
     stats = ("mainhand", {"physical_power":85,"attack_speed":165,"mana_regen":-300})
 
+# Katana
+class Katana(GenesisItem):
+    item_name = ("Katana", {"color":"white"})
+    rarity = "uncommon"
+    category = ["sword"]
+    stats = ("mainhand", {"physical_power":70,"attack_speed":160})
+    item_model = "genesis:sword/katana"
+
 # HailstoneBlade
 class HailstoneBlade(GenesisItem):
     item_name = ("Hailstone Blade", {"color":"aqua"})
     rarity = "epic"
     category = ["sword"]
-    stats = ("mainhand", {"physical_power":75,"attack_speed":175})
+    stats = ("mainhand", {"physical_power":72,"attack_speed":170})
     passives = [{
             "name": "Frostbite",
             "description": "Striking an enemy grants them +1 Frostbite. Once an enemy reaches 10 Frostbite, they take 8 damage and receive Slowness V for 2 seconds.",
@@ -109,7 +117,7 @@ class Kopesh(GenesisItem):
 # AcolyteBlade
 class AcolyteBlade(GenesisItem):
     item_name = ("Acolyte Blade", {"color":"dark_red"})
-    rarity = "rare"
+    rarity = "uncommon"
     category = ["sword"]
     stats = ("mainhand", {"physical_power":80,"attack_speed":140})
 

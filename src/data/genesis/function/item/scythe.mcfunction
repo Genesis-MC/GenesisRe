@@ -18,7 +18,7 @@ class IronScythe(GenesisItem):
     item_name = ("Iron Scythe", {"color":"white"})
     rarity = "common"
     category = ["scythe"]
-    stats = ("mainhand", {"physical_power":85,"attack_speed":85})
+    stats = ("mainhand", {"physical_power":95,"attack_speed":85})
 
 # RecluseFang
 class RecluseFang(GenesisItem):
@@ -42,7 +42,7 @@ class VenomlashFang(GenesisItem):
 # JackOReaper
 class JackOReaper(GenesisItem):
     item_name = ("Jack O' Reaper", {"color":"white"})
-    rarity = "rare"
+    rarity = "uncommon"
     category = ["scythe"]
     stats = ("mainhand", {"physical_power":88,"attack_speed":100})
 
@@ -73,7 +73,7 @@ class CloudSail(GenesisItem):
     item_name = ("Cloud Sail", {"color":"white"})
     rarity = "rare"
     category = ["scythe"]
-    stats = ("mainhand", {"physical_power":80,"attack_speed":85})
+    stats = ("mainhand", {"physical_power":30,"attack_speed":85})
     @right_click_ability(
         name = "cloud_drift",
         description = "WIP",

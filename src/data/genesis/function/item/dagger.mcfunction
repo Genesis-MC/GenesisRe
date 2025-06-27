@@ -20,7 +20,7 @@ class IronDagger(GenesisItem):
     item_name = ("Iron Dagger", {"color":"white"})
     rarity = "common"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":35,"attack_speed":175})
+    stats = ("mainhand", {"physical_power":40,"attack_speed":175})
 
 # Frostfang
 @add_custom_recipe([
@@ -30,9 +30,9 @@ class IronDagger(GenesisItem):
 ])
 class Frostfang(GenesisItem):
     item_name = ("Frostfang", {"color":"aqua"})
-    rarity = "uncommon"
+    rarity = "common"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":25,"attack_speed":175})
+    stats = ("mainhand", {"physical_power":30,"attack_speed":175})
     passives = [{
             "name": "Frostbite",
             "description": "Striking an enemy grants them +1 Frostbite. Once an enemy reaches 10 Frostbite, they take 8 damage and receive Slowness V for 2 seconds.",
@@ -61,9 +61,9 @@ class Frostfang(GenesisItem):
 ])
 class HarbingerOfWinter(GenesisItem):
     item_name = ("Harbinger Of Winter", {"color":"aqua"})
-    rarity = "rare"
+    rarity = "uncommon"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":30,"attack_speed":210,"speed":30})
+    stats = ("mainhand", {"physical_power":40,"attack_speed":200,"speed":30})
     passives = [{
             "name": "Frostbite",
             "description": "Striking an enemy grants them +1 Frostbite. Once an enemy reaches 10 Frostbite, they take 8 damage and receive Slowness V for 2 seconds.",
@@ -85,7 +85,7 @@ class ShadedDagger(GenesisItem):
     item_name = ("Shaded Dagger", {"color":"dark_purple"})
     rarity = "uncommon"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":40,"attack_speed":175,"speed":15})
+    stats = ("mainhand", {"physical_power":50,"attack_speed":175,"speed":15})
 
 # VoidRazor
 @add_custom_recipe([
@@ -95,9 +95,9 @@ class ShadedDagger(GenesisItem):
 ])
 class VoidRazor(GenesisItem):
     item_name = ("Void Razor", {"color":"dark_purple"})
-    rarity = "epic"
+    rarity = "rare"
     category = ["void", "dagger"]
-    stats = ("mainhand", {"physical_power":45,"attack_speed":195,"speed":25})
+    stats = ("mainhand", {"physical_power":57,"attack_speed":195,"speed":30})
 
 # Vorpol
 @add_custom_recipe([
@@ -109,7 +109,7 @@ class Vorpol(GenesisItem):
     item_name = ("Vorpol", {"color":"light_purple"})
     rarity = "legendary"
     category = ["void", "dagger"]
-    stats = ("mainhand", {"physical_power":50,"attack_speed":175,"speed":100})
+    stats = ("mainhand", {"physical_power":72,"attack_speed":175,"speed":100})
     passives = [{
         "name": "Time Dilation",
         "description": "Gain 35% of your Speed as Ability Haste.",
@@ -196,7 +196,7 @@ class Visharp(GenesisItem):
     item_name = ("Visharp", {"color":"light_purple"})
     rarity = "legendary"
     category = ["void", "dagger"]
-    stats = ("mainhand", {"physical_power":60,"attack_speed":195})
+    stats = ("mainhand", {"physical_power":70,"attack_speed":195})
     @right_click_ability(
         name = "Voidrend",
         description = "Teleport up to 5 blocks ahead of you and deal 50% Physical Power to opponents in a 2-block radius from both your initial and landing position.",
@@ -229,37 +229,37 @@ class Visharp(GenesisItem):
 # Hook
 class Hook(GenesisItem):
     item_name = ("Hook", {"color":"white"})
-    rarity = "uncommon"
+    rarity = "common"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":35,"attack_speed":195,"luck":10})
+    stats = ("mainhand", {"physical_power":46,"attack_speed":195})
 
 # LadyLuck
 class LadyLuck(GenesisItem):
     item_name = ("LadyLuck", {"color":"gold"})
     rarity = "mythical"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":30,"attack_speed":230,"luck":50})
+    stats = ("mainhand", {"physical_power":30,"attack_speed":230})
 
 # VermillionGlove
 class VermillionGlove(GenesisItem):
     item_name = ("Vermillion Glove", {"color":"dark_red"})
     rarity = "uncommon"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":45,"attack_speed":175})
+    stats = ("mainhand", {"physical_power":50,"attack_speed":185})
 
 # CrystalMoon
 class CrystalMoon(GenesisItem):
     item_name = ("Crystal Moon", {"color":"white"})
     rarity = "rare"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":30,"attack_speed":175,"armor_toughness":-20,"mana_regen":50})
+    stats = ("mainhand", {"physical_power":60,"attack_speed":175,"armor_toughness":-20,"mana_regen":50})
 
 # PrismDagger
 class PrismDagger(GenesisItem):
     item_name = ("Prism Dagger", {"color":"light_purple"})
     rarity = "epic"
     category = ["dagger"]
-    stats = ("mainhand", {"physical_power":30,"attack_speed":175})
+    stats = ("mainhand", {"physical_power":40,"attack_speed":175})
     passives = [{
         "name": "Arcane Edge",
         "description": "Gain 30% of your Magic Power as Physical Power.",

@@ -28,7 +28,7 @@ class IronSpear(GenesisItem):
 ])
 class Glaive(GenesisItem):
     item_name = ("Glaive", {"color":"white"})
-    rarity = "rare"
+    rarity = "uncommon"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":75,"attack_speed":147})
     @right_click_ability(
@@ -50,7 +50,7 @@ class IcePike(GenesisItem):
     item_name = ("Ice Pike", {"color":"aqua"})
     rarity = "rare"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":75,"attack_speed":155,"speed":40})
+    stats = ("mainhand", {"physical_power":75,"attack_speed":155})
     item_model = "genesis:polearm/ice_pike"
     passives = [{
             "name": "Cryorazor",
@@ -106,7 +106,7 @@ class Halycon(GenesisItem):
 # HelixSpear
 class HelixSpear(GenesisItem):
     item_name = ("Helix Spear", {"color":"white"})
-    rarity = "rare"
+    rarity = "uncommon"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":85,"magic_power":60,"attack_speed":120})
     item_model = "genesis:polearm/helix_spear"
@@ -155,7 +155,7 @@ class HelixSpear(GenesisItem):
 ])
 class HeavensThorn(GenesisItem):
     item_name = ("Heavens Thorn", {"color":"gold"})
-    rarity = "epic"
+    rarity = "rare"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":90,"magic_power":90,"attack_speed":120,"mana_pool":30,"mana_regen":80})
     @right_click_ability(
@@ -203,7 +203,7 @@ class HeavensThorn(GenesisItem):
 ])
 class VerdantStaff(GenesisItem):
     item_name = ("Verdant Staff", {"color":"green"})
-    rarity = "uncommon"
+    rarity = "common"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":50,"attack_speed":120})
     @right_click_ability(
@@ -225,7 +225,7 @@ class VerdantStaff(GenesisItem):
 ])
 class VerdantMasterstaff(GenesisItem):
     item_name = ("Verdant Masterstaff", {"color":"green"})
-    rarity = "rare"
+    rarity = "uncommon"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":55,"attack_speed":120})
     @right_click_ability(
@@ -247,7 +247,7 @@ class VerdantMasterstaff(GenesisItem):
 ])
 class VerdantSceptor(GenesisItem):
     item_name = ("Verdant Sceptor", {"color":"green"})
-    rarity = "epic"
+    rarity = "rare"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":60,"attack_speed":120})
     @right_click_ability(
@@ -260,18 +260,3 @@ class VerdantSceptor(GenesisItem):
         summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize3"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
         data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
         summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle"],custom_particle:{type:"totem_of_undying"},Radius:4f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:1,duration:40,show_particles:0b}]}}
-
-# SceptorOfTheCrimsonEgg
-class SceptorOfTheCrimsonEgg(GenesisItem):
-    item_name = ("Sceptor Of The Crimson Egg", {"color":"red"})
-    rarity = "epic"
-    category = ["polearm"]
-    stats = ("mainhand", {"magic_power":100,"attack_speed":120,"mana_pool":50})
-    @right_click_ability(
-        name = "firebird",
-        description = "WIP",
-        mana = 10,
-        cooldown = 1,
-    )
-    def firebird():
-        say WIP

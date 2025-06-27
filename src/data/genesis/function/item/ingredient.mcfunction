@@ -150,7 +150,7 @@ class VermillionGem(GenesisItem):
 
 class ShadeFlux(GenesisItem):
     item_name = ("Shade Flux", {"color":"dark_purple"})
-    rarity = "uncommon"
+    rarity = "common"
     category = ["ingredient"]
     lore = [{"text":"","color":"red"}] + break_text_into_lines(
         "Mesmerizingly beautiful... and beautifully ominous",

@@ -19,16 +19,16 @@ class IronGreatsword(GenesisItem):
     item_name = ("Iron Greatsword", {"color":"white"})
     rarity = "common"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":110,"attack_speed":65})
+    stats = ("mainhand", {"physical_power":120,"attack_speed":65})
 
-# OvergrownGreatsword
+# VerdantGreatsword
 @add_custom_recipe([
     [None, VerdantTwig, None],
     [VerdantTwig, "iron_block", VerdantTwig],
     [None, SteelHilt, None],
 ])
-class OvergrownGreatsword(GenesisItem):
-    item_name = ("OvergrownGreatsword", {"color":"green"})
+class VerdantGreatsword(GenesisItem):
+    item_name = ("Verdant Greatsword", {"color":"white"})
     rarity = "uncommon"
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":125,"attack_speed":67,"health":40})
@@ -41,7 +41,7 @@ class OvergrownGreatsword(GenesisItem):
 ])
 class Zweihander(GenesisItem):
     item_name = ("Zweihander", {"color":"white"})
-    rarity = "rare"
+    rarity = "uncommon"
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":120,"attack_speed":75})
     item_model = "iron_sword" #! change to custom texture
@@ -105,4 +105,4 @@ class Exetol(GenesisItem):
     item_name = ("Exetol", {"color":"red"})
     rarity = "legendary"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":150,"attack_speed":67})
+    stats = ("mainhand", {"physical_power":180,"attack_speed":67})
