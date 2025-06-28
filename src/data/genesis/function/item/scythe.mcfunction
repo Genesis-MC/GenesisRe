@@ -22,7 +22,7 @@ class IronScythe(GenesisItem):
 
 # RecluseFang
 class RecluseFang(GenesisItem):
-    item_name = ("Recluse Fang", {"color":"red"})
+    item_name = ("Recluse Fang", {"color":"white"})
     rarity = "uncommon"
     category = ["scythe"]
     stats = ("mainhand", {"physical_power":85,"attack_speed":85})
@@ -34,7 +34,7 @@ class RecluseFang(GenesisItem):
     [VenomSac, "diamond", VenomSac],
 ])
 class VenomlashFang(GenesisItem):
-    item_name = ("Venomlash Fang", {"color":"dark_purple"})
+    item_name = ("Venomlash Fang", {"color":"white"})
     rarity = "rare"
     category = ["scythe"]
     stats = ("mainhand", {"physical_power":90,"attack_speed":100})
@@ -48,7 +48,7 @@ class JackOReaper(GenesisItem):
 
 # PrismarineScythe
 class PrismarineScythe(GenesisItem):
-    item_name = ("Prismarine Scythe", {"color":"dark_aqua"})
+    item_name = ("Prismarine Scythe", {"color":"white"})
     rarity = "rare"
     category = ["scythe"]
     stats = ("mainhand", {"physical_power":90,"attack_speed":100,"mana_regen":100})

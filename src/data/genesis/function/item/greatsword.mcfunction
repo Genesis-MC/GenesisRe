@@ -56,7 +56,6 @@ class Zweihander(GenesisItem):
     rarity = "uncommon"
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":120,"attack_speed":75})
-    item_model = "iron_sword" #! change to custom texture
     @right_click_ability(
         name = "Stance Swap - Onslaught",
         description = "Toggles Onslaught Stance. While Onslaught Stance is active, gain +40 Speed, +10% Attack Speed but -20 Armor, -20 Armor Toughness.",
@@ -97,13 +96,17 @@ class SwashbucklersGlory(GenesisItem):
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":140,"attack_speed":60,"armor_toughness":30})
     @right_click_ability(
-        name = "cleave2",
-        description = "WIP",
-        mana = 10,
-        cooldown = 1,
+        name = "Cleave II",
+        description = "Slash all enemies in a 4-block radius, dealing 75% of your Physical Power.",
+        cooldown = 8,
     )
     def cleave2():
-        say WIP
+        tag @s add genesis.caster 
+        summon marker ~ ~ ~ {Tags:["genesis.ability.cleave_particle"]}
+        store result storage genesis:temp item.cleave.damage float 0.075 scoreboard players get @s genesis.stat.physical_power
+        execute function ~/../cleave_macro with storage genesis:temp item.cleave:
+            $execute as @e[distance=..4,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
+        tag @s remove genesis.caster
     
 # RoyalCleaver
 class RoyalCleaver(GenesisItem):

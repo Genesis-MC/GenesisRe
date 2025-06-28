@@ -36,6 +36,9 @@ append function ~/sectick:
     # --Lifeline-- #
     effect give @a[tag=genesis.passive.lifeline] regeneration 2 0 true
 
+    # --Nightfall-- #
+    execute if predicate genesis:is_night run effect give @a[tag=genesis.passive.nightfall] strength 2 0 true
+
     # --Persistant Cosmetics-- #
     execute as @e[tag=genesis.ability.persist_sec] run scoreboard players add @s genesis 1
     execute as @e[tag=genesis.ability.persist_sec] if score @s genesis matches 2.. run kill @s
@@ -45,7 +48,7 @@ append function ~/10tick:
     execute as @a[tag=genesis.ability.polar_vortex] at @s function ~/../polar_vortex_tick:
         reduce_mana_or_return(amount = 2000)
         execute positioned ~ ~0.1 ~ run function genesis:utils/particles/circle_rad6 {particle:"snowflake", ydirection:1, speed:0.3}
-        summon area_effect_cloud ~ ~-2 ~ {custom_particle:{type:"block_crumble",block_state:"minecraft:ice"},Radius:2f,Duration:40,Tags:["genesis.ability.polar_vortex_particle"]}
+        summon area_effect_cloud ~ ~-2 ~ {Tags:["genesis.ability.polar_vortex_particle"],custom_particle:{type:"block_crumble",block_state:"minecraft:ice"},Radius:2f,Duration:40}
         tag @s add genesis.caster
         # Frostbite
         execute as @e[distance=..6,tag=!genesis.player,type=!#genesis:non_living] function ~/../polar_vortex_frostbite:
@@ -94,15 +97,22 @@ append function genesis:tick:
             $execute rotated ~ 0 run teleport @s ^ ^ ^$(distance) ~12 90
 
     # --Persistant Cosmetics-- #
-    execute as @e[tag=genesis.ability.polar_vortex_particle] at @s function genesis:persistant_abilities/polar_vortex_particle:
+    execute as @e[type=area_effect_cloud,tag=genesis.ability.polar_vortex_particle] at @s function genesis:persistant_abilities/polar_vortex_particle:
         tp @s ~ ~0.12 ~ ~8 ~
         particle minecraft:end_rod ^ ^ ^2 0 0 0 0 1
         particle minecraft:trial_spawner_detection_ominous ^ ^ ^-2 0 0 0 0 1
         particle minecraft:end_rod ^ ^ ^-4 0 0 0 0 1
         particle minecraft:trial_spawner_detection_ominous ^ ^ ^4 0 0 0 0 1
-    execute as @e[tag=genesis.ability.revitalize_particle] at @s function genesis:persistant_abilities/revitalize_particle:
+    execute as @e[type=area_effect_cloud,tag=genesis.ability.revitalize_particle] at @s function genesis:persistant_abilities/revitalize_particle:
         tp @s ~ ~ ~ ~6 ~
         particle minecraft:happy_villager ^ ^ ^2 0 0 0 0 1
+    execute as @e[type=marker,tag=genesis.ability.cleave_particle] at @s function genesis:persistant_abilities/cleave_particle:
+        scoreboard players add @s genesis 1
+        tp @s ~ ~ ~ ~10 ~
+        particle minecraft:sweep_attack ^ ^ ^2 0 0 0 0 1
+        particle minecraft:sweep_attack ^ ^ ^3 0 0 0 0 1
+        particle minecraft:sweep_attack ^ ^ ^4 0 0 0 0 1
+        execute if score @s genesis matches 20.. run kill @s
     
 
 append function genesis:load:
