@@ -33,6 +33,9 @@ append function ~/sectick:
             execute if entity @e[tag=genesis.temp,limit=1,distance=..4] run particle minecraft:heart ~ ~1 ~ 0.5 0.5 0.5 0 10
         kill @s
 
+    # --Lifeline-- #
+    effect give @a[tag=genesis.passive.lifeline] regeneration 2 0 true
+
     # --Persistant Cosmetics-- #
     execute as @e[tag=genesis.ability.persist_sec] run scoreboard players add @s genesis 1
     execute as @e[tag=genesis.ability.persist_sec] if score @s genesis matches 2.. run kill @s
@@ -81,13 +84,13 @@ append function ~/5tick:
 append function genesis:tick:
     # --Cryorazor-- # 
     execute as @a[tag=genesis.ability.cryorazor] run tag @s remove genesis.ability.cryorazor
-    execute as @e[type=item_display,tag=genesis.ability.cryorazor] at @s function ~/../cryorazor:
+    execute as @e[type=item_display,tag=genesis.ability.cryorazor] at @s function genesis:persistant_abilities/cryorazor:
         particle minecraft:trial_spawner_detection_ominous ~ ~ ~ 0 0 0 0 2
         scoreboard players add @s genesis 3
         execute if score @s genesis matches 150.. run kill @s
         execute as @e[distance=..2,tag=!genesis.player] run damage @s 4 minecraft:generic
         execute store result storage genesis:temp item.cryorazor.distance float 0.01 run scoreboard players get @s genesis
-        execute function ~/../cryorazor_macro with storage genesis:temp item.cryorazor:
+        execute function genesis:persistant_abilities/cryorazor_macro with storage genesis:temp item.cryorazor:
             $execute rotated ~ 0 run teleport @s ^ ^ ^$(distance) ~12 90
 
     # --Persistant Cosmetics-- #

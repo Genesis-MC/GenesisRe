@@ -32,6 +32,18 @@ class VerdantGreatsword(GenesisItem):
     rarity = "uncommon"
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":125,"attack_speed":67,"health":40})
+    passives = [{
+        "name": "Lifeline",
+        "description": "Gain Regeneration I.",
+    }]
+
+    @on_equip(slot = 'mainhand')
+    def lifeline_add():
+        tag @s add genesis.passive.lifeline
+
+    @on_unequip(slot = 'mainhand')
+    def lifeline_remove():
+        tag @s remove genesis.passive.lifeline
 
 # Zweihander
 @add_custom_recipe([
