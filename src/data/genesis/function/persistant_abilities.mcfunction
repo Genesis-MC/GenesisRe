@@ -34,7 +34,7 @@ append function ~/sectick:
         kill @s
 
     # --Lifeline-- #
-    effect give @a[tag=genesis.passive.lifeline] regeneration 2 0 true
+    effect give @a[tag=genesis.passive.lifeline] regeneration 3 0 true
 
     # --Nightfall-- #
     execute if predicate genesis:is_night run effect give @a[tag=genesis.passive.nightfall] strength 2 0 true
@@ -108,11 +108,11 @@ append function genesis:tick:
         particle minecraft:happy_villager ^ ^ ^2 0 0 0 0 1
     execute as @e[type=marker,tag=genesis.ability.cleave_particle] at @s function genesis:persistant_abilities/cleave_particle:
         scoreboard players add @s genesis 1
-        tp @s ~ ~ ~ ~10 ~
+        tp @s ~ ~ ~ ~35 ~
         particle minecraft:sweep_attack ^ ^ ^2 0 0 0 0 1
         particle minecraft:sweep_attack ^ ^ ^3 0 0 0 0 1
         particle minecraft:sweep_attack ^ ^ ^4 0 0 0 0 1
-        execute if score @s genesis matches 20.. run kill @s
+        execute if score @s genesis matches 10.. run kill @s
     
 
 append function genesis:load:

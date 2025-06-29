@@ -131,27 +131,53 @@ class Vorpol(GenesisItem):
         scoreboard players reset @s genesis.passive.time_dilation_statboost
 
     @right_click_ability(
-        name = "Void Bellow",
-        description = "Release a shockwave in front of you, dealing 80 damage to all enemies caught in the blast.",
+        name = "Voidslash",
+        description = "Teleport up to 2 blocks ahead of you and deal 80 damage to the nearest enemy in a 5-block radius. Upon successfully hitting enemies with Voidslash 4 times, your next Voidslash will instead deal 80 damage to all enemies in a 5-block radius.",
         mana = 25,
         cooldown = 7,
     )
-    def void_bellow():
+    def voidslash():
         tag @s add genesis.caster
-        playsound entity.generic.explode player @a ~ ~ ~ 1 1
-        playsound entity.ravager.hurt player @a ~ ~ ~ 1 0
-        execute anchored eyes function ~/../void_bellow_helper:
-            particle minecraft:gust_emitter_small ^ ^-0.4 ^2 0.2 0.2 0.2 0 5
-            particle minecraft:gust_emitter_small ^ ^-0.4 ^3.5 0.2 0.2 0.2 0 5
-            particle minecraft:gust_emitter_small ^ ^-0.4 ^5 0.2 0.2 0.2 0 5
-            particle minecraft:sonic_boom ^ ^-0.4 ^2 0.1 0.1 0.1 0 5
-            particle minecraft:sonic_boom ^ ^-0.4 ^3.5 0.1 0.1 0.1 0 5
-            particle minecraft:sonic_boom ^ ^-0.4 ^5 0.1 0.1 0.1 0 5
-            particle minecraft:campfire_cosy_smoke ^ ^-1 ^3.5 0.3 0.3 0.3 0.3 10
-            positioned ^ ^-0.5 ^1 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
-            positioned ^ ^-0.5 ^3 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
-            positioned ^ ^-0.5 ^5 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+        execute if score @s genesis.ability.voidslash_count matches 4.. run return run function ~/../voidslash_comboslash:
+            function ~/../voidslash_tp
+            execute at @s positioned ~ ~ ~-3 rotated 25 -50 run function genesis:utils/particles/line_len8 {particle:"witch", speed:0}
+            execute at @s positioned ~4 ~4 ~-2 rotated 70 25 run function genesis:utils/particles/line_len8 {particle:"witch", speed:0}
+            execute at @s positioned ~-5 ~4 ~3 rotated -90 30 run function genesis:utils/particles/line_len8 {particle:"witch", speed:0}
+            execute at @s positioned ~-4 ~3 ~-3 rotated -45 20 run function genesis:utils/particles/line_len8 {particle:"witch", speed:0}
+            execute at @s positioned ~3 ~5 ~4 rotated 160 40 run function genesis:utils/particles/line_len8 {particle:"witch", speed:0}
+            execute as @e[distance=..5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+            scoreboard players reset @s genesis.ability.voidslash_count
+        execute function ~/../voidslash_tp:
+            execute anchored eyes if block ^ ^ ^2 #genesis:walk_through if block ^ ^ ^1 #genesis:walk_through run return run teleport @s ^ ^ ^2
+            execute anchored eyes unless block ^ ^ ^2 #genesis:walk_through if block ^ ^ ^1 #genesis:walk_through run return run teleport @s ^ ^ ^1
+        execute as @e[distance=..5,type=!#genesis:non_living,tag=!genesis.player,sort=nearest,limit=1] at @s function ~/../voidslash_hit:
+            particle witch ^-1 ^ ^ 0 0 0 0 2
+            particle witch ^-0.8 ^0.3 ^ 0 0 0 0 2
+            particle witch ^-0.6 ^0.6 ^ 0 0 0 0 2
+            particle witch ^-0.4 ^0.9 ^ 0 0 0 0 2
+            particle witch ^-0.2 ^1.2 ^ 0 0 0 0 2
+            particle witch ^ ^1.5 ^ 0 0 0 0 2
+            particle witch ^0.2 ^1.8 ^ 0 0 0 0 2
+            particle witch ^0.4 ^2.1 ^ 0 0 0 0 2
+            particle witch ^0.6 ^2.4 ^ 0 0 0 0 2
+            particle witch ^0.8 ^2.7 ^ 0 0 0 0 2
+            particle witch ^1 ^3 ^ 0 0 0 0 2
+            damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+            execute on attacker run scoreboard players add @s genesis.ability.voidslash_count 1
         tag @s remove genesis.caster
+        #playsound entity.generic.explode player @a ~ ~ ~ 1 1
+        #playsound entity.ravager.hurt player @a ~ ~ ~ 1 0
+        #execute anchored eyes function ~/../void_bellow_helper:
+        #    particle minecraft:gust_emitter_small ^ ^-0.4 ^2 0.2 0.2 0.2 0 5
+        #    particle minecraft:gust_emitter_small ^ ^-0.4 ^3.5 0.2 0.2 0.2 0 5
+        #    particle minecraft:gust_emitter_small ^ ^-0.4 ^5 0.2 0.2 0.2 0 5
+        #    particle minecraft:sonic_boom ^ ^-0.4 ^2 0.1 0.1 0.1 0 5
+        #    particle minecraft:sonic_boom ^ ^-0.4 ^3.5 0.1 0.1 0.1 0 5
+        #    particle minecraft:sonic_boom ^ ^-0.4 ^5 0.1 0.1 0.1 0 5
+        #    particle minecraft:campfire_cosy_smoke ^ ^-1 ^3.5 0.3 0.3 0.3 0.3 10
+        #    positioned ^ ^-0.5 ^1 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+        #    positioned ^ ^-0.5 ^3 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
+        #    positioned ^ ^-0.5 ^5 as @e[distance=..1.5,tag=!genesis.player] run damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
 
 
 # Vescherum
@@ -167,7 +193,7 @@ class Vescherum(GenesisItem):
     stats = ("mainhand", {"physical_power":50,"attack_speed":195,"armor_toughness":60,"speed":30})
     @right_click_ability(
         name = "Void Cage",
-        description = "Summon a cage around you for 8 seconds which teleports enemies to its center when they touch its walls. When the cage expires, heal 1 heart for each enemy trapped inside.",
+        description = "Summon a cage around you for 8 seconds which teleports enemies to its center when they walk beyond its area. When the cage expires, heal 1 heart for each enemy trapped inside.",
         mana = 60,
         cooldown = 20,
     )
@@ -199,7 +225,7 @@ class Visharp(GenesisItem):
     stats = ("mainhand", {"physical_power":70,"attack_speed":195})
     @right_click_ability(
         name = "Voidrend",
-        description = "Teleport up to 5 blocks ahead of you and deal 50% Physical Power to opponents in a 2-block radius from both your initial and landing position.",
+        description = "Teleport up to 7 blocks ahead of you and deal 50% Physical Power to enemies in a 3-block radius from both your initial and landing position. Enemies hit will also be granted Slowness II for 2 seconds.",
         mana = 25,
         cooldown = 4,
     )
@@ -212,13 +238,17 @@ class Visharp(GenesisItem):
         store result storage genesis:temp item.voidrend.damage float 0.05 scoreboard players get @s genesis.stat.physical_power
         # Damage @ starting position
         execute function ~/../voidrend_macro with storage genesis:temp item.voidrend:
-            $execute as @e[distance=..2,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
-        execute anchored eyes if block ^ ^ ^5 air if block ^ ^ ^4 air if block ^ ^ ^3 air if block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^5
-        execute anchored eyes unless block ^ ^ ^5 air if block ^ ^ ^4 air if block ^ ^ ^3 air if block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^4
-        execute anchored eyes unless block ^ ^ ^4 air if block ^ ^ ^3 air if block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^3
-        execute anchored eyes unless block ^ ^ ^3 air if block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^2
-        execute anchored eyes unless block ^ ^ ^2 air if block ^ ^ ^1 air run teleport @s ^ ^ ^1
-        execute at @s positioned ~ ~-1 ~:
+            $execute as @e[distance=..3,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
+            execute as @e[distance=..3,tag=!genesis.player] run effect give @s slowness 2 1 true
+        execute function ~/../voidrend_tp:
+            execute anchored eyes if block ^ ^ ^7 #genesis:walk_through if block ^ ^ ^6 #genesis:walk_through if block ^ ^ ^5 #genesis:walk_through if block ^ ^ ^4 #genesis:walk_through if block ^ ^ ^3 #genesis:walk_through if block ^ ^ ^2 #genesis:walk_through if block ^ ^ ^1 #genesis:walk_through run return run teleport @s ^ ^ ^7
+            execute anchored eyes unless block ^ ^ ^7 #genesis:walk_through if block ^ ^ ^6 #genesis:walk_through if block ^ ^ ^5 #genesis:walk_through if block ^ ^ ^4 #genesis:walk_through if block ^ ^ ^3 #genesis:walk_through if block ^ ^ ^2 #genesis:walk_through if block ^ ^ ^1 #genesis:walk_through run return run teleport @s ^ ^ ^6
+            execute anchored eyes unless block ^ ^ ^6 #genesis:walk_through if block ^ ^ ^5 #genesis:walk_through if block ^ ^ ^4 #genesis:walk_through if block ^ ^ ^3 #genesis:walk_through if block ^ ^ ^2 #genesis:walk_through if block ^ ^ ^1 #genesis:walk_through run return run teleport @s ^ ^ ^5
+            execute anchored eyes unless block ^ ^ ^5 #genesis:walk_through if block ^ ^ ^4 #genesis:walk_through if block ^ ^ ^3 #genesis:walk_through if block ^ ^ ^2 #genesis:walk_through if block ^ ^ ^1 #genesis:walk_through run return run teleport @s ^ ^ ^4
+            execute anchored eyes unless block ^ ^ ^4 #genesis:walk_through if block ^ ^ ^3 #genesis:walk_through if block ^ ^ ^2 #genesis:walk_through if block ^ ^ ^1 #genesis:walk_through run return run teleport @s ^ ^ ^3
+            execute anchored eyes unless block ^ ^ ^3 #genesis:walk_through if block ^ ^ ^2 #genesis:walk_through if block ^ ^ ^1 #genesis:walk_through run return run teleport @s ^ ^ ^2
+            execute anchored eyes unless block ^ ^ ^2 #genesis:walk_through if block ^ ^ ^1 #genesis:walk_through run return run teleport @s ^ ^ ^1
+        execute at @s positioned ~ ~-1 ~ function ~/../voidrend_land:
             function genesis:utils/particles/transition_circle {particle:"portal", ydirection:0, speed:1}
             function genesis:utils/particles/transition_circle {particle:"portal", ydirection:0, speed:1.2}
             function genesis:utils/particles/transition_circle {particle:"portal", ydirection:0, speed:0.8}
@@ -232,13 +262,15 @@ class Hook(GenesisItem):
     rarity = "common"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":46,"attack_speed":195})
+    item_model = "genesis:dagger/hook"
 
-# LadyLuck
-class LadyLuck(GenesisItem):
-    item_name = ("LadyLuck", {"color":"gold"})
-    rarity = "mythical"
+# GoldenHook
+class GoldenHook(GenesisItem):
+    item_name = ("Golden Hook", {"color":"gold"})
+    rarity = "rare"
     category = ["dagger"]
     stats = ("mainhand", {"physical_power":30,"attack_speed":230})
+    item_model = "genesis:dagger/golden_hook"
 
 # VermillionGlove
 class VermillionGlove(GenesisItem):

@@ -102,7 +102,7 @@ class SwashbucklersGlory(GenesisItem):
     )
     def cleave2():
         tag @s add genesis.caster 
-        summon marker ~ ~ ~ {Tags:["genesis.ability.cleave_particle"]}
+        summon marker ~ ~1 ~ {Tags:["genesis.ability.cleave_particle"]}
         store result storage genesis:temp item.cleave.damage float 0.075 scoreboard players get @s genesis.stat.physical_power
         execute function ~/../cleave_macro with storage genesis:temp item.cleave:
             $execute as @e[distance=..4,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
