@@ -47,14 +47,27 @@ class Glaive(GenesisItem):
     [SteelHilt, CrystalScale, None],
 ])
 class IcePike(GenesisItem):
-    item_name = ("Ice Pike", {"color":"aqua"})
+    item_name = ("Ice Pike", {"color":"white"})
     rarity = "rare"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":75,"attack_speed":155})
+    stats = ("mainhand", {"physical_power":75,"attack_speed":150})
+    item_model = "genesis:polearm/ice_pike"
+
+# Fimbulspine
+@add_custom_recipe([
+    [None, CrystalScale, "diamond_block"],
+    [CrystalScale, SteelHilt, CrystalScale],
+    [SteelHilt, CrystalScale, None],
+])
+class Fimbulspine(GenesisItem):
+    item_name = ("Fimbulspine", {"color":"aqua"})
+    rarity = "epic"
+    category = ["polearm"]
+    stats = ("mainhand", {"physical_power":80,"attack_speed":160})
     item_model = "genesis:polearm/ice_pike"
     passives = [{
             "name": "Cryorazor",
-            "description": "Striking an enemy grants them +1 Frostbite. Once an enemy reaches 10 Frostbite, they take 8 damage and receive Slowness V for 2 seconds.",
+            "description": "A",
         }]
 
     @on_attack(slot = 'mainhand')
@@ -64,15 +77,6 @@ class IcePike(GenesisItem):
         tag @s remove genesis.temp
         # Limit player to only spawn 1 cryorazor each hit, immediately remove tag next tick
         execute on attacker run tag @s add genesis.ability.cryorazor 
-
-    @right_click_ability(
-        name = "Windcharmer",
-        description = "to be decided",
-        mana = 60,
-        cooldown = 6,
-    )
-    def windcharmer():
-        say temp
 
 # Halycon
 @add_custom_recipe([
