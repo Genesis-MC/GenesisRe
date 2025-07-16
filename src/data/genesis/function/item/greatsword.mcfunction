@@ -9,6 +9,8 @@ from genesis:item import GenesisItem
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 from genesis:item/dagger import HarbingerOfWinter
 
+from genesis:status_impl import Frostbite, PolarVortex
+
 # IronGreatsword
 @add_custom_recipe([
     [None, "iron_ingot", None],
@@ -78,16 +80,13 @@ class EverfrostTitanblade(GenesisItem):
     @right_click_ability(
         name = "Polar Vortex",
         description = "Summon a localized blizzard which follows you around. While this ability is active, 10 mana will be consumed every 0.5 seconds and all enemies in a 6-block radius will be granted +1 Frostbite and Slowness I. This ability can be toggled on and off, and will automatically end if you run out of mana.",
-        mana = 0,
+        mana = 10,
         cooldown = 1,
     )
     def polar_vortex():
-        # If ability is already active, turn it off
-        execute if entity @s[tag=genesis.ability.polar_vortex] run return run tag @s remove genesis.ability.polar_vortex
-        # Else if player does not have enough mana, do nothing
-        execute if score @s genesis.mana.current matches ..1999 run return 0
-        # Else activate the ability
-        tag @s add genesis.ability.polar_vortex
+        if entity @s[tag=(PolarVortex.tag)] return run function ~/remove:
+            PolarVortex.remove()
+        PolarVortex.apply(1)
 
 # SwashbucklersGlory
 class SwashbucklersGlory(GenesisItem):
