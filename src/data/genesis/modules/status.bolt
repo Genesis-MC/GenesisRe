@@ -203,10 +203,10 @@ class GenesisStatusMetaclass(type):
 
             if has_icon:
                 if not is_permanent:
-                    scoreboard players add @s genesis.status.has_visual_cooldown 1
-                scoreboard players add @s genesis.status.has_icon 1
-                function genesis:status/hud/update_icons
-                scoreboard players add @s genesis.hud.display 1
+                    scoreboard players add @s[type=player] genesis.status.has_visual_cooldown 1
+                scoreboard players add @s[type=player] genesis.status.has_icon 1
+                if entity @s[type=player] function genesis:status/hud/update_icons
+                scoreboard players add @s[type=player] genesis.hud.display 1
 
             for func in on_apply_funcs:
                 func(cls)
@@ -262,10 +262,10 @@ class GenesisStatusMetaclass(type):
                 if score @s genesis.status.has_status matches 0 tag @s remove genesis.status.has_status
             if has_icon:
                 if not is_permanent:
-                    scoreboard players remove @s genesis.status.has_visual_cooldown 1
-                scoreboard players remove @s genesis.status.has_icon 1
-                function genesis:status/hud/update_icons
-                scoreboard players remove @s genesis.hud.display 1
+                    scoreboard players remove @s[type=player] genesis.status.has_visual_cooldown 1
+                scoreboard players remove @s[type=player] genesis.status.has_icon 1
+                if entity @s[type=player] function genesis:status/hud/update_icons
+                scoreboard players remove @s[type=player] genesis.hud.display 1
 
             for func in on_remove_funcs:
                 func(cls)
