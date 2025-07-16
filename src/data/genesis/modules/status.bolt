@@ -392,6 +392,28 @@ class GenesisStatusMetaclass(type):
 
 class GenesisStatus(metaclass=GenesisStatusMetaclass):
     abstract = True
+    # permanent: bool = False
+    # """Set this to True if the status always lasts until manually removed. No duration will be shown in the hud. Improves performance."""
+    # icon: str = None
+    # """Icon is a texture path to an icon. It needs to be 12x12 and have an invisible pixel in the bottom right corner. Look at other examples"""
+    # slot: str = None
+    # """Only one status can be in a slot but multiple status' sharing a slot improves performance.
+    # Example: 'chest' slot for a status while wearing a chestpiece. Only one item can be equipped as a chestpiece, so they can all be grouped in a single status slot.
+    # """
+    # category: list[str] = None
+    # """Any 'tags' concerning this status. This is versitile and can be used to check for- or remove all status' in the tag at once."""
+    # def apply(duration: int|tuple[str,str], value: int|tuple[str,str] = 0) OR apply(value: int|tuple[str,str] = 0) if permanent
+    # """Run this function to apply the status to @s with the given duration and value. All values can be an integer or a score ('name', 'objective').
+    # This can be inlined since it's only a single command.
+    # """
+    # def remove()
+    # """Removes the status.
+    # This can be inlined since it's only a single command.
+    # """
+    # def modify_duration(operation: str, duration: int|tuple[str,str]) ONLY IF NOT permanent
+    # """Modify the duration like you would expect. Operation is any scoreboard operation, the duration is an integer or a score."""
+    # def modify_value(operation: str, value: int|tuple[str,str])
+    # """Modify the value like you would expect. Operation is any scoreboard operation, the value is an integer or a score."""
 
 
 def on_apply_status(func):
