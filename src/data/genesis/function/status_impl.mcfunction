@@ -8,17 +8,18 @@ class Frostbite(GenesisStatus):
     initialized = []
     values = ['stacks', 'initiator']
 
-    @after_value_change_status
+    @after_value_change_status(['stacks'])
     def try_frostbite_trigger(cls):
-        if score @s (cls.stacks) matches 10.. at @s function ~/frostbite_trigger:
-            playsound block.glass.break player @a ~ ~ ~ 1 1
-            playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
-            execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.6 0.5 0.6 0 40
-            summon item_display ~ ~ ~ {Tags:["genesis.ability.persist_sec"],Rotation:[0F,90F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1.2f,1.2f,0.01f]},item:{id:"minecraft:paper",count:1,components:{"minecraft:item_model":"genesis:ability/frostbite"}}}
-            # damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1] #! THIS IS POSSIBLE BUT NOT IMPLEMENTED (generate argon id, store that)
-            damage @s 100 minecraft:generic
-            effect give @s minecraft:slowness 2 4 true
-            cls.remove()
+        unless score @s (cls.stacks) matches 10.. at @s return 0
+
+        playsound block.glass.break player @a ~ ~ ~ 1 1
+        playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
+        execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.6 0.5 0.6 0 40
+        summon item_display ~ ~ ~ {Tags:["genesis.ability.persist_sec"],Rotation:[0F,90F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1.2f,1.2f,0.01f]},item:{id:"minecraft:paper",count:1,components:{"minecraft:item_model":"genesis:ability/frostbite"}}}
+        # damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1] #! THIS IS POSSIBLE BUT NOT IMPLEMENTED (generate argon id, store that)
+        damage @s 100 minecraft:generic
+        effect give @s minecraft:slowness 2 4 true
+        cls.remove()
 
     def add_stack(amount = 1):
         if amount not in Frostbite.initialized:
