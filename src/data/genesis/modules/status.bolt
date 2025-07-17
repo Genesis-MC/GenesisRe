@@ -122,8 +122,8 @@ class GenesisStatusMetaclass(type):
             cls.max_duration = f'genesis.status.slot.{cls.slot}.max_duration'
             cls.synced_tick = f'genesis.status.slot.{cls.slot}.synced_tick'
             cls.synced_tick_interval = f'genesis.status.slot.{cls.slot}.synced_tick_interval'
-            for name in value_names:
-                setattr(cls, name, f'genesis.status.slot.{cls.slot}.value.{name}')
+            for idx, name in enumerate(value_names):
+                setattr(cls, name, f'genesis.status.slot.{cls.slot}.value.{idx}') # Since the index is used, this creates less scoreboards for slots. The interface should stay 1:1 the same, just the ingame board names are changed.
         else:
             cls.until = f'genesis.status.unique.{cls.id}.until'
             cls.max_duration = f'genesis.status.unique.{cls.id}.max_duration'
