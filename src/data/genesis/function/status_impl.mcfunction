@@ -6,10 +6,11 @@ from genesis:mana import reduce_mana_or_return
 class Frostbite(GenesisStatus):
     icon = 'genesis:font/status/frostbite'
     initialized = []
+    values = ['stacks', 'initiator']
 
     @after_value_change_status
     def try_frostbite_trigger(cls):
-        if score @s (cls.value) matches 10.. at @s function ~/frostbite_trigger:
+        if score @s (cls.stacks) matches 10.. at @s function ~/frostbite_trigger:
             playsound block.glass.break player @a ~ ~ ~ 1 1
             playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
             execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.6 0.5 0.6 0 40
@@ -24,11 +25,11 @@ class Frostbite(GenesisStatus):
             Frostbite.initialized.append(amount)
             function f'genesis:status/custom/frostbite/apply_{amount}':
                 if entity @s[tag=(Frostbite.tag)] return 0
-                Frostbite.apply(5 * 20, amount)
+                Frostbite.apply(5 * 20, stacks = amount, initiator = -1)
                 execute return 1
             function f'genesis:status/custom/frostbite/increase_{amount}':
                 Frostbite.modify_duration('=', 5 * 20)
-                Frostbite.modify_value('+=', amount)
+                Frostbite.modify_value('stacks', '+=', amount)
         # Try apply, if that fails increase.
         unless function f'genesis:status/custom/frostbite/apply_{amount}' function f'genesis:status/custom/frostbite/increase_{amount}'
 

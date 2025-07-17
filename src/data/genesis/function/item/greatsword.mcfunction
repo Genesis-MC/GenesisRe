@@ -86,7 +86,7 @@ class EverfrostTitanblade(GenesisItem):
     def polar_vortex():
         if entity @s[tag=(PolarVortex.tag)] return run function ~/remove:
             PolarVortex.remove()
-        PolarVortex.apply(1)
+        PolarVortex.apply()
 
 # SwashbucklersGlory
 class SwashbucklersGlory(GenesisItem):
