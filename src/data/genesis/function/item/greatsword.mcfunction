@@ -80,7 +80,7 @@ class EverfrostTitanblade(GenesisItem):
     @right_click_ability(
         name = "Polar Vortex",
         description = "Summon a localized blizzard which follows you around. While this ability is active, 10 mana will be consumed every 0.5 seconds and all enemies in a 6-block radius will be granted +1 Frostbite and Slowness I. This ability can be toggled on and off, and will automatically end if you run out of mana.",
-        mana = 10,
+        mana = 0,
         cooldown = 1,
     )
     def polar_vortex():

@@ -9,6 +9,7 @@ from genesis:mana import add_mana
 from genesis:stat import modify_attribute_stat, remove_attribute_stat
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
+from genesis:status_impl import Frostbite
 
 # IronDagger
 @add_custom_recipe([
@@ -35,23 +36,13 @@ class Frostfang(GenesisItem):
     stats = ("mainhand", {"physical_power":30,"attack_speed":175})
     passives = [{
             "name": "Frostbite",
-            "description": "Striking an enemy grants them +1 Frostbite. Once an enemy reaches 10 Frostbite, they take 8 damage and receive Slowness V for 2 seconds.",
+            "description": "Striking an enemy grants them +1 Frostbite.",
         }]
 
     @on_attack(slot = 'mainhand')
     def frostbite():
-        scoreboard players add @s genesis.passive.frostbite 1
         execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
-        execute if score @s genesis.passive.frostbite matches 10.. function ~/../frostbite_damage:
-            playsound block.glass.break player @a ~ ~ ~ 1 1
-            playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
-            execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.6 0.5 0.6 0 40
-            summon item_display ~ ~ ~ {Tags:["genesis.ability.persist_sec"],Rotation:[0F,90F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1.2f,1.2f,0.01f]},item:{id:"minecraft:paper",count:1,components:{"minecraft:item_model":"genesis:ability/frostbite"}}}
-            execute on attacker run tag @s add genesis.caster
-            damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1]
-            effect give @s minecraft:slowness 2 4 true
-            scoreboard players reset @s genesis.passive.frostbite
-            execute on attacker run tag @s remove genesis.caster
+        Frostbite.add_stack()
 
 # HarbingerOfWinter
 @add_custom_recipe([
@@ -66,15 +57,14 @@ class HarbingerOfWinter(GenesisItem):
     stats = ("mainhand", {"physical_power":40,"attack_speed":200,"speed":30})
     passives = [{
             "name": "Frostbite",
-            "description": "Striking an enemy grants them +1 Frostbite. Once an enemy reaches 10 Frostbite, they take 8 damage and receive Slowness V for 2 seconds.",
+            "description": "Striking an enemy grants them +1 Frostbite.",
         }]
 
     @on_attack(slot = 'mainhand')
     def frostbite():
-        scoreboard players add @s genesis.passive.frostbite 1
         execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
-        execute if score @s genesis.passive.frostbite matches 10.. run function genesis:bolt-item/item/frostfang/on_attack/frostbite_damage
-            
+        Frostbite.add_stack()
+
 # ShadedDagger
 @add_custom_recipe([
     [ShadeFlux, ShadeFlux, ShadeFlux],

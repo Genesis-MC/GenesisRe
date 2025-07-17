@@ -7,6 +7,7 @@ from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
+from genesis:status_impl import Frostbite
 
 # ObsidianBlade
 @add_custom_recipe([
@@ -84,14 +85,13 @@ class HailstoneBlade(GenesisItem):
     stats = ("mainhand", {"physical_power":72,"attack_speed":170})
     passives = [{
             "name": "Frostbite",
-            "description": "Striking an enemy grants them +1 Frostbite. Once an enemy reaches 10 Frostbite, they take 8 damage and receive Slowness V for 2 seconds.",
+            "description": "Striking an enemy grants them +1 Frostbite.",
         }]
 
     @on_attack(slot = 'mainhand')
     def frostbite():
-        scoreboard players add @s genesis.passive.frostbite 1
+        Frostbite.add_stack()
         execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
-        execute if score @s genesis.passive.frostbite matches 10.. run function genesis:bolt-item/item/frostfang/on_attack/frostbite_damage
 
     @right_click_ability(
         name = "Hailslash",
@@ -100,15 +100,16 @@ class HailstoneBlade(GenesisItem):
         cooldown = 10,
     )
     def hailslash():
-        tag @s add genesis.caster 
+        tag @s add genesis.caster
         playsound minecraft:entity.player.attack.sweep player @a ~ ~ ~ 1 0
         playsound minecraft:entity.player.hurt_freeze player @a ~ ~ ~ 1 0.5
-        execute positioned ~ ~1 ~ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:0, speed:0.2}
-        execute positioned ~ ~1 ~ run function genesis:utils/particles/circle_rad2 {particle:"sweep_attack", ydirection:0, speed:0}
+        positioned ~ ~1 ~ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:0, speed:0.2} #! Generate hardcoded instead of macro
+        positioned ~ ~1 ~ run function genesis:utils/particles/circle_rad2 {particle:"sweep_attack", ydirection:0, speed:0} #! Generate hardcoded instead of macro
         store result storage genesis:temp item.hailslash.damage float 0.05 scoreboard players get @s genesis.stat.physical_power
         execute function ~/../hailslash_macro with storage genesis:temp item.hailslash:
-            $execute as @e[distance=..3,tag=!genesis.player] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
-            execute as @e[distance=..3,type=!#genesis:non_living,tag=!genesis.player] run scoreboard players add @s genesis.passive.frostbite 3
+            $execute as @e[distance=..3,tag=!genesis.caster] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
+            as @e[distance=..3,type=!#genesis:non_living,tag=!genesis.caster]:
+                Frostbite.add_stack(3) #! Only 3 because the on_attack also triggers -> fixable, not now :P
         tag @s remove genesis.caster
 
 # Kopesh

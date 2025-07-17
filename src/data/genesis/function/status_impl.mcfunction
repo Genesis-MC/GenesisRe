@@ -5,6 +5,7 @@ from genesis:mana import reduce_mana_or_return
 
 class Frostbite(GenesisStatus):
     icon = 'genesis:font/status/frostbite'
+    initialized = []
 
     @after_value_change_status
     def try_frostbite_trigger(cls):
@@ -13,9 +14,23 @@ class Frostbite(GenesisStatus):
             playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
             execute anchored eyes run particle minecraft:block{block_state:"minecraft:ice"} ^ ^ ^ 0.6 0.5 0.6 0 40
             summon item_display ~ ~ ~ {Tags:["genesis.ability.persist_sec"],Rotation:[0F,90F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1.2f,1.2f,0.01f]},item:{id:"minecraft:paper",count:1,components:{"minecraft:item_model":"genesis:ability/frostbite"}}}
-            damage @s 8 minecraft:generic # by @a[tag=genesis.caster,limit=1] #! THIS IS POSSIBLE BUT NOT IMPLEMENTED (generate argon id, store that)
+            # damage @s 8 minecraft:generic by @a[tag=genesis.caster,limit=1] #! THIS IS POSSIBLE BUT NOT IMPLEMENTED (generate argon id, store that)
+            damage @s 100 minecraft:generic
             effect give @s minecraft:slowness 2 4 true
             cls.remove()
+
+    def add_stack(amount = 1):
+        if amount not in Frostbite.initialized:
+            Frostbite.initialized.append(amount)
+            function f'genesis:status/custom/frostbite/apply_{amount}':
+                if entity @s[tag=(Frostbite.tag)] return 0
+                Frostbite.apply(5 * 20, amount)
+                execute return 1
+            function f'genesis:status/custom/frostbite/increase_{amount}':
+                Frostbite.modify_duration('=', 5 * 20)
+                Frostbite.modify_value('+=', amount)
+        # Try apply, if that fails increase.
+        unless function f'genesis:status/custom/frostbite/apply_{amount}' function f'genesis:status/custom/frostbite/increase_{amount}'
 
 
 class PolarVortex(GenesisStatus):
@@ -33,12 +48,7 @@ class PolarVortex(GenesisStatus):
             summon area_effect_cloud ~ ~-2 ~ {Tags:["genesis.ability.polar_vortex_particle"],custom_particle:{type:"block_crumble",block_state:"minecraft:ice"},Radius:2f,Duration:40}
             tag @s add genesis.caster
             as @e[distance=..6,tag=!genesis.caster,type=!#genesis:non_living] function ~/../polar_vortex_frostbite:
-                if entity @s[tag=(Frostbite.tag)] function ~/../increase_frostbite:
-                    Frostbite.modify_value('+=', 1)
-                    Frostbite.modify_duration('=', 3 * 20)
-                unless entity @s[tag=(Frostbite.tag)] function ~/../apply_frostbite:
-                    Frostbite.apply(3 * 20, 1)
-
+                Frostbite.add_stack()
                 anchored eyes particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 5
                 effect give @s slowness 1 0 true
             tag @s remove genesis.caster
