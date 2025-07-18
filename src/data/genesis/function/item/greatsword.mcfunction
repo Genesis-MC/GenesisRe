@@ -9,6 +9,8 @@ from genesis:item import GenesisItem
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 from genesis:item/dagger import HarbingerOfWinter
 
+from genesis:status_impl import Frostbite, PolarVortex
+
 # IronGreatsword
 @add_custom_recipe([
     [None, "iron_ingot", None],
@@ -82,12 +84,9 @@ class EverfrostTitanblade(GenesisItem):
         cooldown = 1,
     )
     def polar_vortex():
-        # If ability is already active, turn it off
-        execute if entity @s[tag=genesis.ability.polar_vortex] run return run tag @s remove genesis.ability.polar_vortex
-        # Else if player does not have enough mana, do nothing
-        execute if score @s genesis.mana.current matches ..1999 run return 0
-        # Else activate the ability
-        tag @s add genesis.ability.polar_vortex
+        if entity @s[tag=(PolarVortex.tag)] return run function ~/remove:
+            PolarVortex.remove()
+        PolarVortex.apply()
 
 # SwashbucklersGlory
 class SwashbucklersGlory(GenesisItem):

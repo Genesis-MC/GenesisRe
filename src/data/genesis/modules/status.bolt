@@ -79,6 +79,7 @@ class GenesisStatusMetaclass(type):
         cls.tag = f'genesis.status.has.{cls.id}'
 
         is_permanent = getattr(cls, 'permanent', False)
+        value_names = getattr(cls, 'values', [])
         has_slot = hasattr(cls, 'slot')
         has_icon = hasattr(cls, 'icon')
 
@@ -93,49 +94,52 @@ class GenesisStatusMetaclass(type):
             current_icon += 1
         # gather callables
         synced_tick_func = None
-        scheduled_tick_funcs = []
-        on_apply_funcs = []
-        on_remove_funcs = []
-        before_value_change_funcs = []
-        after_value_change_funcs = []
+        scheduled_tick_funcs = {}
+        on_apply_funcs = {}
+        on_remove_funcs = {}
+        before_value_change_funcs = {}
+        after_value_change_funcs = {}
         for k in dir(cls):
             v = getattr(cls, k, None)
             if callable(v):
                 if getattr(v, '__synced_tick_status__', False):
                     synced_tick_func = v
                 elif getattr(v, '__scheduled_tick_status__', False):
-                    scheduled_tick_funcs.append(v)
+                    scheduled_tick_funcs[f'genesis:status/methods/{cls.id}/scheduled_tick_status/{v.__name__}'] = v
                 elif getattr(v, '__on_apply_status__', False):
-                    on_apply_funcs.append(v)
+                    on_apply_funcs[f'genesis:status/methods/{cls.id}/on_apply_status/{v.__name__}'] = v
                 elif getattr(v, '__on_remove_status__', False):
-                    on_remove_funcs.append(v)
+                    on_remove_funcs[f'genesis:status/methods/{cls.id}/on_remove_status/{v.__name__}'] = v
                 elif getattr(v, '__before_value_change_status__', False):
-                    before_value_change_funcs.append(v)
+                    before_value_change_funcs[f'genesis:status/methods/{cls.id}/before_value_change_status/{v.__name__}'] = v
                 elif getattr(v, '__after_value_change_status__', False):
-                    after_value_change_funcs.append(v)
+                    after_value_change_funcs[f'genesis:status/methods/{cls.id}/after_value_change_status/{v.__name__}'] = v
 
 
         #> SET SCOREBOARD VARIABLES
         if has_slot:
             cls.until = f'genesis.status.slot.{cls.slot}.until'
-            cls.value = f'genesis.status.slot.{cls.slot}.value'
             cls.max_duration = f'genesis.status.slot.{cls.slot}.max_duration'
             cls.synced_tick = f'genesis.status.slot.{cls.slot}.synced_tick'
             cls.synced_tick_interval = f'genesis.status.slot.{cls.slot}.synced_tick_interval'
+            for idx, name in enumerate(value_names):
+                setattr(cls, name, f'genesis.status.slot.{cls.slot}.value.{idx}') # Since the index is used, this creates less scoreboards for slots. The interface should stay 1:1 the same, just the ingame board names are changed.
         else:
             cls.until = f'genesis.status.unique.{cls.id}.until'
-            cls.value = f'genesis.status.unique.{cls.id}.value'
             cls.max_duration = f'genesis.status.unique.{cls.id}.max_duration'
             cls.synced_tick = f'genesis.status.unique.{cls.id}.synced_tick'
             cls.synced_tick_interval = f'genesis.status.unique.{cls.id}.synced_tick_interval'
+            for name in value_names:
+                setattr(cls, name, f'genesis.status.unique.{cls.id}.value.{name}')
 
         #> REGISTER SCOREBOARDS
         global added_slots
         append function genesis:load:
             if has_slot:
-                if (cls.slot + ';value') not in added_slots:
-                    added_slots.append(cls.slot + ';value')
-                    scoreboard objectives add (cls.value) dummy
+                for name in value_names:
+                    if (cls.slot + f';value{name}') not in added_slots:
+                        added_slots.append(cls.slot + f';value{name}')
+                        scoreboard objectives add (getattr(cls, name)) dummy
                 if (cls.slot + ';until') not in added_slots and not is_permanent:
                     added_slots.append(cls.slot + ';until')
                     scoreboard objectives add (cls.until) dummy
@@ -147,7 +151,8 @@ class GenesisStatusMetaclass(type):
                     scoreboard objectives add (cls.synced_tick) dummy
                     scoreboard objectives add (cls.synced_tick_interval) dummy
             else:
-                scoreboard objectives add (cls.value) dummy
+                for name in value_names:
+                    scoreboard objectives add (getattr(cls, name)) dummy
                 if not is_permanent:
                     scoreboard objectives add (cls.until) dummy
                 if has_icon and not is_permanent:
@@ -170,7 +175,7 @@ class GenesisStatusMetaclass(type):
                     if score @s (cls.until) matches 1.. scoreboard players operation @s genesis.status.remove_next < @s (cls.until)
 
         #> SET UP APPLY "METHOD"
-        def apply(duration: int|tuple[str,str], value: int|tuple[str,str] = 0):
+        def apply(duration: int|tuple[str,str], **values: int|tuple[str,str]):
             if has_slot:
                 if entity @s[tag=f'genesis.status.category.{cls.slot}'] function f'genesis:status/category/{cls.slot}/remove'
             else:
@@ -191,10 +196,11 @@ class GenesisStatusMetaclass(type):
                 scoreboard players add @s genesis.status.has_status 1
                 tag @s add genesis.status.has_status
 
-            if isinstance(value, int):
-                scoreboard players set @s (cls.value) (value)
-            else:
-                raw (f'scoreboard players operation @s {cls.value} = {value[0]} {value[1]}')
+            for name, value in values.items():
+                if isinstance(value, int):
+                    scoreboard players set @s (getattr(cls, name)) (value)
+                else:
+                    raw (f'scoreboard players operation @s {getattr(cls, name)} = {value[0]} {value[1]}')
 
             tag @s add (cls.tag)
 
@@ -203,13 +209,13 @@ class GenesisStatusMetaclass(type):
 
             if has_icon:
                 if not is_permanent:
-                    scoreboard players add @s genesis.status.has_visual_cooldown 1
-                scoreboard players add @s genesis.status.has_icon 1
-                function genesis:status/hud/update_icons
-                scoreboard players add @s genesis.hud.display 1
+                    scoreboard players add @s[type=player] genesis.status.has_visual_cooldown 1
+                scoreboard players add @s[type=player] genesis.status.has_icon 1
+                if entity @s[type=player] function genesis:status/hud/update_icons
+                scoreboard players add @s[type=player] genesis.hud.display 1
 
-            for func in on_apply_funcs:
-                func(cls)
+            for path in on_apply_funcs:
+                function path
             if synced_tick_func != None:
                 scoreboard players operation @s (cls.synced_tick) = .gametime genesis
                 scoreboard players add @s (cls.synced_tick) ((synced_tick_func.__data__['offset'] % synced_tick_func.__data__['interval']) + 1)
@@ -219,8 +225,8 @@ class GenesisStatusMetaclass(type):
 
         cls.apply = apply
         if is_permanent:
-            def apply2(value: int|tuple[str,str] = 0):
-                apply(0, value)
+            def apply2(**values: int|tuple[str,str]):
+                apply(0, **values)
             cls.apply = apply2
 
         #> SET UP SYNCED TICK
@@ -250,7 +256,8 @@ class GenesisStatusMetaclass(type):
             if synced_tick_func != None:
                 scoreboard players reset @s (cls.synced_tick)
                 scoreboard players reset @s (cls.synced_tick_interval)
-            scoreboard players reset @s (cls.value)
+            for name in value_names:
+                scoreboard players reset @s (getattr(cls, name))
 
             tag @s remove (cls.tag)
 
@@ -262,13 +269,13 @@ class GenesisStatusMetaclass(type):
                 if score @s genesis.status.has_status matches 0 tag @s remove genesis.status.has_status
             if has_icon:
                 if not is_permanent:
-                    scoreboard players remove @s genesis.status.has_visual_cooldown 1
-                scoreboard players remove @s genesis.status.has_icon 1
-                function genesis:status/hud/update_icons
-                scoreboard players remove @s genesis.hud.display 1
+                    scoreboard players remove @s[type=player] genesis.status.has_visual_cooldown 1
+                scoreboard players remove @s[type=player] genesis.status.has_icon 1
+                if entity @s[type=player] function genesis:status/hud/update_icons
+                scoreboard players remove @s[type=player] genesis.hud.display 1
 
-            for func in on_remove_funcs:
-                func(cls)
+            for path in on_remove_funcs:
+                function path
 
         def remove():
             if entity @s[tag=(cls.tag)] function f'genesis:status/remove/{cls.id}'
@@ -300,14 +307,18 @@ class GenesisStatusMetaclass(type):
             cls.modify_duration = modify_duration
 
         #> METHOD TO MODIFY VALUE
-        def modify_value(operation: str, value: int|tuple[str,str]):
-            for func in before_value_change_funcs:
-                func(cls)
+        def modify_value(name: str, operation: str, value: int|tuple[str,str]):
+            for path, func in before_value_change_funcs.items(): #! Add ability to filter here!!
+                if func.__data__['only_for'] and name not in func.__data__['only_for']:
+                    continue
+                function path
 
-            smart_scoreboard_operation('@s', cls.value, operation, value)
+            smart_scoreboard_operation('@s', getattr(cls, name), operation, value)
 
-            for func in after_value_change_funcs:
-                func(cls)
+            for path, func in after_value_change_funcs.items(): #! Add ability to filter here!!
+                if func.__data__['only_for'] and name not in func.__data__['only_for']:
+                    continue
+                function path
         cls.modify_value = modify_value
 
         #> METHOD TO MODIFY MAX DURATION
@@ -379,19 +390,55 @@ class GenesisStatusMetaclass(type):
                         data modify storage genesis:player self.hud[2][2] append value "#"
 
         #> SCHEDULED TICK
-        for func in scheduled_tick_funcs:
+        for path, func in scheduled_tick_funcs.items():
             interval = func.__data__['interval']
-            path = f'genesis:status/scheduled_tick/{cls.id}/tick_{interval}'
-
             append function player_schedule_loop(interval):
                 if entity @s[tag=(cls.tag)] function path:
                     func(cls)
+
+        #> REGISTER ALL METHODS
+        for path, func in on_apply_funcs.items():
+            function path:
+                func(cls)
+        for path, func in on_remove_funcs.items():
+            function path:
+                func(cls)
+        for path, func in before_value_change_funcs.items():
+            function path:
+                func(cls)
+        for path, func in after_value_change_funcs.items():
+            function path:
+                func(cls)
 
         return cls
 
 
 class GenesisStatus(metaclass=GenesisStatusMetaclass):
     abstract = True
+    # values = []
+    # """The values this status can store. Access them using Status.name or Status.modify_value('name', ...)"""
+    # permanent: bool = False
+    # """Set this to True if the status always lasts until manually removed. No duration will be shown in the hud. Improves performance."""
+    # icon: str = None
+    # """Icon is a texture path to an icon. It needs to be 12x12 and have an invisible pixel in the bottom right corner. Look at other examples"""
+    # slot: str = None
+    # """Only one status can be in a slot but multiple status' sharing a slot improves performance.
+    # Example: 'chest' slot for a status while wearing a chestpiece. Only one item can be equipped as a chestpiece, so they can all be grouped in a single status slot.
+    # """
+    # category: list[str] = None
+    # """Any 'tags' concerning this status. This is versitile and can be used to check for- or remove all status' in the tag at once."""
+    # def apply(duration: int|tuple[str,str], **values: int|tuple[str,str] = 0) OR apply(**values: int|tuple[str,str] = 0) if permanent
+    # """Run this function to apply the status to @s with the given duration and value. All values can be an integer or a score ('name', 'objective').
+    # This can be inlined since it's only a single command.
+    # """
+    # def remove()
+    # """Removes the status.
+    # This can be inlined since it's only a single command.
+    # """
+    # def modify_duration(operation: str, duration: int|tuple[str,str]) ONLY IF NOT permanent
+    # """Modify the duration like you would expect. Operation is any scoreboard operation, the duration is an integer or a score."""
+    # def modify_value(operation: str, value: int|tuple[str,str])
+    # """Modify the value like you would expect. Operation is any scoreboard operation, the value is an integer or a score."""
 
 
 def on_apply_status(func):
@@ -402,13 +449,19 @@ def on_remove_status(func):
     func.__on_remove_status__ = True
     return func
 
-def before_value_change_status(func):
-    func.__before_value_change_status__ = True
-    return func
+def before_value_change_status(only_for: list[str] = None):
+    def decorator(func):
+        func.__data__ = { 'only_for': only_for }
+        func.__before_value_change_status__ = True
+        return func
+    return decorator
 
-def after_value_change_status(func):
-    func.__after_value_change_status__ = True
-    return func
+def after_value_change_status(only_for: list[str] = None):
+    def decorator(func):
+        func.__data__ = { 'only_for': only_for }
+        func.__after_value_change_status__ = True
+        return func
+    return decorator
 
 def synced_tick_status(interval, offset = 0):
     def decorator(func):
