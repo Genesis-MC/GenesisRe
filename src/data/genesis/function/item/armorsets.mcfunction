@@ -7,6 +7,7 @@ from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
+from genesis:status_impl import SharedMind
 
 # SteelAndureHelmet
 @add_custom_recipe([
@@ -442,4 +443,46 @@ class DreadnaughtBoots(GenesisItem):
     rarity = "legendary"
     category = ["boots"]
     stats = ("feet", {"attack_speed":-7,"armor":40,"armor_toughness":40,"speed":-5})
+    equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
+
+
+# SymbioticHelmet
+class SymbioticHelmet(GenesisItem):
+    item_name = ("Symbiotic Mind", {"color":"dark_purple"})
+    rarity = "epic"
+    category = ['symbiotic', None, "helmet"]
+    stats = ("head", {"armor":10,"mana_regen":10})
+    equippable = {"slot":"head","asset_id":"minecraft:diamond"}
+    passives = [{
+        "name": "Shared Mind",
+        "description": "When you take damage, gain hugely increased Mana Regeneration for a short time. This effect gets stronger the more Symbiotic items you have equipped.",
+    }]
+
+    @on_attacked(full_slot = 'armor.head')
+    def shared_mind():
+        anchored eyes particle portal ^ ^ ^ 0 0 0 1 20
+        SharedMind.apply_standard()
+
+# SymbioticChestplate
+class SymbioticChestplate(GenesisItem):
+    item_name = ("Symbiotic Chestplate", {"color":"dark_purple"})
+    rarity = "epic"
+    category = ['symbiotic', None, "chestplate"]
+    stats = ("chest", {"armor":35})
+    equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
+
+# SymbioticLeggings
+class SymbioticLeggings(GenesisItem):
+    item_name = ("Symbiotic Leggings", {"color":"dark_purple"})
+    rarity = "epic"
+    category = ['symbiotic', None, "leggings"]
+    stats = ("legs", {"armor":25})
+    equippable = {"slot":"legs","asset_id":"minecraft:diamond"}
+
+# SymbioticBoots
+class SymbioticBoots(GenesisItem):
+    item_name = ("Symbiotic Boots", {"color":"dark_purple"})
+    rarity = "epic"
+    category = ['symbiotic', None, "boots"]
+    stats = ("feet", {"armor":10})
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}

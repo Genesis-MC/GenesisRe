@@ -249,6 +249,9 @@ class GenesisStatusMetaclass(type):
 
         #> SET UP REMOVE "METHOD"
         function f'genesis:status/remove/{cls.id}':
+            for path in on_remove_funcs:
+                function path
+
             if has_icon and not is_permanent:
                 scoreboard players reset @s (cls.max_duration)
             if not is_permanent:
@@ -273,9 +276,6 @@ class GenesisStatusMetaclass(type):
                 scoreboard players remove @s[type=player] genesis.status.has_icon 1
                 if entity @s[type=player] function genesis:status/hud/update_icons
                 scoreboard players remove @s[type=player] genesis.hud.display 1
-
-            for path in on_remove_funcs:
-                function path
 
         def remove():
             if entity @s[tag=(cls.tag)] function f'genesis:status/remove/{cls.id}'

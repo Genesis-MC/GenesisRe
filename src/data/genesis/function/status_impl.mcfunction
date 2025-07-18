@@ -1,6 +1,8 @@
 
 from genesis:status import GenesisStatus, on_apply_status, on_remove_status, before_value_change_status, after_value_change_status, synced_tick_status, scheduled_tick_status
 from genesis:mana import reduce_mana_or_return
+from genesis:utils import smart_scoreboard_operation
+from genesis:stat import modify_score_stat
 
 
 class Frostbite(GenesisStatus):
@@ -69,3 +71,27 @@ class PolarVortex(GenesisStatus):
                 effect give @s slowness 1 0 true
             tag @s remove genesis.caster
             execute return 1
+
+
+class SharedMind(GenesisStatus):
+    icon = 'genesis:item/helmet/symbiotic_helmet'
+    slot = 'head'
+    values = ['strength']
+    mult = 20
+    dura = 2
+
+    def apply_standard():
+        store result score #amount_of_symbiotic_items genesis if items entity @s armor.* *[custom_data~{genesis:{categories:[symbiotic]}}]
+        SharedMind.apply(int(SharedMind.dura * 20), strength = ('#amount_of_symbiotic_items', 'genesis'))
+
+    @on_apply_status
+    def on_apply(SharedMind):
+        smart_scoreboard_operation('#mana_regen_shared_mind', 'genesis', '=', ('@s', SharedMind.strength))
+        smart_scoreboard_operation('#mana_regen_shared_mind', 'genesis', '*=', SharedMind.mult)
+        modify_score_stat('mana_regen', '+=', ('#mana_regen_shared_mind', 'genesis'))
+
+    @on_remove_status
+    def on_remove(SharedMind):
+        smart_scoreboard_operation('#mana_regen_shared_mind', 'genesis', '=', ('@s', SharedMind.strength))
+        smart_scoreboard_operation('#mana_regen_shared_mind', 'genesis', '*=', SharedMind.mult)
+        modify_score_stat('mana_regen', '-=', ('#mana_regen_shared_mind', 'genesis'))
