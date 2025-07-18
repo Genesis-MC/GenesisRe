@@ -42,6 +42,7 @@ class Frostfang(GenesisItem):
     @on_attack(slot = 'mainhand')
     def frostbite():
         execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
+        on attacker function (Frostbite.initiate_self)
         Frostbite.add_stack()
 
 # HarbingerOfWinter
@@ -63,6 +64,7 @@ class HarbingerOfWinter(GenesisItem):
     @on_attack(slot = 'mainhand')
     def frostbite():
         execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
+        on attacker function (Frostbite.initiate_self)
         Frostbite.add_stack()
 
 # ShadedDagger

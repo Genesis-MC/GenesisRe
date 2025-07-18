@@ -90,8 +90,9 @@ class HailstoneBlade(GenesisItem):
 
     @on_attack(slot = 'mainhand')
     def frostbite():
-        Frostbite.add_stack()
         execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
+        on attacker function (Frostbite.initiate_self)
+        Frostbite.add_stack()
 
     @right_click_ability(
         name = "Hailslash",
@@ -106,6 +107,7 @@ class HailstoneBlade(GenesisItem):
         positioned ~ ~1 ~ run function genesis:utils/particles/transition_circle {particle:"snowflake", ydirection:0, speed:0.2} #! Generate hardcoded instead of macro
         positioned ~ ~1 ~ run function genesis:utils/particles/circle_rad2 {particle:"sweep_attack", ydirection:0, speed:0} #! Generate hardcoded instead of macro
         store result storage genesis:temp item.hailslash.damage float 0.05 scoreboard players get @s genesis.stat.physical_power
+        function (Frostbite.initiate_self)
         execute function ~/../hailslash_macro with storage genesis:temp item.hailslash:
             $execute as @e[distance=..3,tag=!genesis.caster] run damage @s $(damage) minecraft:generic by @a[tag=genesis.caster,limit=1]
             as @e[distance=..3,type=!#genesis:non_living,tag=!genesis.caster]:
