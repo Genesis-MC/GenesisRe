@@ -7,7 +7,7 @@ from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
-from genesis:status_impl import SharedMind
+from genesis:status_impl import SharedMind, SharedHeart
 
 # SteelAndureHelmet
 @add_custom_recipe([
@@ -465,11 +465,20 @@ class SymbioticHelmet(GenesisItem):
 
 # SymbioticChestplate
 class SymbioticChestplate(GenesisItem):
-    item_name = ("Symbiotic Chestplate", {"color":"dark_purple"})
+    item_name = ("Symbiotic Heart", {"color":"dark_purple"})
     rarity = "epic"
     category = ['symbiotic', None, "chestplate"]
-    stats = ("chest", {"armor":35})
+    stats = ("chest", {"armor":35,"health":60})
     equippable = {"slot":"chest","asset_id":"minecraft:diamond"}
+    passives = [{
+        "name": "Shared Heart",
+        "description": "When you take damage, gain Regeneration for a short time. This effect gets stronger the more Symbiotic items you have equipped.",
+    }]
+
+    @on_attacked(full_slot = 'armor.chest')
+    def shared_heart():
+        anchored eyes particle dust{scale:1,color:[1,.52,.72]} ^ ^ ^ .3 .3 .3 .5 5
+        SharedHeart.apply_standard()
 
 # SymbioticLeggings
 class SymbioticLeggings(GenesisItem):

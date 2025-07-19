@@ -95,3 +95,28 @@ class SharedMind(GenesisStatus):
         smart_scoreboard_operation('#mana_regen_shared_mind', 'genesis', '=', ('@s', SharedMind.strength))
         smart_scoreboard_operation('#mana_regen_shared_mind', 'genesis', '*=', SharedMind.mult)
         modify_score_stat('mana_regen', '-=', ('#mana_regen_shared_mind', 'genesis'))
+
+
+class SharedHeart(GenesisStatus):
+    icon = 'genesis:item/chestplate/symbiotic_chestplate'
+    slot = 'chest'
+    values = ['strength']
+    dura = 2 * 20
+
+    def apply_standard():
+        store result score #amount_of_symbiotic_items genesis if items entity @s armor.* *[custom_data~{genesis:{categories:[symbiotic]}}]
+        # if strength is equal, refresh duration
+        if entity @s[tag=(SharedHeart.tag)] if score @s (SharedHeart.strength) = #amount_of_symbiotic_items genesis return run function ~/refresh_duration:
+            SharedHeart.modify_duration('=', SharedHeart.dura)
+        # else reapply with new strength
+        SharedHeart.apply(SharedHeart.dura, strength = ('#amount_of_symbiotic_items', 'genesis'))
+
+    @on_apply_status
+    def on_apply(SharedHeart):
+        store result storage genesis:temp shared_heart.amp int .9999999999 scoreboard players get @s (SharedHeart.strength)
+        execute function ~/add_regen with storage genesis:temp shared_heart:
+            $effect give @s regeneration infinite $(amp)
+
+    @on_remove_status
+    def on_remove(SharedHeart):
+        effect clear @s regeneration
