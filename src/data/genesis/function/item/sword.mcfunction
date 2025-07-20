@@ -8,6 +8,9 @@ from genesis:item import GenesisItem
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 from genesis:status_impl import Frostbite
+from genesis:animation import baked_animation
+
+import random
 
 # ObsidianBlade
 @add_custom_recipe([
@@ -154,3 +157,63 @@ class Asophogeny(GenesisItem):
     )
     def blood_root():
         say WIP
+
+
+# GoldenArsenal
+class GoldenArsenal(GenesisItem):
+    item_name = ("Golden Arsenal", {"color":"gold"})
+    rarity = "epic"
+    category = ["sword"]
+    stats = ("mainhand", {"physical_power":80,"attack_speed":150})
+
+    @right_click_ability(
+        name = "Timeless Treasury",
+        description = "Summon many copies of this sword hailing towards your target.",
+        mana = 50,
+        cooldown = 12,
+    )
+    def timeless_treasury():
+        tag @s add genesis.caster
+
+        execute summon marker function ~/setup:
+            tp @s @p[tag=genesis.caster]
+            random.seed('golden_arsenal_timeless_treasury_2')
+            @baked_animation(ticks=20, on_end_kill=True)
+            def golden_arsenal_timeless_treasury(t, stop):
+                dx = (random.random() * 8) - 4
+                dy = (random.random() * 4) + 2
+                dz = (random.random() * 2.5) - 1
+
+                positioned ^dx ^dy ^dz summon item_display function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon
+        tag @s remove genesis.caster
+
+function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon: # "projectile" may get an abstraction in the future
+    # run this using `execute summon item_display run function ...`
+    tp @s ~ ~ ~ ~ ~
+    loot replace entity @s contents loot genesis:item/sword/golden_arsenal
+    playsound block.amethyst_block.hit player @a ~ ~ ~ 0.9 0
+    particle happy_villager ^ ^ ^0.2 .01 .01 .01 0 3
+
+    data modify entity @s item_display set value 'thirdperson_lefthand'
+    data modify entity @s transformation.left_rotation set value {angle:1.4,axis:[1,0,0]}
+    data modify entity @s transformation.translation set value [0,-.07,-.23]
+    data modify entity @s teleport_duration set value 2
+    data modify entity @s brightness set value {block:15,sky:15}
+
+    function ~/../sword_hit:
+        tp @s ~ ~ ~ ~ ~
+        playsound item.trident.hit_ground player @a ~ ~ ~ 1 1.3
+        particle explosion
+
+    @baked_animation(ticks=22, on_end_kill=True)
+    def golden_arsenal_timeless_treasury_sword(t, stop):
+        unless block ~ ~ ~ air return 0
+        if t == 9:
+            playsound entity.player.attack.sweep player @a ~ ~ ~ 0.8 0.8
+        distance = (t ** 4 / 10000) / 2
+        for step in range(int(distance * 10)):
+            step = step / 10
+            positioned ~-.9 ~-.9 ~-.9 as @e[dx=0] positioned ~.8 ~.8 ~.8 if entity @s[dx=0] damage @s (distance * 1.3) generic
+            positioned ^ ^ ^step unless block ~ ~ ~ air return run function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_hit
+        positioned ^ ^ ^distance unless block ~ ~ ~ air return run function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_hit
+        tp ^ ^ ^distance
