@@ -160,7 +160,7 @@ def player_schedule_loop(ticks: int):
 
 @contextmanager
 def hitbox(size: float, selector: str, fix_offset = False):
-    visualize_hitboxes = ctx.meta.get("visualize_hitboxes")
+    visualize_hitboxes = ctx.meta.get("visualize_hitboxes", False)
 
     if selector.endswith(']'):
         selector = selector[:-1] + ','

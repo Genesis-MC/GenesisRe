@@ -7,7 +7,7 @@ from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
-from genesis:status_impl import SharedMind, SharedHeart
+from genesis:status_impl import SharedMind, SharedHeart, SharedGait
 
 # SteelAndureHelmet
 @add_custom_recipe([
@@ -490,8 +490,17 @@ class SymbioticLeggings(GenesisItem):
 
 # SymbioticBoots
 class SymbioticBoots(GenesisItem):
-    item_name = ("Symbiotic Boots", {"color":"dark_purple"})
+    item_name = ("Symbiotic Gait", {"color":"dark_purple"})
     rarity = "epic"
     category = ['symbiotic', None, "boots"]
-    stats = ("feet", {"armor":10})
+    stats = ("feet", {"armor":10,"speed":15})
     equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
+    passives = [{
+        "name": "Shared Gait",
+        "description": "When you take damage, gain increased speed for a short time. This effect gets stronger the more Symbiotic items you have equipped.",
+    }]
+
+    @on_attacked(full_slot = 'armor.feet')
+    def shared_gait():
+        particle end_rod ~ ~ ~ .1 .1 .1 .08 12
+        SharedGait.apply_standard()

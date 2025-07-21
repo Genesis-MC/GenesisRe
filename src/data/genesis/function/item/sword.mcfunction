@@ -171,8 +171,8 @@ class GoldenArsenal(GenesisItem):
     @right_click_ability(
         name = "Timeless Treasury",
         description = "Summon many copies of this sword hailing towards your target.",
-        mana = 1, # 50,
-        cooldown = 1, # 12,
+        mana = 50,
+        cooldown = 12,
     )
     def timeless_treasury():
         with ensure_id():
@@ -182,7 +182,7 @@ class GoldenArsenal(GenesisItem):
             tp @s ~ ~ ~ ~ ~
             scoreboard players operation @s genesis.relation.owner = #caster genesis
             random.seed('golden_arsenal_timeless_treasury_2')
-            @baked_animation(ticks=20, on_end_kill=True)
+            @baked_animation(ticks=30, on_end_kill=True)
             def golden_arsenal_timeless_treasury(t, stop):
                 dx = (random.random() * 8) - 4
                 dy = (random.random() * 4) + 2

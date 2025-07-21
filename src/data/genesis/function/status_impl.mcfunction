@@ -2,7 +2,7 @@
 from genesis:status import GenesisStatus, on_apply_status, on_remove_status, before_value_change_status, after_value_change_status, synced_tick_status, scheduled_tick_status
 from genesis:mana import reduce_mana_or_return
 from genesis:utils import smart_scoreboard_operation
-from genesis:stat import modify_score_stat
+from genesis:stat import modify_score_stat, modify_attribute_stat, remove_attribute_stat
 
 
 class Frostbite(GenesisStatus):
@@ -120,3 +120,27 @@ class SharedHeart(GenesisStatus):
     @on_remove_status
     def on_remove(SharedHeart):
         effect clear @s regeneration
+
+
+class SharedGait(GenesisStatus):
+    icon = 'genesis:item/boots/symbiotic_boots'
+    slot = 'feet'
+    values = ['strength']
+    mult = 20
+    dura = 2
+
+    def apply_standard():
+        store result score #amount_of_symbiotic_items genesis if items entity @s armor.* *[custom_data~{genesis:{categories:[symbiotic]}}]
+        SharedGait.apply(int(SharedGait.dura * 20), strength = ('#amount_of_symbiotic_items', 'genesis'))
+
+    @on_apply_status
+    def on_apply(SharedGait):
+        smart_scoreboard_operation('#speed_shared_gait', 'genesis', '=', ('@s', SharedGait.strength))
+        smart_scoreboard_operation('#speed_shared_gait', 'genesis', '*=', SharedGait.mult)
+        modify_attribute_stat('speed', 'add_value', ('#speed_shared_gait', 'genesis'), 'shared_gait')
+
+    @on_remove_status
+    def on_remove(SharedGait):
+        smart_scoreboard_operation('#speed_shared_mind', 'genesis', '=', ('@s', SharedGait.strength))
+        smart_scoreboard_operation('#speed_shared_gait', 'genesis', '*=', SharedGait.mult)
+        remove_attribute_stat('speed', 'shared_gait')
