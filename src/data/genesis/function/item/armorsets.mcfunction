@@ -477,7 +477,7 @@ class SymbioticChestplate(GenesisItem):
 
     @on_attacked(full_slot = 'armor.chest')
     def shared_heart():
-        anchored eyes particle dust{scale:1,color:[1,.52,.72]} ^ ^ ^ .3 .3 .3 .5 5
+        anchored eyes particle dust{scale:1,color:[1.0,.52,.72]} ^ ^ ^ .3 .3 .3 .5 5
         SharedHeart.apply_standard()
 
 # SymbioticLeggings

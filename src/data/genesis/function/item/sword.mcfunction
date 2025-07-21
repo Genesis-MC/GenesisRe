@@ -196,7 +196,7 @@ function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon
 
     data modify entity @s item_display set value 'thirdperson_lefthand'
     data modify entity @s transformation.left_rotation set value {angle:1.4,axis:[1,0,0]}
-    data modify entity @s transformation.translation set value [0,-.07,-.23]
+    data modify entity @s transformation.translation set value [0.0,-.07,-.23]
     data modify entity @s teleport_duration set value 2
     data modify entity @s brightness set value {block:15,sky:15}
 
