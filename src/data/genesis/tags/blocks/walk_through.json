@@ -40,6 +40,10 @@
 		},
 		{
 			"required": false,
+			"id": "minecraft:snow"
+		},
+		{
+			"required": false,
 			"id": "minecraft:glow_lichen"
 		},
 		{

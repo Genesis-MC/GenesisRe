@@ -1,4 +1,4 @@
-from genesis:utils import texture_path_to_item_model
+from genesis:utils import hitbox
 from genesis:right_click_ability import right_click_ability
 from genesis:tungsten import on_equip, on_unequip
 from bolt_item:decorators import on_consume, on_tick
@@ -9,8 +9,10 @@ from genesis:item import GenesisItem
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 from genesis:status_impl import Frostbite
 from genesis:animation import baked_animation
+from genesis:relation import ensure_id, prepare_id_inline, prepare_id, match_id
 
 import random
+import math
 
 # ObsidianBlade
 @add_custom_recipe([
@@ -169,14 +171,16 @@ class GoldenArsenal(GenesisItem):
     @right_click_ability(
         name = "Timeless Treasury",
         description = "Summon many copies of this sword hailing towards your target.",
-        mana = 50,
-        cooldown = 12,
+        mana = 1, # 50,
+        cooldown = 1, # 12,
     )
     def timeless_treasury():
-        tag @s add genesis.caster
+        with ensure_id():
+            scoreboard players operation #caster genesis = @s argon.id
 
         execute summon marker function ~/setup:
-            tp @s @p[tag=genesis.caster]
+            tp @s ~ ~ ~ ~ ~
+            scoreboard players operation @s genesis.relation.owner = #caster genesis
             random.seed('golden_arsenal_timeless_treasury_2')
             @baked_animation(ticks=20, on_end_kill=True)
             def golden_arsenal_timeless_treasury(t, stop):
@@ -184,8 +188,8 @@ class GoldenArsenal(GenesisItem):
                 dy = (random.random() * 4) + 2
                 dz = (random.random() * 2.5) - 1
 
+                scoreboard players operation #caster genesis = @s genesis.relation.owner
                 positioned ^dx ^dy ^dz summon item_display function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon
-        tag @s remove genesis.caster
 
 function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon: # "projectile" may get an abstraction in the future
     # run this using `execute summon item_display run function ...`
@@ -193,6 +197,7 @@ function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon
     loot replace entity @s contents loot genesis:item/sword/golden_arsenal
     playsound block.amethyst_block.hit player @a ~ ~ ~ 0.9 0
     particle happy_villager ^ ^ ^0.2 .01 .01 .01 0 3
+    scoreboard players operation @s genesis.relation.owner = #caster genesis
 
     data modify entity @s item_display set value 'thirdperson_lefthand'
     data modify entity @s transformation.left_rotation set value {angle:1.4,axis:[1,0,0]}
@@ -207,13 +212,17 @@ function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon
 
     @baked_animation(ticks=22, on_end_kill=True)
     def golden_arsenal_timeless_treasury_sword(t, stop):
-        unless block ~ ~ ~ air return 0
+        unless block ~ ~ ~ #genesis:walk_through return 0
         if t == 9:
             playsound entity.player.attack.sweep player @a ~ ~ ~ 0.8 0.8
         distance = (t ** 4 / 10000) / 2
-        for step in range(int(distance * 10)):
-            step = step / 10
-            positioned ~-.9 ~-.9 ~-.9 as @e[dx=0] positioned ~.8 ~.8 ~.8 if entity @s[dx=0] damage @s (distance * 1.3) generic
-            positioned ^ ^ ^step unless block ~ ~ ~ air return run function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_hit
-        positioned ^ ^ ^distance unless block ~ ~ ~ air return run function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_hit
+        damage_per_distance = math.log(distance + 1, 300) * 50
+        for step in range(int(distance * 5)):
+            step = step / 5
+            prepare_id('@s','genesis.relation.owner')
+            positioned ^ ^ ^step:
+                with hitbox(0.35, '@e'):
+                    damage @s (damage_per_distance) generic by @a[predicate=(match_id),limit=1]
+            positioned ^ ^ ^step unless block ~ ~ ~ #genesis:walk_through return run function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_hit
+        positioned ^ ^ ^distance unless block ~ ~ ~ #genesis:walk_through return run function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_hit
         tp ^ ^ ^distance

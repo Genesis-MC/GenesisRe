@@ -1,0 +1,47 @@
+from contextlib import contextmanager
+
+
+prepared_ids_inline = []
+match_id = 'argon:match_id'
+
+
+append function genesis:load:
+    scoreboard objectives add genesis.relation.owner dummy
+    scoreboard objectives add genesis.relation.team dummy
+
+
+function genesis:relation/ensure_id:
+# use this in an execute string to ensure an argon id: `... if function genesis:relation/ensure_id ...`
+    if score @s argon.id = @s argon.id return 1
+    function argon:player_hurt_entity/setup/setup_id
+    return 1
+
+
+@contextmanager
+def ensure_id():
+    """Used to ensure an argon id on @s. ```
+    with ensure_id():
+        say I CAN BE SURE HERE THAT I HAVE AN argon.id
+    ```"""
+    if function genesis:relation/ensure_id:
+        yield
+
+
+def prepare_id(name: str, objective: str):
+    """This prepares the id to match against."""
+    raw (f'scoreboard players operation #id argon.id = {name} {objective}')
+
+
+@contextmanager
+def prepare_id_inline(name: str, objective: str):
+    clean_name = name.replace('@','__at__').replace('#','__hash__').lower()
+    path = f'genesis:relation/prepare/{clean_name}/{objective}'
+
+    if (name, objective) not in prepared_ids_inline:
+        prepared_ids_inline.append((name, objective))
+        function path:
+            prepare_id(name, objective)
+            return 1
+
+    if function path:
+        yield

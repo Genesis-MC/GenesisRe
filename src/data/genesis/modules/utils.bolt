@@ -1,6 +1,15 @@
+from contextlib import contextmanager
 from genesis:mapping import char_width
 from beet import Language
 from nbtlib import String, Int, Byte, Double, List, Compound
+from mecha import Mecha
+
+
+mc = ctx.inject(Mecha)
+
+
+def parse_selector(s: str):
+    return mc.parse(s, using='selector')
 
 
 def add_translation(key: str, value: str):
@@ -146,4 +155,80 @@ def player_schedule_loop(ticks: int):
         return path
     append function schedule_loop(ticks):
         as @a at @s function path
+    return path
+
+
+@contextmanager
+def hitbox(size: float, selector: str, fix_offset = False):
+    visualize_hitboxes = ctx.meta.get("visualize_hitboxes")
+
+    if selector.endswith(']'):
+        selector = selector[:-1] + ','
+    else:
+        selector += '['
+    if size > 1:
+        selector_format = 'dx={d},dy={d},dz={d}]'
+        delta = size - 1
+        offset = size / 2
+        if fix_offset:
+            if visualize_hitboxes:
+                if function particle_hitbox(size) positioned ~-offset ~-offset ~-offset as parse_selector(selector + selector_format.format(d=delta)) positioned ~offset ~offset ~offset:
+                    yield
+            else:
+                positioned ~-offset ~-offset ~-offset as parse_selector(selector + selector_format.format(d=delta)) positioned ~offset ~offset ~offset:
+                    yield
+        else:
+            if visualize_hitboxes:
+                if function particle_hitbox(size) positioned ~-offset ~-offset ~-offset as parse_selector(selector + selector_format.format(d=delta)):
+                    yield
+            else:
+                positioned ~-offset ~-offset ~-offset as parse_selector(selector + selector_format.format(d=delta)):
+                    yield
+    else:
+        first_offset = size / 2
+        second_offset = 1 - size
+        if fix_offset:
+            return_offset = first_offset + second_offset
+            if visualize_hitboxes:
+                if function particle_hitbox(size) positioned ~-first_offset ~-first_offset ~-first_offset as parse_selector(selector + 'dx=0]') positioned ~-second_offset ~-second_offset ~-second_offset if entity @s[dx=0] positioned ~return_offset ~return_offset ~return_offset:
+                    yield
+            else:
+                positioned ~-first_offset ~-first_offset ~-first_offset as parse_selector(selector + 'dx=0]') positioned ~-second_offset ~-second_offset ~-second_offset if entity @s[dx=0] positioned ~return_offset ~return_offset ~return_offset:
+                    yield
+        else:
+            if visualize_hitboxes:
+                if function particle_hitbox(size) positioned ~-first_offset ~-first_offset ~-first_offset as parse_selector(selector + 'dx=0]') positioned ~-second_offset ~-second_offset ~-second_offset if entity @s[dx=0]:
+                    yield
+            else:
+                positioned ~-first_offset ~-first_offset ~-first_offset as parse_selector(selector + 'dx=0]') positioned ~-second_offset ~-second_offset ~-second_offset if entity @s[dx=0]:
+                    yield
+
+
+particle_hitbox_functions = []
+def particle_hitbox(size: float, color = (1.0,0.4,0.9)):
+    path = f'genesis/debug/hitbox/{size}'
+    for c in color:
+        path += '_' + str(c)
+
+    if path not in particle_hitbox_functions:
+        offset = size / 2
+        scaled_offset = int(offset * 20)
+        function path:
+            for i in range(-scaled_offset, scaled_offset):
+                dist = i / 20
+                particle dust{scale:.1,'color':(color)} ~dist ~-offset ~-offset
+                particle dust{scale:.1,'color':(color)} ~dist ~-offset ~offset
+                particle dust{scale:.1,'color':(color)} ~dist ~offset ~-offset
+                particle dust{scale:.1,'color':(color)} ~dist ~offset ~offset
+
+                particle dust{scale:.1,'color':(color)} ~-offset ~dist ~-offset
+                particle dust{scale:.1,'color':(color)} ~-offset ~dist ~offset
+                particle dust{scale:.1,'color':(color)} ~offset ~dist ~-offset
+                particle dust{scale:.1,'color':(color)} ~offset ~dist ~offset
+
+                particle dust{scale:.1,'color':(color)} ~-offset ~-offset ~dist
+                particle dust{scale:.1,'color':(color)} ~-offset ~offset ~dist
+                particle dust{scale:.1,'color':(color)} ~offset ~-offset ~dist
+                particle dust{scale:.1,'color':(color)} ~offset ~offset ~dist
+            execute return 1
     return path
