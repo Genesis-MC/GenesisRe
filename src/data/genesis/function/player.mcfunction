@@ -19,7 +19,7 @@ advancement ~/join {
 
 function ~/join:
     # Give player a unique id, this starts counting from 0
-    scoreboard players operation @s genesis.player.id = .next_id genesis.player.id
+    store result score @s genesis.relation.team scoreboard players operation @s genesis.player.id = .next_id genesis.player.id
     scoreboard players add .next_id genesis.player.id 1
     # Initialize player based storage, this can be accessed using `storage genesis:player players[$(id)]`
     data modify storage genesis:player players append value {

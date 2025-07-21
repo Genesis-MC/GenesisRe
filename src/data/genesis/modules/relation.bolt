@@ -3,6 +3,7 @@ from contextlib import contextmanager
 
 prepared_ids_inline = []
 match_id = 'argon:match_id'
+match_team = 'genesis:relation/match_team'
 
 
 append function genesis:load:
@@ -45,3 +46,38 @@ def prepare_id_inline(name: str, objective: str):
 
     if function path:
         yield
+
+
+predicate genesis:relation/match_team {
+    "condition": "minecraft:entity_scores", "entity": "this", "scores": {
+        "genesis.relation.team": {
+            "min": {
+                "type": "minecraft:score",
+                "target": { "type": "minecraft:fixed", "name": "#this" },
+                "score": "genesis.relation.team"
+            },
+            "max": {
+                "type": "minecraft:score",
+                "target": { "type": "minecraft:fixed", "name": "#this" },
+                "score": "genesis.relation.team"
+            }
+        }
+    }
+}
+
+
+def prepare_team():
+    scoreboard players operation #this genesis.relation.team = @s genesis.relation.team
+
+function genesis:relation/team/prepare:
+    scoreboard players operation #this genesis.relation.team = @s genesis.relation.team
+    return 1
+
+@contextmanager
+def prepare_team_inline():
+    if function genesis:relation/team/prepare:
+        yield
+
+
+def set_prepared_team():
+    scoreboard players operation @s genesis.relation.team = #this genesis.relation.team

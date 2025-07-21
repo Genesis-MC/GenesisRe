@@ -9,7 +9,7 @@ from genesis:item import GenesisItem
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 from genesis:status_impl import Frostbite
 from genesis:animation import baked_animation
-from genesis:relation import ensure_id, prepare_id_inline, prepare_id, match_id
+from genesis:relation import ensure_id, prepare_id_inline, prepare_id, match_id, prepare_team, set_prepared_team, prepare_team_inline, match_team
 
 import random
 import math
@@ -177,10 +177,12 @@ class GoldenArsenal(GenesisItem):
     def timeless_treasury():
         with ensure_id():
             scoreboard players operation #caster genesis = @s argon.id
+        prepare_team()
 
         execute summon marker function ~/setup:
             tp @s ~ ~ ~ ~ ~
             scoreboard players operation @s genesis.relation.owner = #caster genesis
+            set_prepared_team()
             random.seed('golden_arsenal_timeless_treasury_2')
             @baked_animation(ticks=30, on_end_kill=True)
             def golden_arsenal_timeless_treasury(t, stop):
@@ -189,6 +191,7 @@ class GoldenArsenal(GenesisItem):
                 dz = (random.random() * 2.5) - 1
 
                 scoreboard players operation #caster genesis = @s genesis.relation.owner
+                prepare_team()
                 positioned ^dx ^dy ^dz summon item_display function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon
 
 function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon: # "projectile" may get an abstraction in the future
@@ -198,6 +201,7 @@ function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon
     playsound block.amethyst_block.hit player @a ~ ~ ~ 0.9 0
     particle happy_villager ^ ^ ^0.2 .01 .01 .01 0 3
     scoreboard players operation @s genesis.relation.owner = #caster genesis
+    set_prepared_team()
 
     data modify entity @s item_display set value 'thirdperson_lefthand'
     data modify entity @s transformation.left_rotation set value {angle:1.4,axis:[1,0,0]}
@@ -213,15 +217,16 @@ function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon
     @baked_animation(ticks=22, on_end_kill=True)
     def golden_arsenal_timeless_treasury_sword(t, stop):
         unless block ~ ~ ~ #genesis:walk_through return 0
+        prepare_team()
+        prepare_id('@s','genesis.relation.owner')
         if t == 9:
             playsound entity.player.attack.sweep player @a ~ ~ ~ 0.8 0.8
         distance = (t ** 4 / 10000) / 2
         damage_per_distance = math.log(distance + 1, 300) * 50
         for step in range(int(distance * 5)):
             step = step / 5
-            prepare_id('@s','genesis.relation.owner')
             positioned ^ ^ ^step:
-                with hitbox(0.35, '@e'):
+                with hitbox(0.35, f'@e[predicate=!{match_team}]'):
                     damage @s (damage_per_distance) generic by @a[predicate=(match_id),limit=1]
             positioned ^ ^ ^step unless block ~ ~ ~ #genesis:walk_through return run function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_hit
         positioned ^ ^ ^distance unless block ~ ~ ~ #genesis:walk_through return run function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_hit
