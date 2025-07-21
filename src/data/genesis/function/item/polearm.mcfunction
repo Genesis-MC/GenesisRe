@@ -116,8 +116,8 @@ class HelixSpear(GenesisItem):
     item_model = "genesis:polearm/helix_spear"
     @right_click_ability(
         name = "Piercing Light",
-        description = "Release a piercing ray of light in front of you, dealing 15% of your Magic Power to all hit enemies.",
-        mana = 30,
+        description = "Release a piercing ray of light in front of you, dealing 150% of your Magic Power to all hit enemies.",
+        mana = 50,
         cooldown = 3.5,
     )
     def piercing_light():
@@ -164,8 +164,8 @@ class HeavensThorn(GenesisItem):
     stats = ("mainhand", {"physical_power":90,"magic_power":90,"attack_speed":120,"mana_pool":30,"mana_regen":80})
     @right_click_ability(
         name = "Piercing Light",
-        description = "Release a piercing ray of light in front of you, dealing 15% of your Magic Power to all hit enemies.",
-        mana = 30,
+        description = "Release a piercing ray of light in front of you, dealing 150% of your Magic Power to all hit enemies.",
+        mana = 50,
         cooldown = 3.5,
     )
     def piercing_light():
@@ -206,7 +206,7 @@ class HeavensThorn(GenesisItem):
     [VerdantTwig, None, None],
 ])
 class VerdantStaff(GenesisItem):
-    item_name = ("Verdant Staff", {"color":"green"})
+    item_name = ("Verdant Staff", {"color":"white"})
     rarity = "common"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":50,"attack_speed":120})
@@ -217,6 +217,8 @@ class VerdantStaff(GenesisItem):
         cooldown = 13,
     )
     def revitalize1():
+        playsound minecraft:block.enchantment_table.use player @a ~ ~ ~ 1 0
+        playsound minecraft:item.bone_meal.use player @a ~ ~ ~ 1 0
         summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize1"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
         data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
         summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle"],custom_particle:{type:"totem_of_undying"},Radius:2f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:0,duration:60,show_particles:0b}]}}
@@ -228,7 +230,7 @@ class VerdantStaff(GenesisItem):
     [VerdantShard, VerdantShard, VerdantShard],
 ])
 class VerdantMasterstaff(GenesisItem):
-    item_name = ("Verdant Masterstaff", {"color":"green"})
+    item_name = ("Verdant Masterstaff", {"color":"white"})
     rarity = "uncommon"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":55,"attack_speed":120})
@@ -239,6 +241,8 @@ class VerdantMasterstaff(GenesisItem):
         cooldown = 15,
     )
     def revitalize2():
+        playsound minecraft:block.enchantment_table.use player @a ~ ~ ~ 1 0
+        playsound minecraft:item.bone_meal.use player @a ~ ~ ~ 1 0
         summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize2"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
         data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
         summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle"],custom_particle:{type:"totem_of_undying"},Radius:3f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:0,duration:40,show_particles:0b}]}}
@@ -250,7 +254,7 @@ class VerdantMasterstaff(GenesisItem):
     [CrystalScale, VerdantGem, CrystalScale],
 ])
 class VerdantSceptor(GenesisItem):
-    item_name = ("Verdant Sceptor", {"color":"green"})
+    item_name = ("Verdant Sceptor", {"color":"white"})
     rarity = "rare"
     category = ["polearm"]
     stats = ("mainhand", {"physical_power":60,"attack_speed":120})
@@ -261,6 +265,8 @@ class VerdantSceptor(GenesisItem):
         cooldown = 18,
     )
     def revitalize3():
+        playsound minecraft:block.enchantment_table.use player @a ~ ~ ~ 1 0
+        playsound minecraft:item.bone_meal.use player @a ~ ~ ~ 1 0
         summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize3"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
         data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
         summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle"],custom_particle:{type:"totem_of_undying"},Radius:4f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:1,duration:40,show_particles:0b}]}}

@@ -18,16 +18,19 @@ append function ~/sectick:
         tag @s add genesis.temp
         # Revitalize 1
         execute if entity @s[tag=genesis.ability.revitalize1] on target at @s function ~/../revitalize_1:
+            playsound minecraft:block.note_block.chime player @a ~ ~ ~ 1 1
             execute if entity @e[tag=genesis.temp,limit=1,distance=..2] run scoreboard players set @s c.heal 30000
             execute if entity @e[tag=genesis.temp,limit=1,distance=..2] run function custom_heal:apply_heal
             execute if entity @e[tag=genesis.temp,limit=1,distance=..2] run particle minecraft:heart ~ ~1 ~ 0.5 0.5 0.5 0 10
         # Revitalize 2
         execute if entity @s[tag=genesis.ability.revitalize2] on target at @s function ~/../revitalize_2:
+            playsound minecraft:block.note_block.chime player @a ~ ~ ~ 1 1
             execute if entity @e[tag=genesis.temp,limit=1,distance=..3] run scoreboard players set @s c.heal 50000
             execute if entity @e[tag=genesis.temp,limit=1,distance=..3] run function custom_heal:apply_heal
             execute if entity @e[tag=genesis.temp,limit=1,distance=..3] run particle minecraft:heart ~ ~1 ~ 0.5 0.5 0.5 0 10
         # Revitalize 3
         execute if entity @s[tag=genesis.ability.revitalize3] on target at @s function ~/../revitalize_3:
+            playsound minecraft:block.note_block.chime player @a ~ ~ ~ 1 1
             execute if entity @e[tag=genesis.temp,limit=1,distance=..4] run scoreboard players set @s c.heal 80000
             execute if entity @e[tag=genesis.temp,limit=1,distance=..4] run function custom_heal:apply_heal
             execute if entity @e[tag=genesis.temp,limit=1,distance=..4] run particle minecraft:heart ~ ~1 ~ 0.5 0.5 0.5 0 10
@@ -56,6 +59,7 @@ append function ~/5tick:
             execute on target run scoreboard players operation @s c.heal = #temp genesis
             execute on target run function custom_heal:apply_heal
             execute unless score #temp genesis = constant(0) genesis on target at @s run particle minecraft:heart ~ ~1 ~ 0.5 0.5 0.5 0 10
+            execute unless score #temp genesis = constant(0) genesis on target at @s run playsound minecraft:block.note_block.chime player @a ~ ~ ~ 1 1
             kill @s
     execute as @e[type=item_display,tag=genesis.ability.voidcage_flair] function ~/../void_cage_spike_tick:
         scoreboard players add @s genesis 1
@@ -84,11 +88,14 @@ append function genesis:tick:
         tp @s ~ ~ ~ ~6 ~
         particle minecraft:happy_villager ^ ^ ^2 0 0 0 0 1
     execute as @e[type=marker,tag=genesis.ability.cleave_particle] at @s function genesis:persistant_abilities/cleave_particle:
-        scoreboard players add @s genesis 1
+        scoreboard players add @s genesis 1 
         tp @s ~ ~ ~ ~35 ~
         particle minecraft:sweep_attack ^ ^ ^2 0 0 0 0 1
         particle minecraft:sweep_attack ^ ^ ^3 0 0 0 0 1
         particle minecraft:sweep_attack ^ ^ ^4 0 0 0 0 1
+        execute if score @s genesis matches 1 run return run playsound entity.player.attack.sweep player @a ~ ~ ~ 1 0.8
+        execute if score @s genesis matches 4 run return run playsound entity.player.attack.sweep player @a ~ ~ ~ 1 0.8
+        execute if score @s genesis matches 7 run return run playsound entity.player.attack.sweep player @a ~ ~ ~ 1 0.8
         execute if score @s genesis matches 10.. run kill @s
     
 
