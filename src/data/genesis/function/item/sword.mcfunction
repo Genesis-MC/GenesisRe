@@ -197,6 +197,9 @@ class GoldenArsenal(GenesisItem):
 function genesis:projectile/custom/golden_arsenal/timeless_treasury/sword_summon: # "projectile" may get an abstraction in the future
     # run this using `execute summon item_display run function ...`
     tp @s ~ ~ ~ ~ ~
+    summon item_display ~ ~ ~ {Tags:["genesis.ability.persist_sec","genesis.temp"],item:{id:"minecraft:paper",count:1,components:{"minecraft:item_model":"genesis:ability/timeless_treasury_magic_circle"}}}
+    rotate @e[tag=genesis.temp,distance=..0.1,limit=1] ~90 ~
+    execute as @e[tag=genesis.temp,distance=..0.1] run tag @s remove genesis.temp
     loot replace entity @s contents loot genesis:item/sword/golden_arsenal
     playsound block.amethyst_block.hit player @a ~ ~ ~ 0.9 0
     particle happy_villager ^ ^ ^0.2 .01 .01 .01 0 3
