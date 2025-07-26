@@ -1,2 +1,26 @@
 {
+  "ability.unleash.vocal": {
+    "subtitle": "genesis.ability.unleash.vocal",
+    "sounds": [
+      "genesis:ability/unleash_vocal"
+    ]
+  },
+  "ability.unleash.power_up": {
+    "subtitle": "genesis.ability.unleash.power_up",
+    "sounds": [
+      "genesis:ability/unleash_power_up"
+    ]
+  },
+  "ability.unleash.boom": {
+    "subtitle": "genesis.ability.unleash.boom",
+    "sounds": [
+      "genesis:ability/unleash_boom"
+    ]
+  },
+  "ability.unleash.ping": {
+    "subtitle": "genesis.ability.unleash.ping",
+    "sounds": [
+      "genesis:ability/unleash_ping"
+    ]
+  }
 }

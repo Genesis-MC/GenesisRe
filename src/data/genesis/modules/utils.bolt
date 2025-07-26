@@ -159,81 +159,101 @@ def player_schedule_loop(ticks: int):
 
 
 @contextmanager
-def hitbox(size: float, selector: str, fix_offset = False, overwrite_height = 0):
-    visualize_hitboxes = ctx.meta.get("visualize_hitboxes", False)
-
+def hitbox(size: float, selector: str, fix_offset = False, overwrite_y = 0): # overwrite y only supports values >= 1
     if selector.endswith(']'):
         selector = selector[:-1] + ','
     else:
         selector += '['
+    size_y = size
     if size > 1:
-        selector_format = 'dx={d},dy={d},dz={d}]'
+        selector_format = 'dx={d},dy={dy},dz={d}]'
         delta = size - 1
+        delta_y = delta
         offset = size / 2
+        offset_y = offset
+        if overwrite_y:
+            offset_y = 0
+            delta_y = overwrite_y - 1
+            size_y = overwrite_y
         if fix_offset:
-            if visualize_hitboxes:
-                if function particle_hitbox(size) positioned ~-offset ~-offset ~-offset as parse_selector(selector + selector_format.format(d=delta)) positioned ~offset ~offset ~offset:
-                    yield
-            else:
-                positioned ~-offset ~-offset ~-offset as parse_selector(selector + selector_format.format(d=delta)) positioned ~offset ~offset ~offset:
+            with particle_hitbox([size,size_y,size]):
+                positioned ~-offset ~-offset_y ~-offset as parse_selector(selector + selector_format.format(d=delta,dy=delta_y)) positioned ~offset ~offset_y ~offset:
                     yield
         else:
-            if visualize_hitboxes:
-                if function particle_hitbox(size) positioned ~-offset ~-offset ~-offset as parse_selector(selector + selector_format.format(d=delta)):
-                    yield
-            else:
-                positioned ~-offset ~-offset ~-offset as parse_selector(selector + selector_format.format(d=delta)):
+            with particle_hitbox([size,size_y,size]):
+                positioned ~-offset ~-offset_y ~-offset as parse_selector(selector + selector_format.format(d=delta,dy=delta_y)):
                     yield
     else:
         first_offset = size / 2
+        first_offset_y = first_offset
         second_offset = 1 - size
+        second_offset_y = second_offset
+        selector_ext = 'dx=0]'
+        if overwrite_y:
+            selector_ext = f'dy={overwrite_y-1},' + selector_ext
+            first_offset_y = 0
+            second_offset_y = 0
+            size_y = overwrite_y
         if fix_offset:
             return_offset = first_offset + second_offset
-            if visualize_hitboxes:
-                if function particle_hitbox(size) positioned ~-first_offset ~-first_offset ~-first_offset as parse_selector(selector + 'dx=0]') positioned ~-second_offset ~-second_offset ~-second_offset if entity @s[dx=0] positioned ~return_offset ~return_offset ~return_offset:
-                    yield
-            else:
-                positioned ~-first_offset ~-first_offset ~-first_offset as parse_selector(selector + 'dx=0]') positioned ~-second_offset ~-second_offset ~-second_offset if entity @s[dx=0] positioned ~return_offset ~return_offset ~return_offset:
+            return_offset_y = return_offset
+            if overwrite_y:
+                return_offset_y = 0
+            with particle_hitbox([size,size_y,size]):
+                positioned ~-first_offset ~-first_offset_y ~-first_offset as parse_selector(selector + selector_ext) positioned ~-second_offset ~-second_offset_y ~-second_offset if entity @s[dx=0] positioned ~return_offset ~return_offset_y ~return_offset:
                     yield
         else:
-            if visualize_hitboxes:
-                if function particle_hitbox(size) positioned ~-first_offset ~-first_offset ~-first_offset as parse_selector(selector + 'dx=0]') positioned ~-second_offset ~-second_offset ~-second_offset if entity @s[dx=0]:
+            with particle_hitbox([size,size_y,size]):
+                positioned ~-first_offset ~-first_offset_y ~-first_offset as parse_selector(selector + selector_ext) positioned ~-second_offset ~-second_offset_y ~-second_offset if entity @s[dx=0]:
                     yield
-            else:
-                positioned ~-first_offset ~-first_offset ~-first_offset as parse_selector(selector + 'dx=0]') positioned ~-second_offset ~-second_offset ~-second_offset if entity @s[dx=0]:
-                    yield
+
+
+def clamp(v, min, max):
+    if v < min:
+        return min
+    if v > max:
+        return max
+    return v
 
 
 particle_hitbox_functions = []
-def particle_hitbox(size: float, color = (1.0,0.4,0.9)):
-    path = f'genesis/debug/hitbox/{size}'
+@contextmanager
+def particle_hitbox(size: tuple[float,float,float], color = (1.0,0.4,0.9)):
+    visualize_hitboxes = ctx.meta.get("visualize_hitboxes", False)
+
+    if not visualize_hitboxes:
+        yield
+        return
+
+    path = f'genesis/debug/hitbox/{size[0]}_{size[1]}_{size[2]}'
     for c in color:
         path += '_' + str(c)
 
     if path not in particle_hitbox_functions:
-        resolution = 20
-        if size > 1:
-            resolution = 2
-        if size > 10:
-            resolution = 1
-        offset = size / 2
-        scaled_offset = int(offset * resolution)
+        resolution = [size[0]/10,size[1]/10,size[2]/10]
+        offset = [size[0]/2,size[1]/2,size[2]/2]
+        scaled_offset = [int(offset[0]*resolution[0]),int(offset[1]*resolution[1]),int(offset[2]*resolution[2])]
         function path:
-            for i in range(-scaled_offset, scaled_offset):
-                dist = i / resolution
-                particle dust{scale:(2/resolution),'color':(color)} ~dist ~-offset ~-offset
-                particle dust{scale:(2/resolution),'color':(color)} ~dist ~-offset ~offset
-                particle dust{scale:(2/resolution),'color':(color)} ~dist ~offset ~-offset
-                particle dust{scale:(2/resolution),'color':(color)} ~dist ~offset ~offset
+            for i in range(-scaled_offset[0], scaled_offset[0]):
+                dist_x = i / resolution[0]
+                particle dust{scale:(clamp(1/resolution[0],0.01,4)),'color':(color)} ~dist_x ~-offset[1] ~-offset[2]
+                particle dust{scale:(clamp(1/resolution[0],0.01,4)),'color':(color)} ~dist_x ~-offset[1] ~offset[2]
+                particle dust{scale:(clamp(1/resolution[0],0.01,4)),'color':(color)} ~dist_x ~offset[1] ~-offset[2]
+                particle dust{scale:(clamp(1/resolution[0],0.01,4)),'color':(color)} ~dist_x ~offset[1] ~offset[2]
 
-                particle dust{scale:(2/resolution),'color':(color)} ~-offset ~dist ~-offset
-                particle dust{scale:(2/resolution),'color':(color)} ~-offset ~dist ~offset
-                particle dust{scale:(2/resolution),'color':(color)} ~offset ~dist ~-offset
-                particle dust{scale:(2/resolution),'color':(color)} ~offset ~dist ~offset
+            for i in range(-scaled_offset[1], scaled_offset[1]):
+                dist_y = i / resolution[1]
+                particle dust{scale:(clamp(1/resolution[1],0.01,4)),'color':(color)} ~-offset[0] ~dist_y ~-offset[2]
+                particle dust{scale:(clamp(1/resolution[1],0.01,4)),'color':(color)} ~-offset[0] ~dist_y ~offset[2]
+                particle dust{scale:(clamp(1/resolution[1],0.01,4)),'color':(color)} ~offset[0] ~dist_y ~-offset[2]
+                particle dust{scale:(clamp(1/resolution[1],0.01,4)),'color':(color)} ~offset[0] ~dist_y ~offset[2]
 
-                particle dust{scale:(2/resolution),'color':(color)} ~-offset ~-offset ~dist
-                particle dust{scale:(2/resolution),'color':(color)} ~-offset ~offset ~dist
-                particle dust{scale:(2/resolution),'color':(color)} ~offset ~-offset ~dist
-                particle dust{scale:(2/resolution),'color':(color)} ~offset ~offset ~dist
+            for i in range(-scaled_offset[2], scaled_offset[2]):
+                dist_z = i / resolution[2]
+                particle dust{scale:(clamp(1/resolution[2],0.01,4)),'color':(color)} ~-offset[0] ~-offset[1] ~dist_z
+                particle dust{scale:(clamp(1/resolution[2],0.01,4)),'color':(color)} ~-offset[0] ~offset[1] ~dist_z
+                particle dust{scale:(clamp(1/resolution[2],0.01,4)),'color':(color)} ~offset[0] ~-offset[1] ~dist_z
+                particle dust{scale:(clamp(1/resolution[2],0.01,4)),'color':(color)} ~offset[0] ~offset[1] ~dist_z
             execute return 1
-    return path
+    if function path:
+        yield

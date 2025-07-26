@@ -172,14 +172,24 @@ class SwordOfUntappedPower(GenesisItem):
                     sz = (t - 60)
                     h = 0.4
 
+                if t == 0:
+                    playsound genesis:ability.unleash.vocal player @a ~ ~1.8 ~ .1 .6
+                    playsound genesis:ability.unleash.vocal player @a ~ ~1.8 ~ 2
+                    particle dust{scale:1.3,color:[1,.2,.9]} ~ ~18 ~ 0 10 0 0 300
+                if t == 20:
+                    playsound genesis:ability.unleash.power_up player @a ~ ~1.8 ~ .4 1.6
+                if t == 45:
+                    playsound genesis:ability.unleash.ping player @a ~ ~1.8 ~
+                if t == 55:
+                    playsound genesis:ability.unleash.boom player @a ~ ~1.8 ~ 2 1.5
                 if t <= 30 or t >= 60:
                     data modify entity @s transformation.scale set value [sz,h,sz]
                     rotate @s ~1 ~
                 if t == 50:
                     particle flash ~ ~2.5 ~
                     for i in range(8):
-                        x = math.cos(math.pi/8*i)
-                        z = math.sin(math.pi/8*i)
+                        x = math.cos(2*math.pi/8*i)
+                        z = math.sin(2*math.pi/8*i)
                         particle end_rod ~x ~2.5 ~z x 0 z .5 0
                         particle dust{scale:1.3,color:[1,.2,.9]} ~x ~2.5 ~z
                 if t > 61:
@@ -187,14 +197,16 @@ class SwordOfUntappedPower(GenesisItem):
                     d = sz - 1 # account for interpolation duration desync
                     r = d / 2
                     width = (3 / 32) * d
-                    points = 16
+                    points = 32
                     prepare_team()
                     prepare_id('@s','genesis.relation.owner')
                     for i in range(points):
-                        x2 = math.cos(math.pi/points*i)*r
-                        z2 = math.sin(math.pi/points*i)*r
-                        positioned ~x2 ~.3 ~z2:
-                            with hitbox(width, f'@e[predicate=!{match_team}]'):
+                        x2 = math.cos(2*math.pi/points*i)*r
+                        z2 = math.sin(2*math.pi/points*i)*r
+                        y2 = (width / 2) - 1
+                        particle end_rod ~x2 ~.3 ~z2 (-x2) 10 (-z2) .1 0
+                        positioned ~x2 ~y2 ~z2:
+                            with hitbox(width, f'@e[predicate=!{match_team}]', overwrite_y=10):
                                 damage @s 20 generic by @a[predicate=(match_id),limit=1]
 
 
@@ -248,3 +260,4 @@ def charging_unleash(t):
 
     if t == 0:
         particle flash
+        playsound block.beacon.activate player @a ~ ~ ~ 1 0.5
