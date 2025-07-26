@@ -1,4 +1,4 @@
-from genesis:utils import texture_path_to_item_model
+from genesis:utils import texture_path_to_item_model, hitbox
 from genesis:right_click_ability import right_click_ability
 from genesis:tungsten import on_equip, on_unequip
 from bolt_item:decorators import on_consume, on_tick
@@ -10,6 +10,10 @@ from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, Crimso
 from genesis:item/dagger import HarbingerOfWinter
 
 from genesis:status_impl import Frostbite, PolarVortex
+from genesis:animation import using_item_baked_animation, baked_animation
+from genesis:relation import ensure_id, prepare_id_inline, prepare_id, match_id, prepare_team, set_prepared_team, prepare_team_inline, match_team
+import math
+import random
 
 # IronGreatsword
 @add_custom_recipe([
@@ -120,3 +124,127 @@ class Exetol(GenesisItem):
     rarity = "legendary"
     category = ["greatsword"]
     stats = ("mainhand", {"physical_power":180,"attack_speed":67})
+
+# Sword of Untapped Power
+class SwordOfUntappedPower(GenesisItem):
+    item_name = ("Sword of Untapped Power", {"color":"dark_purple"})
+    rarity = "transcendent"
+    category = ["greatsword"]
+    stats = ("mainhand", {"physical_power":140,"attack_speed":85})
+
+    @right_click_ability(
+        name = "Unleash",
+        description = "Concentrate to unleash the full power entrapped in this weapon to create a giant explosion that encompasses all.",
+        cooldown = 1, # 40,
+        mana = 1, # 100,
+        charge_time = 5,
+        charge_animation = "block",
+    )
+    def unleash():
+        with ensure_id():
+            scoreboard players operation #caster genesis = @s argon.id
+        prepare_team()
+        execute summon item_display:
+            tp @s ~ ~ ~ ~ 0
+            scoreboard players operation @s genesis.relation.owner = #caster genesis
+            set_prepared_team()
+            item replace entity @s contents with paper[item_model='genesis:ability/unleash_halo']
+            data modify entity @s teleport_duration set value 2
+            data modify entity @s interpolation_duration set value 1
+            data modify entity @s brightness set value {block:15,sky:15}
+            data modify entity @s transformation.scale set value [0,1.5,0]
+
+            @baked_animation(ticks=130,on_end_kill=True)
+            def sword_of_untapped_power_unleash_explosion(t, stop):
+                if t < 20: # 0-1 expand halo
+                    sz = 2 + (t / 120)
+                    h = 1.5
+                elif t < 30: # 1-2 shrink halo to 0
+                    sz = 2.16 - (((t - 20) / 6.2) ** 2)
+                    h = 1.5
+                elif t == 30: # 2 make sure halo is at 0
+                    sz = 0
+                    h = 1.5
+                elif t < 60: # prepare for boom
+                    sz = 0
+                    h = 0.4
+                else: # shockwave
+                    sz = (t - 60)
+                    h = 0.4
+
+                if t <= 30 or t >= 60:
+                    data modify entity @s transformation.scale set value [sz,h,sz]
+                    rotate @s ~1 ~
+                if t == 50:
+                    particle flash ~ ~2.5 ~
+                    for i in range(8):
+                        x = math.cos(math.pi/8*i)
+                        z = math.sin(math.pi/8*i)
+                        particle end_rod ~x ~2.5 ~z x 0 z .5 0
+                        particle dust{scale:1.3,color:[1,.2,.9]} ~x ~2.5 ~z
+                if t > 61:
+                    # shockwave hitboxes
+                    d = sz - 1 # account for interpolation duration desync
+                    r = d / 2
+                    width = (3 / 32) * d
+                    points = 16
+                    prepare_team()
+                    prepare_id('@s','genesis.relation.owner')
+                    for i in range(points):
+                        x2 = math.cos(math.pi/points*i)*r
+                        z2 = math.sin(math.pi/points*i)*r
+                        positioned ~x2 ~.3 ~z2:
+                            with hitbox(width, f'@e[predicate=!{match_team}]'):
+                                damage @s 20 generic by @a[predicate=(match_id),limit=1]
+
+
+random.seed('sword_of_untapped_power_unleash')
+@using_item_baked_animation(item=SwordOfUntappedPower,ticks=99) # This would actually be 5 * 20 but consumable component triggers at that frame, so its 5 * 20 - 1
+def charging_unleash(t):
+    def particle_location(t, offset):
+        y = t / 8
+        spins = 999 / (t + 30)
+        r = (10 / (y + 4)) - 0.5
+        x = math.cos(math.pi*offset*2+2*math.pi/spins*t)*r
+        z = math.sin(math.pi*offset*2+2*math.pi/spins*t)*r
+        dy = ((t+1) / 8) - y
+        dspins = (999 / (t + 31)) - spins
+        dr = ((10 / (y + dy + 4)) - 0.5) - r
+        dx = (math.cos(math.pi*offset*2+2*math.pi/(spins+dspins)*(t+1))*(r+dr)) - x
+        dz = (math.sin(math.pi*offset*2+2*math.pi/(spins+dspins)*(t+1))*(r+dr)) - z
+        return (x,y,z,dx,dy,dz)
+
+    x, y, z, dx, dy, dz = particle_location(t, 0)
+    particle end_rod ~x ~y ~z dx dz dz .1 0
+    particle dust{scale:1.3,color:[1,.2,.9]} ~x ~y ~z
+
+    if t >= 14:
+        x, y, z, dx, dy, dz = particle_location(t-14, 0.7)
+        particle end_rod ~x ~y ~z dx dy dz .1 0
+        particle dust{scale:1.3,color:[1,.2,.9]} ~x ~y ~z
+
+    if t >= 42:
+        x, y, z, dx, dy, dz = particle_location(t-42, 0.2)
+        particle end_rod ~x ~y ~z dx dy dz .1 0
+        particle dust{scale:1.3,color:[1,.2,.9]} ~x ~y ~z
+
+    if t >= 67:
+        x, y, z, dx, dy, dz = particle_location(t-67, 0.5)
+        particle end_rod ~x ~y ~z dx dy dz .1 0
+        particle dust{scale:1.3,color:[1,.2,.9]} ~x ~y ~z
+
+    r = 3
+    alpha = 2 * math.pi * random.random()
+    x = r * math.cos(alpha)
+    z = r * math.sin(alpha)
+    particle end_rod ~x ~.1 ~z 0 1 0 .5 0
+
+    r = 3
+    for i in range(30):
+        alpha = 2 * math.pi * ((i / 30) + (t / 200))
+        x = r * math.cos(alpha)
+        z = r * math.sin(alpha)
+        particle dust{scale:.7,color:[1,.2,.9]} ~x ~.1 ~z
+
+    if t == 0:
+        particle flash

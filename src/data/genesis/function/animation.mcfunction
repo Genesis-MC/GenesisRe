@@ -50,3 +50,41 @@ entity_type_tag genesis:animation {
         "item_display",
     ]
 }
+
+
+append function genesis:load:
+    scoreboard objectives add genesis.animation.using_item dummy
+    scoreboard objectives add genesis.animation.using_item_last dummy
+
+append function genesis:player/tick:
+    if score @s genesis.animation.using_item matches 1.. scoreboard players add @s genesis.animation.using_item_last 1
+    if score @s genesis.animation.using_item matches 1.. unless score @s genesis.animation.using_item = @s genesis.animation.using_item_last function genesis:animation/using_item/reset:
+        scoreboard players reset @s genesis.animation.using_item
+        scoreboard players reset @s genesis.animation.using_item_last
+
+def using_item_baked_animation(item, ticks: int, loop: bool = False):
+    def decorator(func):
+        adv_path = f'genesis:bolt-item/item/{item.id}/using_item_baked_animation/{func.__name__}'
+        advancement adv_path {
+            "criteria": { "criteria": {
+                "trigger": "minecraft:using_item",
+                "conditions": { "item": {
+                    "items": item.base_item,
+                    "predicates": { "minecraft:custom_data": { "bolt-item": { "id": f'genesis:{item.id}' }}}
+                    }
+                }}
+            },
+            "rewards": { "function": adv_path }
+        }
+
+        function adv_path:
+            advancement revoke @s only ~/
+            if loop:
+                scoreboard players operation @s genesis.animation.time %= constant(ticks) genesis
+            scoreboard players add @s genesis.animation.using_item 1
+            for t in range(ticks):
+                if score @s genesis.animation.using_item matches (t) return run function ~/../frame_{t-1}: # -1 so the baked animation starts at 0
+                    func(t-1)
+
+        return func
+    return decorator

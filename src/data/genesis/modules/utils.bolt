@@ -159,7 +159,7 @@ def player_schedule_loop(ticks: int):
 
 
 @contextmanager
-def hitbox(size: float, selector: str, fix_offset = False):
+def hitbox(size: float, selector: str, fix_offset = False, overwrite_height = 0):
     visualize_hitboxes = ctx.meta.get("visualize_hitboxes", False)
 
     if selector.endswith(']'):
@@ -211,24 +211,29 @@ def particle_hitbox(size: float, color = (1.0,0.4,0.9)):
         path += '_' + str(c)
 
     if path not in particle_hitbox_functions:
+        resolution = 20
+        if size > 1:
+            resolution = 2
+        if size > 10:
+            resolution = 1
         offset = size / 2
-        scaled_offset = int(offset * 20)
+        scaled_offset = int(offset * resolution)
         function path:
             for i in range(-scaled_offset, scaled_offset):
-                dist = i / 20
-                particle dust{scale:.1,'color':(color)} ~dist ~-offset ~-offset
-                particle dust{scale:.1,'color':(color)} ~dist ~-offset ~offset
-                particle dust{scale:.1,'color':(color)} ~dist ~offset ~-offset
-                particle dust{scale:.1,'color':(color)} ~dist ~offset ~offset
+                dist = i / resolution
+                particle dust{scale:(2/resolution),'color':(color)} ~dist ~-offset ~-offset
+                particle dust{scale:(2/resolution),'color':(color)} ~dist ~-offset ~offset
+                particle dust{scale:(2/resolution),'color':(color)} ~dist ~offset ~-offset
+                particle dust{scale:(2/resolution),'color':(color)} ~dist ~offset ~offset
 
-                particle dust{scale:.1,'color':(color)} ~-offset ~dist ~-offset
-                particle dust{scale:.1,'color':(color)} ~-offset ~dist ~offset
-                particle dust{scale:.1,'color':(color)} ~offset ~dist ~-offset
-                particle dust{scale:.1,'color':(color)} ~offset ~dist ~offset
+                particle dust{scale:(2/resolution),'color':(color)} ~-offset ~dist ~-offset
+                particle dust{scale:(2/resolution),'color':(color)} ~-offset ~dist ~offset
+                particle dust{scale:(2/resolution),'color':(color)} ~offset ~dist ~-offset
+                particle dust{scale:(2/resolution),'color':(color)} ~offset ~dist ~offset
 
-                particle dust{scale:.1,'color':(color)} ~-offset ~-offset ~dist
-                particle dust{scale:.1,'color':(color)} ~-offset ~offset ~dist
-                particle dust{scale:.1,'color':(color)} ~offset ~-offset ~dist
-                particle dust{scale:.1,'color':(color)} ~offset ~offset ~dist
+                particle dust{scale:(2/resolution),'color':(color)} ~-offset ~-offset ~dist
+                particle dust{scale:(2/resolution),'color':(color)} ~-offset ~offset ~dist
+                particle dust{scale:(2/resolution),'color':(color)} ~offset ~-offset ~dist
+                particle dust{scale:(2/resolution),'color':(color)} ~offset ~offset ~dist
             execute return 1
     return path
