@@ -257,3 +257,14 @@ def particle_hitbox(size: tuple[float,float,float], color = (1.0,0.4,0.9)):
             execute return 1
     if function path:
         yield
+
+
+chance_predicates = []
+def chance_predicate(v: float):
+    path = f'genesis:utils/chance_{v}'
+    global chance_predicates
+    if v in chance_predicates:
+        return path
+    chance_predicates.append(v)
+    predicate path {"condition": "minecraft:random_chance", "chance": (v)}
+    return path

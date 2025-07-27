@@ -410,6 +410,8 @@ class GenesisMob(metaclass=MobMetaclass):
     @classproperty
     def entity_data(cls):
         cls.tags.add("genesis.mob")
+        cls.tags.add("smithed.entity")
+        cls.tags.add("genesis.mob.checked")
         cls.tags.add(f"genesis.mob.{cls.id}")
         data = {}
         components, _ = _get_components_and_callables_from_parents(cls)
