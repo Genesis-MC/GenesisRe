@@ -9,7 +9,7 @@ from genesis:item import GenesisItem
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 from genesis:item/dagger import HarbingerOfWinter
 
-from genesis:status_impl import Frostbite, PolarVortex
+from genesis:status_impl import Frostbite, PolarVortex, Lifeline
 from genesis:animation import using_item_baked_animation, baked_animation
 from genesis:relation import ensure_id, prepare_id_inline, prepare_id, match_id, prepare_team, set_prepared_team, prepare_team_inline, match_team
 import math
@@ -44,12 +44,12 @@ class VerdantGreatsword(GenesisItem):
     }]
 
     @on_equip(slot = 'mainhand')
-    def lifeline_add():
-        tag @s add genesis.passive.lifeline
+    def lifeline_apply():
+        Lifeline.apply()
 
     @on_unequip(slot = 'mainhand')
     def lifeline_remove():
-        tag @s remove genesis.passive.lifeline
+        Lifeline.remove()
 
 # Zweihander
 @add_custom_recipe([

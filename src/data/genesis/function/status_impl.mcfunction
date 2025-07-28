@@ -151,10 +151,16 @@ class Nightfall(GenesisStatus):
     slot = 'mainhand'
     permanent = True
 
-    @on_apply_status
-    def on_apply(Nightfall):
-        effect give @s strength infinite 0 true
+    @scheduled_tick_status(20)
+    def tick(Nightfall):
+        effect give @s strength 2 0 true
 
-    @on_remove_status
-    def on_remove(Nightfall):
-        effect clear @s strength
+
+class Lifeline(GenesisStatus):
+    icon = 'genesis:item/greatsword/verdant_greatsword'
+    slot = 'mainhand'
+    permanent = True
+
+    @scheduled_tick_status(20)
+    def tick(Nightfall):
+        effect give @s regeneration 3 0 true
