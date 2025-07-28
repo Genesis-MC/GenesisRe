@@ -144,3 +144,17 @@ class SharedGait(GenesisStatus):
         smart_scoreboard_operation('#speed_shared_mind', 'genesis', '=', ('@s', SharedGait.strength))
         smart_scoreboard_operation('#speed_shared_gait', 'genesis', '*=', SharedGait.mult)
         remove_attribute_stat('speed', 'shared_gait')
+
+
+class Nightfall(GenesisStatus):
+    icon = 'genesis:item/sword/fading_dusk'
+    slot = 'mainhand'
+    permanent = True
+
+    @on_apply_status
+    def on_apply(Nightfall):
+        effect give @s strength infinite 0 true
+
+    @on_remove_status
+    def on_remove(Nightfall):
+        effect clear @s strength
