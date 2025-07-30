@@ -123,7 +123,31 @@ class Exetol(GenesisItem):
     item_name = ("Exetol", {"color":"red"})
     rarity = "legendary"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":180,"attack_speed":67})
+    stats = ("mainhand", {"physical_power":180,"attack_speed":70,"speed":-10})
+    passives = [{
+        "name": "Delta Flow",
+        "description": "On hit, split open the earth and summon up to 3 rows of basalt spikes depending on the amount of armor you have. Each row gets progressively larger and knocks up enemies higher.",
+    }]
+
+    @on_attack(slot = 'mainhand')
+    def delta_flow():
+        execute on attacker at @s run summon marker ~ ~ ~ {Tags:["genesis.ability.delta_flow"]}
+        execute on attacker run tp @e[tag=genesis.ability.delta_flow,limit=1] @s
+        execute store result entity @e[tag=genesis.ability.delta_flow,limit=1] Pos[1] double 1 run data get entity @s Pos[1] 1 
+
+        execute facing entity @e[tag=genesis.ability.delta_flow,limit=1] eyes function ~/../delta_flow_spawnspikes:
+            particle minecraft:lava ^ ^0.5 ^ 0 0 0 0 10
+            particle minecraft:lava ^ ^1 ^-1 0 0 0 0 10
+            particle minecraft:lava ^ ^1.5 ^-2.5 0 0 0 0 10
+            summon item_display ^ ^0.5 ^ {Tags:["genesis.ability.persist_sec","genesis.temp"],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1f,1f,1f]},item:{id:"minecraft:dead_bush",count:1,components:{"minecraft:item_model":"genesis:ability/basalt_spike"}}}
+            summon item_display ^ ^0.5 ^-1 {Tags:["genesis.ability.persist_sec","genesis.temp"],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1.5f,1.5f,1.5f]},item:{id:"minecraft:dead_bush",count:1,components:{"minecraft:item_model":"genesis:ability/basalt_spike"}}}
+            summon item_display ^ ^0.5 ^-2.5 {Tags:["genesis.ability.persist_sec","genesis.temp"],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:dead_bush",count:1,components:{"minecraft:item_model":"genesis:ability/basalt_spike"}}}
+        execute as @e[tag=genesis.temp,distance=..5] function ~/../delta_flow_positionspikes:
+            rotate @s facing entity @e[tag=genesis.ability.delta_flow,limit=1] eyes
+            execute at @s run rotate @s ~-180 0
+            tag @s remove genesis.temp
+        kill @e[tag=genesis.ability.delta_flow]
+
 
 # Sword of Untapped Power
 class SwordOfUntappedPower(GenesisItem):
@@ -152,7 +176,7 @@ class SwordOfUntappedPower(GenesisItem):
             data modify entity @s teleport_duration set value 2
             data modify entity @s interpolation_duration set value 1
             data modify entity @s brightness set value {block:15,sky:15}
-            data modify entity @s transformation.scale set value [0,1.5,0]
+            data modify entity @s transformation.scale set value [0.0,1.5,0.0]
 
             @baked_animation(ticks=130,on_end_kill=True)
             def sword_of_untapped_power_unleash_explosion(t, stop):
@@ -175,7 +199,7 @@ class SwordOfUntappedPower(GenesisItem):
                 if t == 0:
                     playsound genesis:ability.unleash.vocal player @a ~ ~1.8 ~ .1 .6
                     playsound genesis:ability.unleash.vocal player @a ~ ~1.8 ~ 2
-                    particle dust{scale:1.3,color:[1,.2,.9]} ~ ~18 ~ 0 10 0 0 300
+                    particle dust{scale:1.3,color:[1.0,.2,.9]} ~ ~18 ~ 0 10 0 0 300
                 if t == 20:
                     playsound genesis:ability.unleash.power_up player @a ~ ~1.8 ~ .4 1.6
                 if t == 45:
@@ -191,7 +215,7 @@ class SwordOfUntappedPower(GenesisItem):
                         x = math.cos(2*math.pi/8*i)
                         z = math.sin(2*math.pi/8*i)
                         particle end_rod ~x ~2.5 ~z x 0 z .5 0
-                        particle dust{scale:1.3,color:[1,.2,.9]} ~x ~2.5 ~z
+                        particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~2.5 ~z
                 if t > 61:
                     # shockwave hitboxes
                     d = sz - 1 # account for interpolation duration desync
@@ -228,22 +252,22 @@ def charging_unleash(t):
 
     x, y, z, dx, dy, dz = particle_location(t, 0)
     particle end_rod ~x ~y ~z dx dz dz .1 0
-    particle dust{scale:1.3,color:[1,.2,.9]} ~x ~y ~z
+    particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~y ~z
 
     if t >= 14:
         x, y, z, dx, dy, dz = particle_location(t-14, 0.7)
         particle end_rod ~x ~y ~z dx dy dz .1 0
-        particle dust{scale:1.3,color:[1,.2,.9]} ~x ~y ~z
+        particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~y ~z
 
     if t >= 42:
         x, y, z, dx, dy, dz = particle_location(t-42, 0.2)
         particle end_rod ~x ~y ~z dx dy dz .1 0
-        particle dust{scale:1.3,color:[1,.2,.9]} ~x ~y ~z
+        particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~y ~z
 
     if t >= 67:
         x, y, z, dx, dy, dz = particle_location(t-67, 0.5)
         particle end_rod ~x ~y ~z dx dy dz .1 0
-        particle dust{scale:1.3,color:[1,.2,.9]} ~x ~y ~z
+        particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~y ~z
 
     r = 3
     alpha = 2 * math.pi * random.random()
@@ -256,7 +280,7 @@ def charging_unleash(t):
         alpha = 2 * math.pi * ((i / 30) + (t / 200))
         x = r * math.cos(alpha)
         z = r * math.sin(alpha)
-        particle dust{scale:.7,color:[1,.2,.9]} ~x ~.1 ~z
+        particle dust{scale:.7,color:[1.0,.2,.9]} ~x ~.1 ~z
 
     if t == 0:
         particle flash
