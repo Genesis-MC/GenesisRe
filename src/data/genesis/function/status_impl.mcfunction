@@ -144,3 +144,23 @@ class SharedGait(GenesisStatus):
         smart_scoreboard_operation('#speed_shared_mind', 'genesis', '=', ('@s', SharedGait.strength))
         smart_scoreboard_operation('#speed_shared_gait', 'genesis', '*=', SharedGait.mult)
         remove_attribute_stat('speed', 'shared_gait')
+
+
+class Nightfall(GenesisStatus):
+    icon = 'genesis:item/sword/fading_dusk'
+    slot = 'mainhand'
+    permanent = True
+
+    @scheduled_tick_status(20)
+    def tick(Nightfall):
+        effect give @s strength 2 0 true
+
+
+class Lifeline(GenesisStatus):
+    icon = 'genesis:item/greatsword/verdant_greatsword'
+    slot = 'mainhand'
+    permanent = True
+
+    @scheduled_tick_status(20)
+    def tick(Nightfall):
+        effect give @s regeneration 3 0 true

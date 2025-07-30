@@ -1,7 +1,8 @@
 from ps_beet_bolt.bolt_item import component_names, Components, _int_hash, _get_mc_components
 from genesis:mapping import stat_wrapper_characters, rarity_text_color, categories, rarities, stat_names, category_modifiers, slots, stat_attribute_to_score
-from genesis:utils import add_translation, break_text_into_lines, camel_case_to_snake_case
+from genesis:utils import add_translation, break_text_into_lines, camel_case_to_snake_case, player_schedule_loop
 from genesis:tungsten import add_tungsten_components
+from ps_beet_bolt.bolt_item import event_decorator
 
 
 class GenesisItemMetaclass(type):
@@ -205,3 +206,14 @@ def add_loot_table(item):
     }
     item.loot_table = path
     return item
+
+
+#> DECORATORS
+
+def scheduled_tick_item(full_slot: str, interval: int):
+    @event_decorator
+    def decorator(func, item):
+        append function player_schedule_loop(interval):
+            if items entity @s (full_slot) (item.base_item)[custom_data~{'bolt-item':{id:f'{item.namespace}:{item.id}'}}] function f'{item.namespace}:bolt-item/item/{item.id}/scheduled_tick/{func.__name__}':
+                func()
+    return decorator

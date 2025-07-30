@@ -4,10 +4,10 @@ from genesis:tungsten import on_equip, on_unequip
 from bolt_item:decorators import on_consume, on_tick
 from argon:decorators import on_attack, on_attacked
 from genesis:crafter import add_custom_recipe
-from genesis:item import GenesisItem
+from genesis:item import GenesisItem, scheduled_tick_item
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
-from genesis:status_impl import Frostbite
+from genesis:status_impl import Frostbite, Nightfall
 from genesis:animation import baked_animation
 from genesis:relation import ensure_id, prepare_id_inline, prepare_id, match_id, prepare_team, set_prepared_team, prepare_team_inline, match_team
 
@@ -43,12 +43,20 @@ class FadingDusk(GenesisItem):
     }]
 
     @on_equip(slot = 'mainhand')
-    def lifeline_add():
-        tag @s add genesis.passive.nightfall
+    def nightfall_equip():
+        unless predicate genesis:is_night return fail
+        Nightfall.apply()
 
     @on_unequip(slot = 'mainhand')
-    def lifeline_remove():
-        tag @s remove genesis.passive.nightfall
+    def nightfall_unequip():
+        Nightfall.remove()
+
+    @scheduled_tick_item('weapon.mainhand', 20)
+    def nightfall_tick():
+        unless predicate genesis:is_night return run execute:
+            Nightfall.remove()
+        if entity @s[tag=(Nightfall.tag)] return fail
+        Nightfall.apply()
 
 # SaberCrimson
 @add_custom_recipe([

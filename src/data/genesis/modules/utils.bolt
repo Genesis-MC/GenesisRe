@@ -144,6 +144,7 @@ def schedule_loop(ticks: int):
     append function genesis:load:
         execute function path:
             schedule function path (ticks)
+    registered_schedule_loops.append(path)
     return path
 
 
@@ -155,6 +156,7 @@ def player_schedule_loop(ticks: int):
         return path
     append function schedule_loop(ticks):
         as @a at @s function path
+    registered_player_schedule_loops.append(path)
     return path
 
 

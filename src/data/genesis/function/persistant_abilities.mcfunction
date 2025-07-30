@@ -36,12 +36,6 @@ append function ~/sectick:
             execute if entity @e[tag=genesis.temp,limit=1,distance=..4] run particle minecraft:heart ~ ~1 ~ 0.5 0.5 0.5 0 10
         kill @s
 
-    # --Lifeline-- #
-    effect give @a[tag=genesis.passive.lifeline] regeneration 3 0 true
-
-    # --Nightfall-- #
-    execute if predicate genesis:is_night run effect give @a[tag=genesis.passive.nightfall] strength 2 0 true
-
     # --Persistant Cosmetics-- #
     execute as @e[tag=genesis.ability.persist_sec] run scoreboard players add @s genesis 1
     execute as @e[tag=genesis.ability.persist_sec] if score @s genesis matches 2.. run kill @s
