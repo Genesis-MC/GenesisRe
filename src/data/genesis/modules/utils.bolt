@@ -227,7 +227,7 @@ def particle_hitbox(size: tuple[float,float,float], color = (1.0,0.4,0.9)):
         yield
         return
 
-    path = f'genesis/debug/hitbox/{size[0]}_{size[1]}_{size[2]}'
+    path = f'genesis:debug/hitbox/{size[0]}_{size[1]}_{size[2]}'
     for c in color:
         path += '_' + str(c)
 
