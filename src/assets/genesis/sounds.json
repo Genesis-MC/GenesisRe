@@ -22,5 +22,11 @@
     "sounds": [
       "genesis:ability/unleash_ping"
     ]
+  },
+  "ability.delta_flow.burst": {
+    "subtitle": "genesis.ability.delta_flow.burst",
+    "sounds": [
+      "genesis:ability/delta_flow_burst"
+    ]
   }
 }

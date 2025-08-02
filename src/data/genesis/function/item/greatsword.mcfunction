@@ -126,27 +126,39 @@ class Exetol(GenesisItem):
     stats = ("mainhand", {"physical_power":180,"attack_speed":70,"speed":-10})
     passives = [{
         "name": "Delta Flow",
-        "description": "On hit, split open the earth and summon up to 3 rows of basalt spikes depending on the amount of armor you have. Each row gets progressively larger and knocks up enemies higher.",
+        "description": "On hit, split open the earth and summon up to 4 rows of magma spikes depending on the amount of armor you have. Each row gets progressively larger and knocks up enemies higher.",
     }]
 
     @on_attack(slot = 'mainhand')
     def delta_flow():
-        execute on attacker at @s run summon marker ~ ~ ~ {Tags:["genesis.ability.delta_flow"]}
-        execute on attacker run tp @e[tag=genesis.ability.delta_flow,limit=1] @s
-        execute store result entity @e[tag=genesis.ability.delta_flow,limit=1] Pos[1] double 1 run data get entity @s Pos[1] 1 
-
-        execute facing entity @e[tag=genesis.ability.delta_flow,limit=1] eyes function ~/../delta_flow_spawnspikes:
-            particle minecraft:lava ^ ^0.5 ^ 0 0 0 0 10
-            particle minecraft:lava ^ ^1 ^-1 0 0 0 0 10
-            particle minecraft:lava ^ ^1.5 ^-2.5 0 0 0 0 10
-            summon item_display ^ ^0.5 ^ {Tags:["genesis.ability.persist_sec","genesis.temp"],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1f,1f,1f]},item:{id:"minecraft:dead_bush",count:1,components:{"minecraft:item_model":"genesis:ability/basalt_spike"}}}
-            summon item_display ^ ^0.5 ^-1 {Tags:["genesis.ability.persist_sec","genesis.temp"],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1.5f,1.5f,1.5f]},item:{id:"minecraft:dead_bush",count:1,components:{"minecraft:item_model":"genesis:ability/basalt_spike"}}}
-            summon item_display ^ ^0.5 ^-2.5 {Tags:["genesis.ability.persist_sec","genesis.temp"],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,2f]},item:{id:"minecraft:dead_bush",count:1,components:{"minecraft:item_model":"genesis:ability/basalt_spike"}}}
+        with ensure_id():
+            scoreboard players operation #caster genesis = @s argon.id
+        prepare_team()
+        playsound genesis:ability.delta_flow.burst player @a ~ ~ ~ 0.3 1.6
+        particle dust_pillar{block_state:"blackstone"} ~ ~-0.2 ~ 0.3 0 0.3 0 20
+        # Summon marker as same rotation and xz as player but y of the mob
+        execute on attacker at @s run summon marker ~ ~ ~ {Tags:["genesis.ability.magma_spike_reference"]}
+        execute on attacker run tp @e[tag=genesis.ability.magma_spike_reference,limit=1] @s
+        execute store result entity @e[tag=genesis.ability.magma_spike_reference,limit=1] Pos[1] double 1 run data get entity @s Pos[1] 1 
+        # Spawn spikes
+        execute facing entity @e[tag=genesis.ability.magma_spike_reference,limit=1] eyes function ~/../delta_flow_spawnspikes:
+            summon item_display ^ ^0.5 ^ {Tags:["genesis.ability.magma_spike","genesis.temp"],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1f,1f,1f]},item:{id:"minecraft:dead_bush",count:1,components:{"minecraft:item_model":"genesis:ability/basalt_spike"}}}
+            summon marker ^ ^0.7 ^-1.1 {Tags:["genesis.ability.magma_spike","genesis.ability.magma_spike_marker1","genesis.temp"]}
+            execute on attacker if score @s genesis.stat.armor matches 200.. run summon marker ^ ^0.9 ^-2.6 {Tags:["genesis.ability.magma_spike","genesis.ability.magma_spike_marker2","genesis.temp"]}
+            execute on attacker if score @s genesis.stat.armor matches 240.. run summon marker ^ ^1.2 ^-4.6 {Tags:["genesis.ability.magma_spike","genesis.ability.magma_spike_marker3","genesis.temp"]}
+        # Rotate Spikes
         execute as @e[tag=genesis.temp,distance=..5] function ~/../delta_flow_positionspikes:
-            rotate @s facing entity @e[tag=genesis.ability.delta_flow,limit=1] eyes
+            scoreboard players operation @s genesis.relation.owner = #caster genesis
+            set_prepared_team()
+            rotate @s facing entity @e[tag=genesis.ability.magma_spike_reference,limit=1] eyes
             execute at @s run rotate @s ~-180 0
+            prepare_id('@s','genesis.relation.owner')
+            prepare_team()
+            with hitbox(0.8, f'@e[predicate=!{match_team}]'):
+                data merge entity @s {Motion:[0d,0.5d,0d]}
             tag @s remove genesis.temp
-        kill @e[tag=genesis.ability.delta_flow]
+        # Kill marker
+        kill @e[tag=genesis.ability.magma_spike_reference]
 
 
 # Sword of Untapped Power

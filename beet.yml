@@ -25,4 +25,4 @@ pipeline:
   - plugins.remove_empty_functions
 
 meta:
-  visualize_hitboxes: false
+  visualize_hitboxes: False
