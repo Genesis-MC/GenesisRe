@@ -7,7 +7,7 @@ from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem, scheduled_tick_item
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
-from genesis:status_impl import Frostbite, Nightfall
+from genesis:status/main import Frostbite, Nightfall
 from genesis:animation import baked_animation
 from genesis:relation import ensure_id, prepare_id_inline, prepare_id, match_id, prepare_team, set_prepared_team, prepare_team_inline, match_team
 

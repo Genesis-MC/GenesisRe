@@ -1,4 +1,5 @@
 from genesis:utils import constant
+from ps_beet_bolt.bolt_item import event_decorator
 
 
 def baked_animation(ticks: int, loop: bool = False, on_end_kill: bool = False):
@@ -62,8 +63,9 @@ append function genesis:player/tick:
         scoreboard players reset @s genesis.animation.using_item
         scoreboard players reset @s genesis.animation.using_item_last
 
-def using_item_baked_animation(item, ticks: int, loop: bool = False):
-    def decorator(func):
+def using_item_baked_animation(ticks: int, loop: bool = False):
+    @event_decorator
+    def decorator(func, item):
         adv_path = f'genesis:bolt-item/item/{item.id}/using_item_baked_animation/{func.__name__}'
         advancement adv_path {
             "criteria": { "criteria": {
@@ -83,8 +85,8 @@ def using_item_baked_animation(item, ticks: int, loop: bool = False):
                 scoreboard players operation @s genesis.animation.time %= constant(ticks) genesis
             scoreboard players add @s genesis.animation.using_item 1
             for t in range(ticks):
-                if score @s genesis.animation.using_item matches (t) return run function ~/../frame_{t-1}: # -1 so the baked animation starts at 0
-                    func(t-1)
+                if score @s genesis.animation.using_item matches (t+1) return run function ~/frame_{t}: # -1 so the baked animation starts at 0
+                    func(t)
 
         return func
     return decorator

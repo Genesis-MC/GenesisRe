@@ -88,7 +88,7 @@ append function_tag genesis:mana/changed {"values":["genesis:right_click_ability
 function ~/update_cooldown/ability_haste_check:
     for slot, nbt_path in [("mainhand","SelectedItem"),("offhand","equipment.offhand")]:
         unless entity @s[tag=f'genesis.right_click_ability.not_enough_mana.{slot}'] if items entity @s f'weapon.{slot}' *[custom_data~{genesis:{'right_click_ability':{}}}] function ~/../ability_haste_{slot}:
-            store result score .cooldown genesis data get entity @s f'{nbt_path}.components."minecraft:custom_data".genesis.right_click_ability.cooldown' 4000
+            store result score .cooldown genesis data get entity @s f'{nbt_path}.components."minecraft:custom_data".genesis.right_click_ability.cooldown' 4000 # 20 * 100 = 4000
             store result score .previously_reduced_cooldown genesis data get entity @s f'{nbt_path}.components."minecraft:use_cooldown".seconds' 20
 
             # Calculate original cooldown reduced by ability haste

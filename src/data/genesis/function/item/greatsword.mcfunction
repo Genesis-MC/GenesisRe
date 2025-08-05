@@ -9,7 +9,7 @@ from genesis:item import GenesisItem
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 from genesis:item/dagger import HarbingerOfWinter
 
-from genesis:status_impl import Frostbite, PolarVortex, Lifeline
+from genesis:status/main import Frostbite, PolarVortex, Lifeline
 from genesis:animation import using_item_baked_animation, baked_animation
 from genesis:relation import ensure_id, prepare_id_inline, prepare_id, match_id, prepare_team, set_prepared_team, prepare_team_inline, match_team
 import math
@@ -162,6 +162,7 @@ class Exetol(GenesisItem):
 
 
 # Sword of Untapped Power
+random.seed('sword_of_untapped_power_unleash')
 class SwordOfUntappedPower(GenesisItem):
     item_name = ("Sword of Untapped Power", {"color":"dark_purple"})
     rarity = "transcendent"
@@ -171,8 +172,8 @@ class SwordOfUntappedPower(GenesisItem):
     @right_click_ability(
         name = "Unleash",
         description = "Concentrate to unleash the full power entrapped in this weapon to create a giant explosion that encompasses all.",
-        cooldown = 1, # 40,
-        mana = 1, # 100,
+        cooldown = 40,
+        mana = 100,
         charge_time = 5,
         charge_animation = "block",
     )
@@ -245,55 +246,53 @@ class SwordOfUntappedPower(GenesisItem):
                             with hitbox(width, f'@e[predicate=!{match_team}]', overwrite_y=10):
                                 damage @s 20 generic by @a[predicate=(match_id),limit=1]
 
+    @using_item_baked_animation(ticks=99) # This would actually be 5 * 20 but consumable component triggers at that frame, so its 5 * 20 - 1
+    def charging_unleash(t):
+        def particle_location(t, offset):
+            y = t / 8
+            spins = 999 / (t + 30)
+            r = (10 / (y + 4)) - 0.5
+            x = math.cos(math.pi*offset*2+2*math.pi/spins*t)*r
+            z = math.sin(math.pi*offset*2+2*math.pi/spins*t)*r
+            dy = ((t+1) / 8) - y
+            dspins = (999 / (t + 31)) - spins
+            dr = ((10 / (y + dy + 4)) - 0.5) - r
+            dx = (math.cos(math.pi*offset*2+2*math.pi/(spins+dspins)*(t+1))*(r+dr)) - x
+            dz = (math.sin(math.pi*offset*2+2*math.pi/(spins+dspins)*(t+1))*(r+dr)) - z
+            return (x,y,z,dx,dy,dz)
 
-random.seed('sword_of_untapped_power_unleash')
-@using_item_baked_animation(item=SwordOfUntappedPower,ticks=99) # This would actually be 5 * 20 but consumable component triggers at that frame, so its 5 * 20 - 1
-def charging_unleash(t):
-    def particle_location(t, offset):
-        y = t / 8
-        spins = 999 / (t + 30)
-        r = (10 / (y + 4)) - 0.5
-        x = math.cos(math.pi*offset*2+2*math.pi/spins*t)*r
-        z = math.sin(math.pi*offset*2+2*math.pi/spins*t)*r
-        dy = ((t+1) / 8) - y
-        dspins = (999 / (t + 31)) - spins
-        dr = ((10 / (y + dy + 4)) - 0.5) - r
-        dx = (math.cos(math.pi*offset*2+2*math.pi/(spins+dspins)*(t+1))*(r+dr)) - x
-        dz = (math.sin(math.pi*offset*2+2*math.pi/(spins+dspins)*(t+1))*(r+dr)) - z
-        return (x,y,z,dx,dy,dz)
-
-    x, y, z, dx, dy, dz = particle_location(t, 0)
-    particle end_rod ~x ~y ~z dx dz dz .1 0
-    particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~y ~z
-
-    if t >= 14:
-        x, y, z, dx, dy, dz = particle_location(t-14, 0.7)
-        particle end_rod ~x ~y ~z dx dy dz .1 0
+        x, y, z, dx, dy, dz = particle_location(t, 0)
+        particle end_rod ~x ~y ~z dx dz dz .1 0
         particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~y ~z
 
-    if t >= 42:
-        x, y, z, dx, dy, dz = particle_location(t-42, 0.2)
-        particle end_rod ~x ~y ~z dx dy dz .1 0
-        particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~y ~z
+        if t >= 14:
+            x, y, z, dx, dy, dz = particle_location(t-14, 0.7)
+            particle end_rod ~x ~y ~z dx dy dz .1 0
+            particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~y ~z
 
-    if t >= 67:
-        x, y, z, dx, dy, dz = particle_location(t-67, 0.5)
-        particle end_rod ~x ~y ~z dx dy dz .1 0
-        particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~y ~z
+        if t >= 42:
+            x, y, z, dx, dy, dz = particle_location(t-42, 0.2)
+            particle end_rod ~x ~y ~z dx dy dz .1 0
+            particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~y ~z
 
-    r = 3
-    alpha = 2 * math.pi * random.random()
-    x = r * math.cos(alpha)
-    z = r * math.sin(alpha)
-    particle end_rod ~x ~.1 ~z 0 1 0 .5 0
+        if t >= 67:
+            x, y, z, dx, dy, dz = particle_location(t-67, 0.5)
+            particle end_rod ~x ~y ~z dx dy dz .1 0
+            particle dust{scale:1.3,color:[1.0,.2,.9]} ~x ~y ~z
 
-    r = 3
-    for i in range(30):
-        alpha = 2 * math.pi * ((i / 30) + (t / 200))
+        r = 3
+        alpha = 2 * math.pi * random.random()
         x = r * math.cos(alpha)
         z = r * math.sin(alpha)
-        particle dust{scale:.7,color:[1.0,.2,.9]} ~x ~.1 ~z
+        particle end_rod ~x ~.1 ~z 0 1 0 .5 0
 
-    if t == 0:
-        particle flash
-        playsound block.beacon.activate player @a ~ ~ ~ 1 0.5
+        r = 3
+        for i in range(30):
+            alpha = 2 * math.pi * ((i / 30) + (t / 200))
+            x = r * math.cos(alpha)
+            z = r * math.sin(alpha)
+            particle dust{scale:.7,color:[1.0,.2,.9]} ~x ~.1 ~z
+
+        if t == 0:
+            particle flash
+            playsound block.beacon.activate player @a ~ ~ ~ 1 0.5
