@@ -1,29 +1,37 @@
 name: GenesisRe
 version: v0.1.0
 output: build
-require:
-  - bolt
-  - ps_beet_bolt.register.bolt_item
-  - ps_beet_bolt.register.tungsten
-  - ps_beet_bolt.register.argon
 
 data_pack:
   load:
     - libraries/mc-tungsten*
     - libraries/mc-argon*
-    - src
   name: GenesisRe
   description: Genesis Rewrite
+  zipped: false
 
 resource_pack:
-  load: src
   name: GenesisRe-RP
   description: Genesis Rewrite
+  zipped: false
 
 pipeline:
-  - mecha
-  - plugins.remove_empty_functions
-  - plugins.new_pack_format_fix
+  - require:
+      - bolt
+      - ps_beet_bolt.register.bolt_item
+      - ps_beet_bolt.register.tungsten
+      - ps_beet_bolt.register.argon
+
+    data_pack:
+      load: src
+
+    resource_pack:
+      load: src
+
+    pipeline:
+      - mecha
+      - plugins.remove_empty_functions
+      - plugins.new_pack_format_fix
 
 meta:
   visualize_hitboxes: False
