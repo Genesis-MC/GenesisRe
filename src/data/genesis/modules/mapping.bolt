@@ -28,6 +28,7 @@ categories = [
 
     "ingredient", # crafting
     "mineral", # minerology
+    "curio", # e.g. the pegaeon egg
 
     "food",
     "meal",
