@@ -85,7 +85,14 @@
     ],
     "fallback": {
       "type": "minecraft:model",
-      "model": "minecraft:block/acacia_log"
+      "model": "genesis:item/curio/pegaeon_egg/block",
+      "tints": [
+        {
+          "type": "minecraft:custom_model_data",
+          "index": 0,
+          "default": 25087
+        }
+      ]
     }
   }
 }

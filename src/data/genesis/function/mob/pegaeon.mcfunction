@@ -1,5 +1,5 @@
 from genesis:interaction import call_on_rclick_tagged, call_on_lclick_tagged
-from genesis:item import GenesisItem
+from genesis:item import GenesisItem, block_model_item
 
 class PegaeonEgg(GenesisItem):
     item_name = ("Pegaeon Egg", {})
@@ -14,6 +14,7 @@ class PegaeonEgg(GenesisItem):
     enchantment_glint_override = False
     item_model = "genesis:curio/pegaeon_egg"
 
+NestModelItem = block_model_item("pegaeon_nest")
 
 ### API FUNCS ###
 function ~/spawn_nest:
@@ -25,8 +26,8 @@ function ~/spawn_nest:
   execute align xyz positioned ~0.5 ~ ~0.5 if entity @e[type=item_display,tag=genesis.pegaeon_nest,distance=..0.1] run return fail
   eggs = []
   for i in range(3):
-    eggs.append({"id":"minecraft:item_display","Tags":["genesis","genesis.pegaeon_egg_in_nest"],"Rotation":[(120*i),0],"width":WIDTH,"height":HEIGHT})
-  execute align xyz positioned ~0.5 ~ ~0.5 run summon item_display ~ ~ ~ {Tags:["genesis","genesis.pegaeon_nest"],item:{id:"minecraft:dead_bush"},width:WIDTH,height:HEIGHT,Passengers:([{id:"minecraft:interaction",width:WIDTH,height:HEIGHT,response:true,Tags:["genesis","genesis.interaction","genesis.pegaeon_nest"]}] + eggs)}
+    eggs.append({"id":"minecraft:item_display","Tags":["genesis","genesis.pegaeon_egg_in_nest"],"Rotation":[(120*i),0],"width":WIDTH,"height":HEIGHT,"transformation":{"left_rotation":[0,0,0,1],"right_rotation":[0,0,0,1],"translation":[0.7,0.54,0],"scale":[1,1,1]}})
+  execute align xyz positioned ~0.5 ~ ~0.5 run summon item_display ~ ~ ~ {Tags:["genesis","genesis.pegaeon_nest"],item:NestModelItem,width:WIDTH,height:HEIGHT,transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0.52f,0f],scale:[1f,1f,1f]},Passengers:([{id:"minecraft:interaction",width:WIDTH,height:HEIGHT,response:true,Tags:["genesis","genesis.interaction","genesis.pegaeon_nest"]}] + eggs)}
   execute align xyz positioned ~0.5 ~ ~0.5 as @n[type=item_display,tag=genesis.pegaeon_nest,distance=..0.1]:
     # initialise nest
     data modify storage genesis:temp mob.pegaeon set value {nest:{pos:[I;0,0,0]},egg:{id:PegaeonEgg.base_item,components:PegaeonEgg.components}}

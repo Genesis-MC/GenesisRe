@@ -173,6 +173,18 @@ def item_model_creator(item: Components):
 
     return truncated_path
 
+def block_model_item(block_model):
+    """
+    Generates a resource pack item (assets/namespace/items) to
+    display a block model
+    Returns an item with ID and components to display said model
+    """
+    item_model_path = f"genesis:block/{block_model}"
+    item_model item_model_path {"model": {
+        "type": "minecraft:model",
+        "model": f"genesis:block/{block_model}"
+    }}
+    return {"id":"minecraft:poisonous_potato", "components": {"minecraft:item_model": item_model_path}}
 
 def passives_handler(item: Components, passives: list[dict[str,str]]):
     pre_line = []

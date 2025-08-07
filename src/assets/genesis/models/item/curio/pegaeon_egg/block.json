@@ -1,0 +1,37 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"0": "genesis:item/curio/pegaeon_egg/block_0",
+		"1": "genesis:item/curio/pegaeon_egg/block_1"
+	},
+	"elements": [
+		{
+			"from": [5, 0, 4],
+			"to": [11, 10, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 0, 4]},
+			"faces": {
+				"north": {"uv": [8, 0, 14, 10], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [0, 0, 8, 10], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [8, 0, 14, 10], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [0, 0, 8, 10], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [8, 16, 0, 10], "rotation": 90, "texture": "#0", "tintindex": 0},
+				"down": {"uv": [16, 10, 8, 16], "rotation": 270, "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"from": [5, 0, 4],
+			"to": [11, 10, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 0, 4]},
+			"faces": {
+				"north": {"uv": [8, 0, 14, 10], "texture": "#1"},
+				"east": {"uv": [0, 0, 8, 10], "texture": "#1"},
+				"south": {"uv": [8, 0, 14, 10], "texture": "#1"},
+				"west": {"uv": [0, 0, 8, 10], "texture": "#1"},
+				"up": {"uv": [8, 16, 0, 10], "rotation": 90, "texture": "#1"},
+				"down": {"uv": [16, 10, 8, 16], "rotation": 270, "texture": "#1"}
+			}
+		}
+	]
+}
