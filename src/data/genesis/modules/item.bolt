@@ -1,6 +1,6 @@
 from ps_beet_bolt.bolt_item import component_names, Components, _int_hash, _get_mc_components
 from genesis:mapping import stat_wrapper_characters, rarity_text_color, categories, rarities, stat_names, category_modifiers, slots, stat_attribute_to_score
-from genesis:utils import add_translation, break_text_into_lines, camel_case_to_snake_case, player_schedule_loop
+from genesis:utils import add_translation, break_text_into_lines, camel_case_to_snake_case, player_schedule_loop, classproperty
 from genesis:tungsten import add_tungsten_components
 from ps_beet_bolt.bolt_item import event_decorator
 
@@ -66,6 +66,12 @@ class GenesisItemMetaclass(type):
 
 class GenesisItem(metaclass=GenesisItemMetaclass):
     abstract = True
+
+    @classproperty
+    def selector(cls):
+        # returns an item selector used in e.g. the item command:
+        # /execute if items entity @s weapon.mainhand id[predicates] <- this thing
+        return f"{cls.base_item}[minecraft:custom_data~{{bolt-item:{{id:\"{cls.namespace}:{cls.id}\"}}}}]"
 
 
 def stats_handler(item: Components, stats_component: tuple[str,dict[str,int]]):
