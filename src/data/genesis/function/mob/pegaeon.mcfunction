@@ -1,5 +1,6 @@
 from genesis:interaction import call_on_rclick_tagged, call_on_lclick_tagged
 from genesis:item import GenesisItem, block_model_item
+from genesis:schedule import schedule_on_entity_fixed
 MAX_DIST_BETWEEN_NESTS = 1000
 ROOT = ~/
 
@@ -80,7 +81,7 @@ predicate SAFE_BLOCK_CONFIG {
 function ~/spawn:
   WIDTH = 2
   HEIGHT = 2
-  summon item_display ~ ~ ~ {Tags:["genesis","genesis.pegaeon","genesis.pegaeon.parked","genesis.pegaeon.new"],item:{id:"minecraft:dragon_head"},width:WIDTH,height:HEIGHT,transformation:{left_rotation:[0f,1f,0f,0f],right_rotation:[0f,0f,0f,1f],translation:[0f,1f,0f],scale:[1f,1f,1f]},Passengers:([{id:"minecraft:interaction",width:WIDTH,height:HEIGHT,response:true,Tags:["genesis","genesis.interaction","genesis.pegaeon"]}])}
+  summon item_display ~ ~ ~ {Tags:["genesis","genesis.pegaeon","genesis.pegaeon.parked","genesis.pegaeon.new"],teleport_duration:3,item:{id:"minecraft:dragon_head"},width:WIDTH,height:HEIGHT,transformation:{left_rotation:[0f,1f,0f,0f],right_rotation:[0f,0f,0f,1f],translation:[0f,1f,0f],scale:[1f,1f,1f]},Passengers:([{id:"minecraft:interaction",width:WIDTH,height:HEIGHT,response:true,Tags:["genesis","genesis.interaction","genesis.pegaeon"]}])}
   execute as @n[type=item_display,tag=genesis.pegaeon.new,distance=..0.1]:
     tag @s remove genesis.pegaeon.new
     data modify storage genesis:temp mob.pegaeon.macro set value {}
@@ -92,6 +93,36 @@ function ~/spawn:
 function ~/lclick:
   call_on_lclick_tagged("genesis.pegaeon")
   execute on vehicle run function genesis:utils/entity/kill_stack
+
+function ~/rclick:
+  call_on_rclick_tagged("genesis.pegaeon")
+  execute on vehicle if entity @s[tag=genesis.pegaeon.flying] run return fail
+  SIT_HEIGHT = 1
+  data merge entity @s {width:0,height:SIT_HEIGHT}
+  execute on vehicle:
+    tag @s remove genesis.pegaeon.parked
+    tag @s add genesis.pegaeon.flying
+    data modify storage genesis:temp mob.pegaeon.mount set from entity @s data
+    execute summon marker:
+      tag @s add genesis
+      tag @s add genesis.pegaeon_absent
+      data modify entity @s data set from storage genesis:temp mob.pegaeon.mount
+      schedule_on_entity_fixed("function genesis:mob/pegaeon/reappear", 50)
+  ride @p[tag=genesis.interaction.player] mount @s
+  schedule function ~/../flying_tick 1t replace
+
+function ~/reappear:
+  data modify storage genesis:temp mob.pegaeon.mount set from entity @s data
+  kill @s
+  function ~/../spawn
+
+function ~/flying_tick:
+  execute if entity @e[type=item_display,tag=genesis.pegaeon.flying,limit=1] run schedule function ~/ 1t replace
+  execute as @e[type=item_display,tag=genesis.pegaeon.flying] at @s:
+    tp @s ^ ^ ^1
+    execute unless entity @a[distance=..10,limit=1]:
+      execute on passengers if entity @s[type=interaction] on passengers run ride @s dismount
+      function genesis:utils/entity/kill_stack
 
 function ~/nest:
   function ~/rclick:
@@ -146,7 +177,7 @@ function ~/nest:
           function f"{ROOT}/spawn"
         kill @s
       
-      tellraw @a {"text":"can_hatch=","extra":[{"score":{"name":"#can_hatch","objective":"genesis"}}]}
+      #tellraw @a {"text":"can_hatch=","extra":[{"score":{"name":"#can_hatch","objective":"genesis"}}]}
 
   
   function ~/lclick:

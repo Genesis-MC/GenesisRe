@@ -1,0 +1,69 @@
+append function genesis:load:
+  scoreboard objectives add genesis.schedule.next dummy
+
+def schedule_on_entity_fixed(command, delay, selector="@s"):
+  data modify storage genesis:temp schedule.command set value command
+  data modify storage genesis:temp schedule.delay set value delay
+  execute as @s run function genesis:schedule/entity
+
+function ~/entity:
+  """
+  Schedules a function to be run by an entity after a specified delay.
+  Cannot be used on players!
+  Input:
+  - storage genesis:temp schedule.command: str
+  - storage genesis:temp schedule.delay: int: delay in ticks
+  """
+  data modify storage genesis:temp schedule.internal.events set value []
+  data modify storage genesis:temp schedule.internal.events set from entity @s data.genesis.scheduled_events
+  execute store result score #time genesis run data get storage genesis:temp schedule.delay 1
+  execute store result score #gametime genesis run time query gametime
+  scoreboard players operation #time genesis += #gametime genesis
+  data modify storage genesis:temp schedule.internal.event set value {}
+  data modify storage genesis:temp schedule.internal.event.command set from storage genesis:temp schedule.command
+  execute store result storage genesis:temp schedule.internal.event.time int 1 run scoreboard players get #time genesis
+  data modify storage genesis:temp schedule.internal.events append from storage genesis:temp schedule.internal.event
+  function ~/../internal/get_min_event_time
+  scoreboard players operation @s genesis.schedule.next = #min genesis
+  tag @s add genesis.schedule.has_event
+  data modify entity @s data.genesis.scheduled_events set from storage genesis:temp schedule.internal.events
+
+append function genesis:tick:
+  function genesis:schedule/tick
+function ~/tick:
+  execute store result score #gametime genesis run time query gametime
+  execute as @e[tag=genesis.schedule.has_event] if score #gametime genesis >= @s genesis.schedule.next at @s run function ~/../internal/reached_time
+
+function ~/internal:
+  function ~/reached_time:
+    data modify storage genesis:temp schedule.internal.events set value []
+    data modify storage genesis:temp schedule.internal.events set from entity @s data.genesis.scheduled_events
+    data modify storage genesis:temp schedule.internal.passed_events set value []
+    data modify storage genesis:temp schedule.internal.macro set value {}
+    execute store result storage genesis:temp schedule.internal.macro.time int 1 run scoreboard players get @s genesis.schedule.next
+    with storage genesis:temp schedule.internal.macro:
+      $data modify storage genesis:temp schedule.internal.passed_events append from storage genesis:temp schedule.internal.events[{time:$(time)}]
+      $data remove storage genesis:temp schedule.internal.events[{time:$(time)}]
+    execute if data storage genesis:temp schedule.internal.events[0]:
+      data modify entity @s data.genesis.scheduled_events set from storage genesis:temp schedule.internal.events
+      function ~/../get_min_event_time
+      scoreboard players operation @s genesis.schedule.next = #min genesis
+    execute unless data storage genesis:temp schedule.internal.events[0]:
+      data remove entity @s data.genesis.scheduled_events
+      scoreboard players reset @s genesis.schedule.next
+      tag @s remove genesis.schedule.has_event
+    execute if data storage genesis:temp schedule.internal.passed_events[0] run function ~/run_loop:
+      with storage genesis:temp schedule.internal.passed_events[0]:
+        $$(command)
+      data remove storage genesis:temp schedule.internal.passed_events[0]
+      execute if data storage genesis:temp schedule.internal.passed_events[0] run function ~/
+    
+  function ~/get_min_event_time:
+    data modify storage genesis:temp schedule.internal.temp set from storage genesis:temp schedule.internal.events
+    execute store result score #min genesis run data get storage genesis:temp schedule.internal.temp[-1].time 1
+    data remove storage genesis:temp schedule.internal.temp[-1]
+    execute if data storage genesis:temp schedule.internal.temp[0] run function ~/loop:
+      execute store result score #temp genesis run data get storage genesis:temp schedule.internal.temp[-1].time 1
+      scoreboard players operation #min genesis < #temp genesis
+      data remove storage genesis:temp schedule.internal.temp[-1]
+      execute if data storage genesis:temp schedule.internal.temp[0] run function ~/
