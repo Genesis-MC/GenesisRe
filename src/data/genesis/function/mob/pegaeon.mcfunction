@@ -94,6 +94,7 @@ function ~/spawn:
 
 function ~/lclick:
   call_on_lclick_tagged("genesis.pegaeon")
+  execute on attacker unless entity @s[gamemode=creative] run return fail
   execute on vehicle run function genesis:utils/entity/kill_stack
 
 function ~/rclick:
@@ -164,7 +165,7 @@ function ~/flying_tick:
                   x = 3 * i
                   z = 3 * j
                   execute positioned ~x ~ ~z positioned over world_surface run tp @s ~ ~ ~
-                  execute at @s run particle note ~ ~ ~ 0 0 0 0 1 force @a
+                  #execute at @s run particle note ~ ~ ~ 0 0 0 0 1 force @a
                   execute store result score #temp genesis run data get entity @s Pos[1] 1
                   scoreboard players operation #target_y genesis > #temp genesis
         kill @s
@@ -216,6 +217,13 @@ function ~/nest:
         scoreboard players operation #temp genesis *= #temp genesis
         scoreboard players operation #squared_distance genesis += #temp genesis
       execute if score #squared_distance genesis matches (100, MAX_DIST_BETWEEN_NESTS**2) run scoreboard players set #can_hatch genesis 1
+
+      execute if score #can_hatch genesis matches 1 as @e[type=item_display,tag=genesis.pegaeon,distance=..10] run function ~/check_for_connection:
+        # check if connection already exists
+        data modify storage genesis:temp temp set from storage genesis:temp mob.pegaeon.egg.components."minecraft:lodestone_tracker".target.pos
+        execute store success score #temp genesis run data modify storage genesis:temp temp set from entity @s data.target_pos
+        execute if score #temp genesis matches 0 run scoreboard players set #can_hatch genesis 0
+      execute if score #can_hatch genesis matches 1 as @e[type=marker,tag=genesis.pegaeon_absent,distance=..10] run function ~/check_for_connection
       
       execute summon item_display:
         with storage genesis:temp mob.pegaeon.macro:
@@ -242,10 +250,12 @@ function ~/nest:
           kill @s
           function f"{ROOT}/spawn"
         kill @s
+      execute if score #can_hatch genesis matches 1 on target unless entity @s[gamemode=creative] run item modify entity @s weapon.mainhand {function:"minecraft:set_count",count:-1,add:true}
       
       #tellraw @a {"text":"can_hatch=","extra":[{"score":{"name":"#can_hatch","objective":"genesis"}}]}
 
   
   function ~/lclick:
     call_on_lclick_tagged("genesis.pegaeon_nest")
+    execute on attacker unless entity @s[gamemode=creative] run return fail
     execute on vehicle run function genesis:utils/entity/kill_stack
