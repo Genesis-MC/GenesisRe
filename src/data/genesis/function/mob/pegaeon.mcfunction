@@ -2,6 +2,8 @@ from genesis:interaction import call_on_rclick_tagged, call_on_lclick_tagged
 from genesis:item import GenesisItem, block_model_item
 from genesis:schedule import schedule_on_entity_fixed
 MAX_DIST_BETWEEN_NESTS = 1000
+FLYING_HEIGHT_ABOVE_GROUND = 20
+FLYING_SPEED = 40
 ROOT = ~/
 
 class PegaeonEgg(GenesisItem):
@@ -119,10 +121,74 @@ function ~/reappear:
 function ~/flying_tick:
   execute if entity @e[type=item_display,tag=genesis.pegaeon.flying,limit=1] run schedule function ~/ 1t replace
   execute as @e[type=item_display,tag=genesis.pegaeon.flying] at @s:
-    tp @s ^ ^ ^1
-    execute unless entity @a[distance=..10,limit=1]:
-      execute on passengers if entity @s[type=interaction] on passengers run ride @s dismount
-      function genesis:utils/entity/kill_stack
+    scoreboard players set #has_passenger genesis 0
+    execute on passengers if entity @s[type=interaction] on passengers run scoreboard players set #has_passenger genesis 1
+    execute if score #has_passenger genesis matches 0 run return run function ~/../lose_passenger
+    data modify storage genesis:temp mob.pegaeon.mount set from entity @s data
+    data modify storage genesis:temp mob.pegaeon.pos set from entity @s Pos
+    execute store result score #distance_to_home genesis run data get storage genesis:temp mob.pegaeon.mount.home.pos[0] 1
+    execute store result score #temp genesis run data get storage genesis:temp mob.pegaeon.pos[0] 1
+    scoreboard players operation #distance_to_home genesis -= #temp genesis
+    scoreboard players operation #distance_to_home genesis *= #distance_to_home genesis
+    execute store result score #temp genesis run data get storage genesis:temp mob.pegaeon.mount.home.pos[2] 1
+    execute store result score #temp2 genesis run data get storage genesis:temp mob.pegaeon.pos[2] 1
+    scoreboard players operation #temp genesis -= #temp2 genesis
+    scoreboard players operation #temp genesis *= #temp genesis
+    scoreboard players operation #distance_to_home genesis += #temp genesis
+    execute store result score #distance_to_target genesis run data get storage genesis:temp mob.pegaeon.mount.target_pos[0] 1
+    execute store result score #temp genesis run data get storage genesis:temp mob.pegaeon.pos[0] 1
+    scoreboard players operation #distance_to_target genesis -= #temp genesis
+    scoreboard players operation #distance_to_target genesis *= #distance_to_target genesis
+    execute store result score #temp genesis run data get storage genesis:temp mob.pegaeon.mount.target_pos[2] 1
+    execute store result score #temp2 genesis run data get storage genesis:temp mob.pegaeon.pos[2] 1
+    scoreboard players operation #temp genesis -= #temp2 genesis
+    scoreboard players operation #temp genesis *= #temp genesis
+    scoreboard players operation #distance_to_target genesis += #temp genesis
+    execute if score #distance_to_target genesis matches (None, 4**2) run return run function ~/../reach_target
+    
+    execute:
+      execute if score #distance_to_target genesis matches (None, 50**2) run return:
+        execute store result score #target_y genesis run data get storage genesis:temp mob.pegaeon.mount.target_pos[1] 1
+        execute if score #distance_to_target genesis matches (15**2, None) scoreboard players add #target_y genesis 8
+      execute if score #distance_to_home genesis matches (None, 20**2) run return:
+        execute store result score #target_y genesis run data get storage genesis:temp mob.pegaeon.mount.home.pos[1] 1
+        scoreboard players add #target_y genesis 8
+      execute rotated ~ 0 positioned ^ ^ ^ positioned over world_surface summon marker:
+        execute store result score #target_y genesis run data get entity @s Pos[1] 1
+        for k in range(5):
+          f = (k+1) * 6
+          execute positioned ^ ^ ^k:
+            for i in range(-1, 2):
+              for j in range(-1, 2):
+                if not (i == 0 and j == 0):
+                  x = 3 * i
+                  z = 3 * j
+                  execute positioned ~x ~ ~z positioned over world_surface run tp @s ~ ~ ~
+                  execute at @s run particle note ~ ~ ~ 0 0 0 0 1 force @a
+                  execute store result score #temp genesis run data get entity @s Pos[1] 1
+                  scoreboard players operation #target_y genesis > #temp genesis
+        kill @s
+      scoreboard players add #target_y genesis FLYING_HEIGHT_ABOVE_GROUND
+    
+    execute store result score #temp genesis run data get storage genesis:temp mob.pegaeon.pos[1] 1
+    scoreboard players operation #target_y genesis -= #temp genesis
+    data modify storage genesis:temp mob.pegaeon.macro set value {}
+    execute store result storage genesis:temp mob.pegaeon.macro.dy int 1 scoreboard players get #target_y genesis
+    with storage genesis:temp mob.pegaeon.macro:
+      $execute rotated ~ 0 run rotate @s facing ^ ^$(dy) ^10
+
+    #tellraw @a ["",{"text":"to_home="},{"score":{"name":"#distance_to_home","objective":"genesis"}},{"text":", to_target="},{"score":{"name":"#distance_to_target","objective":"genesis"}},{"text":", target_y="},{"score":{"name":"#target_y","objective":"genesis"}}]
+    speed_per_tick = FLYING_SPEED / 20
+    execute rotated as @s run tp @s ^ ^ ^speed_per_tick
+      
+
+function ~/lose_passenger:
+  function genesis:utils/entity/kill_stack
+
+function ~/reach_target:
+  execute on passengers if entity @s[type=interaction] on passengers run effect give @s minecraft:slow_falling 3
+  execute on passengers if entity @s[type=interaction] on passengers run ride @s dismount
+  function genesis:utils/entity/kill_stack
 
 function ~/nest:
   function ~/rclick:
