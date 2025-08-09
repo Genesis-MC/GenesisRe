@@ -6,6 +6,7 @@ data_pack:
   load:
     - libraries/mc-tungsten*
     - libraries/mc-argon*
+    - libraries/player_motion*
   name: GenesisRe
   description: Genesis Rewrite
   zipped: false
