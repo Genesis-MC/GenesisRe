@@ -112,9 +112,15 @@ append function genesis:tick:
         particle minecraft:trial_spawner_detection_ominous ^ ^ ^-2 0 0 0 0 1
         particle minecraft:end_rod ^ ^ ^-4 0 0 0 0 1
         particle minecraft:trial_spawner_detection_ominous ^ ^ ^4 0 0 0 0 1
-    execute as @e[type=area_effect_cloud,tag=genesis.ability.revitalize_particle] at @s function genesis:persistant_abilities/revitalize_particle:
-        tp @s ~ ~ ~ ~6 ~
+    execute as @e[type=area_effect_cloud,tag=genesis.ability.revitalize_particle1] at @s function genesis:persistant_abilities/revitalize_particle1:
+        tp @s ~ ~0.02 ~ ~6 ~
         particle minecraft:happy_villager ^ ^ ^2 0 0 0 0 1
+    execute as @e[type=area_effect_cloud,tag=genesis.ability.revitalize_particle2] at @s function genesis:persistant_abilities/revitalize_particle2:
+        tp @s ~ ~0.02 ~ ~7 ~
+        particle minecraft:happy_villager ^ ^ ^3 0 0 0 0 1
+    execute as @e[type=area_effect_cloud,tag=genesis.ability.revitalize_particle3] at @s function genesis:persistant_abilities/revitalize_particle3:
+        tp @s ~ ~0.02 ~ ~8 ~
+        particle minecraft:happy_villager ^ ^ ^4 0 0 0 0 1
     execute as @e[type=marker,tag=genesis.ability.cleave_particle] at @s function genesis:persistant_abilities/cleave_particle:
         scoreboard players add @s genesis 1 
         tp @s ~ ~ ~ ~35 ~

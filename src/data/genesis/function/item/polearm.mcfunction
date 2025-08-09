@@ -221,7 +221,7 @@ class VerdantStaff(GenesisItem):
         playsound minecraft:item.bone_meal.use player @a ~ ~ ~ 1 0
         summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize1"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
         data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
-        summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle"],custom_particle:{type:"totem_of_undying"},Radius:2f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:0,duration:60,show_particles:0b}]}}
+        summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle1"],custom_particle:{type:"totem_of_undying"},Radius:2f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:0,duration:60,show_particles:0b}]}}
         
 # VerdantMasterstaff
 @add_custom_recipe([
@@ -245,7 +245,7 @@ class VerdantMasterstaff(GenesisItem):
         playsound minecraft:item.bone_meal.use player @a ~ ~ ~ 1 0
         summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize2"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
         data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
-        summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle"],custom_particle:{type:"totem_of_undying"},Radius:3f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:0,duration:40,show_particles:0b}]}}
+        summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle2"],custom_particle:{type:"totem_of_undying"},Radius:3f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:0,duration:40,show_particles:0b}]}}
 
 # VerdantSceptor
 @add_custom_recipe([
@@ -269,4 +269,4 @@ class VerdantSceptor(GenesisItem):
         playsound minecraft:item.bone_meal.use player @a ~ ~ ~ 1 0
         summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize3"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
         data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
-        summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle"],custom_particle:{type:"totem_of_undying"},Radius:4f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:1,duration:40,show_particles:0b}]}}
+        summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle3"],custom_particle:{type:"totem_of_undying"},Radius:4f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:1,duration:40,show_particles:0b}]}}
