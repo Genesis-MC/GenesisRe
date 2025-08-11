@@ -8,6 +8,8 @@ from genesis:item import GenesisItem
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
 
+from genesis:relation import ensure_id, prepare_id_inline, prepare_id, match_id, prepare_team, set_prepared_team, prepare_team_inline, match_team
+
 # IronSpear
 @add_custom_recipe([
     [None, "iron_ingot", "iron_ingot"],
@@ -219,7 +221,17 @@ class VerdantStaff(GenesisItem):
     def revitalize1():
         playsound minecraft:block.enchantment_table.use player @a ~ ~ ~ 1 0
         playsound minecraft:item.bone_meal.use player @a ~ ~ ~ 1 0
-        summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize1"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
+        with ensure_id():
+            scoreboard players operation #caster genesis = @s argon.id
+        prepare_team()
+        summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize1","genesis.temp"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
+        execute as @e[tag=genesis.temp,limit=1]:
+            scoreboard players operation @s genesis.relation.owner = #caster genesis
+            set_prepared_team()
+            prepare_id('@s','genesis.relation.owner')
+            prepare_team()
+            execute as @a[predicate=(match_id),limit=1] run say it worked
+            tag @s remove genesis.temp
         data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
         summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle1"],custom_particle:{type:"totem_of_undying"},Radius:2f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:0,duration:60,show_particles:0b}]}}
         

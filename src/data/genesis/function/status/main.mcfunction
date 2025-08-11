@@ -4,6 +4,8 @@ from genesis:mana import reduce_mana_or_return
 from genesis:utils import smart_scoreboard_operation
 from genesis:stat import modify_score_stat, modify_attribute_stat, remove_attribute_stat
 
+append function genesis:load:
+    scoreboard objectives add genesis.status.unique.frostbite.limit dummy
 
 class Frostbite(GenesisStatus):
     icon = 'genesis:font/status/frostbite'
@@ -13,7 +15,7 @@ class Frostbite(GenesisStatus):
 
     @after_value_change_status(['stacks'])
     def try_frostbite_trigger(Frostbite):
-        unless score @s (Frostbite.stacks) matches 10.. at @s return 0
+        if score @s (Frostbite.stacks) < @s genesis.status.unique.frostbite.limit at @s return 0
 
         playsound block.glass.break player @a ~ ~ ~ 1 1
         playsound entity.player.hurt_freeze player @a ~ ~ ~ 1 1
@@ -24,10 +26,16 @@ class Frostbite(GenesisStatus):
         unless score @s (Frostbite.initiator) matches -1 scoreboard players operation #id argon.id = @s (Frostbite.initiator)
         unless score @s (Frostbite.initiator) matches -1 damage @s 8 minecraft:generic by @e[type=!#genesis:non_living,limit=1,predicate=argon:match_id]
 
-        effect give @s minecraft:slowness 2 4 true
+        effect give @s minecraft:slowness 1 4 true
+        effect give @s minecraft:slowness 3 0 true
+
+        # Increase frostbite limit by 5 (Max 20)
+        unless score @s genesis.status.unique.frostbite.limit matches 20.. run scoreboard players add @s genesis.status.unique.frostbite.limit 5
         Frostbite.remove()
 
     def add_stack(amount = 1):
+        # Initializes frostbite limit to 5
+        unless score @s genesis.status.unique.frostbite.limit matches 5.. run scoreboard players set @s genesis.status.unique.frostbite.limit 5
         if amount not in Frostbite.initialized:
             Frostbite.initialized.append(amount)
             function f'genesis:status/custom/frostbite/apply_{amount}':
