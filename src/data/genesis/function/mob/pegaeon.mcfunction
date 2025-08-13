@@ -83,7 +83,8 @@ predicate SAFE_BLOCK_CONFIG {
 function ~/spawn:
   WIDTH = 2
   HEIGHT = 2
-  summon item_display ~ ~ ~ {Tags:["genesis","genesis.pegaeon","genesis.pegaeon.parked","genesis.pegaeon.new"],teleport_duration:3,item:{id:"minecraft:dragon_head"},width:WIDTH,height:HEIGHT,transformation:{left_rotation:[0f,1f,0f,0f],right_rotation:[0f,0f,0f,1f],translation:[0f,1f,0f],scale:[1f,1f,1f]},Passengers:([{id:"minecraft:interaction",width:WIDTH,height:HEIGHT,response:true,Tags:["genesis","genesis.interaction","genesis.pegaeon"]}])}
+  SEAT_HEIGHT = 1.0625
+  summon item_display ~ ~ ~ {Tags:["genesis","genesis.pegaeon","genesis.pegaeon.parked","genesis.pegaeon.new"],teleport_duration:3,transformation:{left_rotation:[0f,1f,0f,0f],right_rotation:[0f,0f,0f,1f],translation:[0f,1f,0f],scale:[1f,1f,1f]},Passengers:([{id:"minecraft:interaction",width:WIDTH,height:HEIGHT,response:true,Tags:["genesis","genesis.interaction","genesis.pegaeon"]},{id:"minecraft:interaction",width:0,height:SEAT_HEIGHT,Tags:["genesis","genesis.pegaeon.seat"]}])}
   execute as @n[type=item_display,tag=genesis.pegaeon.new,distance=..0.1]:
     tag @s remove genesis.pegaeon.new
     data modify storage genesis:temp mob.pegaeon.macro set value {}
@@ -91,6 +92,9 @@ function ~/spawn:
     with storage genesis:temp mob.pegaeon.macro:
       $rotate @s $(x) 0
     data modify entity @s data set from storage genesis:temp mob.pegaeon.mount
+    execute rotated as @s run function animated_java:genesis_pegaeon/summon {args:{animation:"idle",frame:0}}
+    execute on passengers if entity @s[type=interaction,tag=genesis.pegaeon.seat] run ride @n[type=minecraft:item_display,tag=aj.genesis_pegaeon.root,distance=..0.1] mount @s
+    execute on passengers if entity @s[type=interaction,tag=genesis.pegaeon.seat] on passengers if entity @s[type=item_display,tag=aj.genesis_pegaeon.root] on passengers if entity @s[type=item_display,tag=aj.genesis_pegaeon.bone] run data modify entity @s item.components."minecraft:dyed_color" set from storage genesis:temp mob.pegaeon.mount.color
 
 function ~/lclick:
   call_on_lclick_tagged("genesis.pegaeon")
@@ -100,19 +104,26 @@ function ~/lclick:
 function ~/rclick:
   call_on_rclick_tagged("genesis.pegaeon")
   execute on vehicle if entity @s[tag=genesis.pegaeon.flying] run return fail
-  SIT_HEIGHT = 1
-  data merge entity @s {width:0,height:SIT_HEIGHT}
   execute on vehicle:
     tag @s remove genesis.pegaeon.parked
-    tag @s add genesis.pegaeon.flying
+    tag @s add genesis.pegaeon.taking_off
     data modify storage genesis:temp mob.pegaeon.mount set from entity @s data
     execute summon marker:
       tag @s add genesis
       tag @s add genesis.pegaeon_absent
       data modify entity @s data set from storage genesis:temp mob.pegaeon.mount
       schedule_on_entity_fixed("function genesis:mob/pegaeon/reappear", 50)
-  ride @p[tag=genesis.interaction.player] mount @s
+    execute on passengers if entity @s[type=interaction,tag=genesis.pegaeon.seat] on passengers if entity @s[type=item_display,tag=aj.genesis_pegaeon.root] run function animated_java:genesis_pegaeon/animations/take_off/play
+    schedule_on_entity_fixed("function genesis:mob/pegaeon/finish_takeoff", 40)
+    execute on passengers if entity @s[type=interaction,tag=genesis.pegaeon.seat] run ride @p[tag=genesis.interaction.player] mount @s
+  kill @s
+
+function ~/finish_takeoff:
+  tag @s remove genesis.pegaeon.taking_off
+  tag @s add genesis.pegaeon.flying
+  execute on passengers if entity @s[type=interaction,tag=genesis.pegaeon.seat] on passengers if entity @s[type=item_display,tag=aj.genesis_pegaeon.root] run function animated_java:genesis_pegaeon/animations/flying/play
   schedule function ~/../flying_tick 1t replace
+
 
 function ~/reappear:
   data modify storage genesis:temp mob.pegaeon.mount set from entity @s data
@@ -123,7 +134,7 @@ function ~/flying_tick:
   execute if entity @e[type=item_display,tag=genesis.pegaeon.flying,limit=1] run schedule function ~/ 1t replace
   execute as @e[type=item_display,tag=genesis.pegaeon.flying] at @s:
     scoreboard players set #has_passenger genesis 0
-    execute on passengers if entity @s[type=interaction] on passengers run scoreboard players set #has_passenger genesis 1
+    execute on passengers if entity @s[type=interaction,tag=genesis.pegaeon.seat] on passengers unless entity @s[type=item_display] run scoreboard players set #has_passenger genesis 1
     execute if score #has_passenger genesis matches 0 run return run function ~/../lose_passenger
     data modify storage genesis:temp mob.pegaeon.mount set from entity @s data
     data modify storage genesis:temp mob.pegaeon.pos set from entity @s Pos
@@ -177,6 +188,7 @@ function ~/flying_tick:
     execute store result storage genesis:temp mob.pegaeon.macro.dy int 1 scoreboard players get #target_y genesis
     with storage genesis:temp mob.pegaeon.macro:
       $execute rotated ~ 0 run rotate @s facing ^ ^$(dy) ^10
+    execute rotated as @s on passengers if entity @s[type=interaction,tag=genesis.pegaeon.seat] on passengers if entity @s[type=item_display,tag=aj.genesis_pegaeon.root] run rotate @s ~ ~
 
     #tellraw @a ["",{"text":"to_home="},{"score":{"name":"#distance_to_home","objective":"genesis"}},{"text":", to_target="},{"score":{"name":"#distance_to_target","objective":"genesis"}},{"text":", target_y="},{"score":{"name":"#target_y","objective":"genesis"}}]
     speed_per_tick = FLYING_SPEED / 20
@@ -184,11 +196,15 @@ function ~/flying_tick:
       
 
 function ~/lose_passenger:
-  function genesis:utils/entity/kill_stack
+  function ~/../kill
 
 function ~/reach_target:
-  execute on passengers if entity @s[type=interaction] on passengers run effect give @s minecraft:slow_falling 3
-  execute on passengers if entity @s[type=interaction] on passengers run ride @s dismount
+  function ~/../kill
+
+function ~/kill:
+  execute on passengers if entity @s[type=interaction,tag=genesis.pegaeon.seat] on passengers if entity @s[type=item_display,tag=aj.genesis_pegaeon.root] run function animated_java:genesis_pegaeon/remove/this
+  execute on passengers if entity @s[type=interaction,tag=genesis.pegaeon.seat] on passengers run effect give @s minecraft:slow_falling 3
+  execute on passengers if entity @s[type=interaction,tag=genesis.pegaeon.seat] on passengers run ride @s dismount
   function genesis:utils/entity/kill_stack
 
 function ~/nest:

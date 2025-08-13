@@ -1,0 +1,85 @@
+{
+	"textures": {
+		"0": "animated_java:blueprint/genesis_pegaeon/texture",
+		"particle": "minecraft:item/pufferfish"
+	},
+	"display": {
+		"head": {
+			"rotation": [0, 180, 0]
+		}
+	},
+	"elements": [
+		{
+			"from": [2.66667, 8, 8],
+			"to": [13.33333, 8, 32],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [9.77778, 8, 8.88889]
+			},
+			"faces": {
+				"north": {
+					"uv": [0, 0, 1.5, 0],
+					"texture": "#0"
+				},
+				"east": {
+					"uv": [0, 0, 3.375, 0],
+					"texture": "#0"
+				},
+				"south": {
+					"uv": [0, 0, 1.5, 0],
+					"texture": "#0"
+				},
+				"west": {
+					"uv": [0, 0, 3.375, 0],
+					"texture": "#0"
+				},
+				"up": {
+					"uv": [1.5, 6.375, 0, 3],
+					"texture": "#0"
+				},
+				"down": {
+					"uv": [1.5, 3, 0, 6.375],
+					"texture": "#0"
+				}
+			}
+		},
+		{
+			"from": [2.66667, 8, 8],
+			"to": [13.33333, 8, 32],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [9.77778, 8, 8.88889]
+			},
+			"faces": {
+				"north": {
+					"uv": [0, 0, 1.5, 0],
+					"texture": "#0"
+				},
+				"east": {
+					"uv": [0, 0, 3.375, 0],
+					"texture": "#0"
+				},
+				"south": {
+					"uv": [0, 0, 1.5, 0],
+					"texture": "#0"
+				},
+				"west": {
+					"uv": [0, 0, 3.375, 0],
+					"texture": "#0"
+				},
+				"up": {
+					"uv": [3, 6.375, 1.5, 3],
+					"texture": "#0",
+					"tintindex": 0
+				},
+				"down": {
+					"uv": [3, 3, 1.5, 6.375],
+					"texture": "#0",
+					"tintindex": 0
+				}
+			}
+		}
+	]
+}

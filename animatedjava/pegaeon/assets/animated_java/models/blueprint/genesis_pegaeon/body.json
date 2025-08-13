@@ -1,0 +1,48 @@
+{
+	"textures": {
+		"0": "animated_java:blueprint/genesis_pegaeon/texture",
+		"particle": "minecraft:item/pufferfish"
+	},
+	"display": {
+		"head": {
+			"rotation": [0, 180, 0]
+		}
+	},
+	"elements": [
+		{
+			"from": [3, 4, -3],
+			"to": [13, 12, 18],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [7, 6, 8]
+			},
+			"faces": {
+				"north": {
+					"uv": [3.5, 1.875, 4.75, 2.875],
+					"texture": "#0"
+				},
+				"east": {
+					"uv": [5.875, 0, 8.5, 1],
+					"texture": "#0"
+				},
+				"south": {
+					"uv": [5.5, 6.875, 6.75, 7.875],
+					"texture": "#0"
+				},
+				"west": {
+					"uv": [8.5, 0, 5.875, 1],
+					"texture": "#0"
+				},
+				"up": {
+					"uv": [4.25, 7.5, 3, 4.875],
+					"texture": "#0"
+				},
+				"down": {
+					"uv": [5.5, 4.875, 4.25, 7.5],
+					"texture": "#0"
+				}
+			}
+		}
+	]
+}

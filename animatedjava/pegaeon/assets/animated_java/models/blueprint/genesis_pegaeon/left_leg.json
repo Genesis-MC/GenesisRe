@@ -1,0 +1,118 @@
+{
+	"textures": {
+		"0": "animated_java:blueprint/genesis_pegaeon/texture",
+		"particle": "minecraft:item/pufferfish"
+	},
+	"display": {
+		"head": {
+			"rotation": [0, 180, 0]
+		}
+	},
+	"elements": [
+		{
+			"from": [5, 2, 5],
+			"to": [10, 12, 12],
+			"rotation": {
+				"angle": 22.5,
+				"axis": "x",
+				"origin": [9, 8, 8]
+			},
+			"faces": {
+				"north": {
+					"uv": [8.75, 1, 8.125, 2.25],
+					"texture": "#0"
+				},
+				"east": {
+					"uv": [2, 7.875, 1.125, 9.125],
+					"texture": "#0"
+				},
+				"south": {
+					"uv": [8.75, 2.25, 8.125, 3.5],
+					"texture": "#0"
+				},
+				"west": {
+					"uv": [5.375, 7.5, 4.5, 8.75],
+					"texture": "#0"
+				},
+				"up": {
+					"uv": [5.875, 1.875, 6.5, 1],
+					"texture": "#0"
+				},
+				"down": {
+					"uv": [5.375, 8.5, 6, 9.375],
+					"texture": "#0"
+				}
+			}
+		},
+		{
+			"from": [6, -4, 8],
+			"to": [9, 4, 12],
+			"rotation": {
+				"angle": -22.5,
+				"axis": "x",
+				"origin": [6, 2, 8]
+			},
+			"faces": {
+				"north": {
+					"uv": [7.875, 8.625, 7.5, 9.625],
+					"texture": "#0"
+				},
+				"east": {
+					"uv": [6.5, 8.5, 6, 9.5],
+					"texture": "#0"
+				},
+				"south": {
+					"uv": [9.125, 1.625, 8.75, 2.625],
+					"texture": "#0"
+				},
+				"west": {
+					"uv": [4.5, 8.25, 4, 9.25],
+					"texture": "#0"
+				},
+				"up": {
+					"uv": [6.5, 1.5, 6.875, 1],
+					"texture": "#0"
+				},
+				"down": {
+					"uv": [9.125, 1.625, 9.5, 2.125],
+					"texture": "#0"
+				}
+			}
+		},
+		{
+			"from": [5, -5, 6],
+			"to": [10, -2, 11],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [6, 1, 8]
+			},
+			"faces": {
+				"north": {
+					"uv": [9.625, 7, 9, 7.375],
+					"texture": "#0"
+				},
+				"east": {
+					"uv": [1.875, 9.125, 1.25, 9.5],
+					"texture": "#0"
+				},
+				"south": {
+					"uv": [1.25, 9.125, 0.625, 9.5],
+					"texture": "#0"
+				},
+				"west": {
+					"uv": [0.625, 9.125, 0, 9.5],
+					"texture": "#0"
+				},
+				"up": {
+					"uv": [8.625, 8.875, 9.25, 8.25],
+					"texture": "#0"
+				},
+				"down": {
+					"uv": [8.75, 1, 9.375, 1.625],
+					"texture": "#0"
+				}
+			}
+		}
+	]
+}

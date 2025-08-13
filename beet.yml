@@ -4,6 +4,7 @@ output: build
 
 data_pack:
   load:
+    - animatedjava/*
     - libraries/mc-tungsten*
     - libraries/mc-argon*
     - libraries/player_motion*
@@ -13,6 +14,8 @@ data_pack:
   zipped: false
 
 resource_pack:
+  load:
+    - animatedjava/*
   name: GenesisRe-RP
   description: Genesis Rewrite
   zipped: false
