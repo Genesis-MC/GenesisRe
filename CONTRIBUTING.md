@@ -107,3 +107,8 @@ Generally it's better to commit/push often so merge conflicts (multiple people m
 - New lines:
     - All files should end with trailing new line
     - Feel free to use 2 new lines between functions/imports/things to visually separate them
+- Animated Java:
+    - Prefix your export namespace with `genesis` to avoid conflicts with AJ rigs added by other datapacks, e.g. `genesis_pegaeon` rather than `pegaeon`
+    - Place the generated data- and resourcepacks in a subfolder in the `animatedjava` folder for organisation
+
+
