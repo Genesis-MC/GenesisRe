@@ -39,7 +39,12 @@ function ~/spawn_nest:
     # initialise nest
     data modify storage genesis:temp mob.pegaeon set value {nest:{pos:[I;0,0,0]},egg:{id:PegaeonEgg.base_item,components:PegaeonEgg.components}}
     data modify storage genesis:temp mob.pegaeon.egg.components."minecraft:custom_model_data".colors set value [0]
-    execute store result storage genesis:temp mob.pegaeon.egg.components."minecraft:custom_model_data".colors[0] int 1 run random value 0..16777215
+    data modify storage genesis:temp util.color.hsv set value [0d,1d,1d]
+    execute store result storage genesis:temp util.color.hsv[0] double 0.0001 run random value 0..10000
+    execute store result storage genesis:temp util.color.hsv[1] double 0.0001 run random value 5000..10000
+    execute store result storage genesis:temp util.color.hsv[2] double 0.0001 run random value 5000..10000
+    function genesis:utils/color/hsv_to_int
+    data modify storage genesis:temp mob.pegaeon.egg.components."minecraft:custom_model_data".colors[0] set from storage genesis:temp util.color.int
     for i in range(3):
       execute store result storage genesis:temp mob.pegaeon.nest.pos[i] int 1 run data get entity @s Pos[i] 1
     data modify entity @s data set from storage genesis:temp mob.pegaeon.nest
