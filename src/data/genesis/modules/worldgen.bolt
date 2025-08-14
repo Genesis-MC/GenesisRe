@@ -1,0 +1,89 @@
+from genesis:utils import to_nbt
+from beet import Structure
+from beet.contrib.worldgen import WorldgenTemplatePool
+
+STRUCTURE_DATA_VERSION = 4440
+
+def create_command_jigsaw_feature(name, command, prefix="genesis:worldgen/command_feature"):
+  """
+  Creates a structure template which, when placed, will run a command,
+  and a template pool which only contains the aforementioned template.
+  This allows you to add jigsaw blocks which in practice run a command.
+  Configure the jigsaw block facing upwards with the following fields:
+  - target pool: genesis:worldgen/command_feature/name
+  - name: minecraft:bottom
+  - target name: minecraft:bottom
+  The connecting jigsaw where the command is run will be placed ABOVE your
+  jigsaw block (even if it's placed inside when you click the "generate" button)
+  """
+  path = f"{prefix}/{name}"
+  entity_data = {
+    "id": "minecraft:armor_stand",
+    "NoGravity": True,
+    "Small": True,
+    "Marker": True,
+    "Invisible": True,
+    "Invulnerable": True,
+    "equipment": {
+      "feet": {
+        "id": "minecraft:poisonous_potato",
+        "components": {
+          "minecraft:enchantments": {"genesis:worldgen/run_command": 1},
+          "minecraft:custom_data": {
+            "command": command
+          }
+        }
+      }
+    }
+  }
+  ctx.data[path] = Structure(to_nbt({
+    "size":[1,1,1],
+    "entities": [
+      {
+        "nbt": entity_data,
+        "blockPos": [0, 0, 0],
+        "pos": [0.5, 0.0, 0.5]
+      }
+    ],
+    "blocks": [
+      {
+        "nbt": {
+          "joint": "rollable",
+          "name": "minecraft:bottom",
+          "pool": "minecraft:empty",
+          "final_state": "minecraft:structure_void",
+          "placement_priority": 0,
+          "selection_priority": 0,
+          "id": "minecraft:jigsaw",
+          "target": "minecraft:bottom"
+        },
+        "pos": [0,0,0],
+        "state": 0
+      }
+    ],
+    "palette": [
+      {
+        "Properties": {
+          "orientation": "down_south"
+        },
+        "Name": "minecraft:jigsaw"
+      }
+    ],
+    "DataVersion": STRUCTURE_DATA_VERSION
+  }))
+  ctx.data[path] = WorldgenTemplatePool({
+    "elements": [
+      {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": path,
+        "processors": {
+          "processors": []
+        },
+        "projection": "rigid"
+      },
+      "weight": 1
+      }
+    ],
+    "fallback": "minecraft:empty"
+  })

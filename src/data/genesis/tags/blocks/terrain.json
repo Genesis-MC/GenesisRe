@@ -1,0 +1,30 @@
+{
+  "values": [
+    "minecraft:cobbled_deepslate",
+    "minecraft:deepslate",
+    "minecraft:cobblestone",
+    "minecraft:stone",
+    "minecraft:andesite",
+    "minecraft:diorite",
+    "minecraft:granite",
+    "minecraft:tuff",
+    "minecraft:calcite",
+    "minecraft:dripstone_block",
+    "minecraft:sandstone",
+    "minecraft:red_sandstone",
+    "minecraft:sand",
+    "minecraft:red_sand",
+    "minecraft:dirt",
+    "minecraft:coarse_dirt",
+    "minecraft:rooted_dirt",
+    "minecraft:grass_block",
+    "minecraft:mud",
+    "minecraft:clay",
+    "minecraft:gravel",
+    "minecraft:podzol",
+    "minecraft:mycelium",
+    "minecraft:dirt_path",
+    "minecraft:moss_block",
+    "minecraft:pale_moss_block"
+  ]
+}

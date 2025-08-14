@@ -1,0 +1,15 @@
+{
+  "name": "pegaeon_platform",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "genesis:pegaeon_platform",
+        "processors": "genesis:pegaeon_platform",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}
