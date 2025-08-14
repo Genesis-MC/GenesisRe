@@ -2,7 +2,7 @@ from genesis:interaction import call_on_rclick_tagged, call_on_lclick_tagged
 from genesis:item import GenesisItem, block_model_item
 from genesis:schedule import schedule_on_entity_fixed
 from genesis:worldgen import create_command_jigsaw_feature
-MAX_DIST_BETWEEN_NESTS = 1000
+MAX_DIST_BETWEEN_NESTS = 2500
 FLYING_HEIGHT_ABOVE_GROUND = 20
 FLYING_SPEED = 40
 ROOT = ~/
