@@ -7,6 +7,7 @@ from genesis:crafter import add_custom_recipe
 from genesis:item import GenesisItem
 
 from genesis:item/ingredient import SteelHilt, GildedHilt, BejeweledHilt, CrimsonAlloy, WarpedAlloy, VerdantGem, VermillionGem, ShadedEnderPearl, VoidedEnderPearl, ShadeFlux, AncientGoldCoin, ArcaneCloth, Frostflake, BoarHide, Calimari, Cloth, CrystalDust, CrystalScale, Drumstick, FloralNectar, FrozenWisp, EverfrostCore, LivingwoodCore, PyroclasticCore, ManaCloth, MetalAlloy, MossyBark, MutatedFlesh, PrimeBeef, PureCrystalDust, ScrapscuttleEgg, ShardOfTheCrimsonAbyss, ShardOfTheDepths, ShardOfTheWarpedEmpyrean, TerraclodPearl, Truffle, VenomSac, VerdantShard, VerdantTwig, VermillionClay, VoidedFragment, WizardsTruffle, WolfFang 
+from genesis:status/main import Frostbite
 
 from genesis:relation import ensure_id, prepare_id_inline, prepare_id, match_id, prepare_team, set_prepared_team, prepare_team_inline, match_team
 
@@ -32,7 +33,7 @@ class Glaive(GenesisItem):
     item_name = ("Glaive", {"color":"white"})
     rarity = "uncommon"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":75,"attack_speed":147})
+    stats = ("mainhand", {"physical_power":75,"attack_speed":140})
     @right_click_ability(
         name = "stance_swap_onslaught",
         description = "WIP",
@@ -43,42 +44,58 @@ class Glaive(GenesisItem):
         say WIP
 
 # Ice Pike
-@add_custom_recipe([
-    [None, CrystalScale, "diamond_block"],
-    [CrystalScale, SteelHilt, CrystalScale],
-    [SteelHilt, CrystalScale, None],
-])
 class IcePike(GenesisItem):
     item_name = ("Ice Pike", {"color":"white"})
     rarity = "rare"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":75,"attack_speed":150})
+    stats = ("mainhand", {"physical_power":70,"attack_speed":145})
     item_model = "genesis:polearm/ice_pike"
+    passives = [{
+            "name": "Frostbite",
+            "description": "Striking an enemy grants them +1 Frostbite.",
+        }]
+
+    @on_attack(slot = 'mainhand')
+    def frostbite():
+        execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
+        on attacker function (Frostbite.initiate_self)
+        Frostbite.add_stack()
 
 # Fimbulspine
-@add_custom_recipe([
-    [None, CrystalScale, "diamond_block"],
-    [CrystalScale, SteelHilt, CrystalScale],
-    [SteelHilt, CrystalScale, None],
-])
 class Fimbulspine(GenesisItem):
     item_name = ("Fimbulspine", {"color":"aqua"})
     rarity = "epic"
     category = ["polearm"]
-    stats = ("mainhand", {"physical_power":80,"attack_speed":160})
-    item_model = "genesis:polearm/ice_pike"
+    stats = ("mainhand", {"physical_power":80,"attack_speed":150})
+    item_model = "genesis:polearm/fimbulspine"
     passives = [{
+            "name": "Frostbite",
+            "description": "Striking an enemy grants them +1 Frostbite.",
+    }, {
             "name": "Cryorazor",
-            "description": "A",
-        }]
+            "description": "On hit, spawn a Cryorazor which will quickly revolve around, dealing 30 damage and granting +1 Frostbite to enemies it collides with. Deals x2 damage to enemies with existing Frostbite stacks. Only 1 Cryorazor may exist at a time.",
+    }]
+
+    @on_attack(slot = 'mainhand')
+    def frostbite():
+        execute anchored eyes run particle minecraft:snowflake ^ ^ ^ 0.5 0.5 0.5 0 10
+        on attacker function (Frostbite.initiate_self)
+        Frostbite.add_stack()
 
     @on_attack(slot = 'mainhand')
     def cryorazor():
-        tag @s add genesis.temp
-        execute on attacker if entity @s[tag=!genesis.ability.cryorazor] at @e[tag=genesis.temp,limit=1] run summon item_display ~ ~1 ~ {Tags:["genesis.ability.cryorazor"],Rotation:[0F,90F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,0.01f]},item:{id:"minecraft:paper",count:1,components:{"minecraft:item_model":"genesis:ability/frostbite"}}}
-        tag @s remove genesis.temp
-        # Limit player to only spawn 1 cryorazor each hit, immediately remove tag next tick
-        execute on attacker run tag @s add genesis.ability.cryorazor 
+        execute on attacker if entity @s[tag=genesis.ability.cryorazor] run return 0
+        execute on attacker function ~/../cryorazor_player_setup:
+            # Limit player to only spawn 1 cryorazor each hit, immediately remove tag next tick
+            tag @s add genesis.ability.cryorazor 
+            with ensure_id():
+                scoreboard players operation #caster genesis = @s argon.id
+            prepare_team()
+        at @s run summon item_display ~ ~1 ~ {Tags:["genesis.ability.cryorazor","genesis.temp"],Rotation:[0F,90F],transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2f,2f,0.01f]},item:{id:"minecraft:paper",count:1,components:{"minecraft:item_model":"genesis:ability/frostbite"}}}
+        as @e[tag=genesis.temp,distance=..5] function ~/../cryorazor_setup:
+            scoreboard players operation @s genesis.relation.owner = #caster genesis
+            set_prepared_team()
+            tag @s remove genesis.temp
 
 # Halycon
 @add_custom_recipe([
@@ -221,17 +238,7 @@ class VerdantStaff(GenesisItem):
     def revitalize1():
         playsound minecraft:block.enchantment_table.use player @a ~ ~ ~ 1 0
         playsound minecraft:item.bone_meal.use player @a ~ ~ ~ 1 0
-        with ensure_id():
-            scoreboard players operation #caster genesis = @s argon.id
-        prepare_team()
-        summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize1","genesis.temp"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
-        execute as @e[tag=genesis.temp,limit=1]:
-            scoreboard players operation @s genesis.relation.owner = #caster genesis
-            set_prepared_team()
-            prepare_id('@s','genesis.relation.owner')
-            prepare_team()
-            execute as @a[predicate=(match_id),limit=1] run say it worked
-            tag @s remove genesis.temp
+        summon interaction ~ ~ ~ {width:0f,height:0f,Tags:["genesis.ability.revitalize","genesis.ability.revitalize1"],interaction:{player:[I;-470087286,1253655809,-1360091822,1632556642],timestamp:0L}}
         data modify entity @e[tag=genesis.ability.revitalize,sort=nearest,limit=1] interaction.player set from entity @s UUID
         summon area_effect_cloud ~ ~0.2 ~ {Tags:["genesis.ability.revitalize_particle1"],custom_particle:{type:"totem_of_undying"},Radius:2f,Duration:80,potion_duration_scale:1f,potion_contents:{custom_effects:[{id:"minecraft:regeneration",amplifier:0,duration:60,show_particles:0b}]}}
         

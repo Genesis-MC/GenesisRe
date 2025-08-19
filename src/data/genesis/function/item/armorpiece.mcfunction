@@ -219,14 +219,6 @@ class EtherealChestplate(GenesisItem):
     def remove_statuses():
         PassiveSteadfast.remove()
 
-# BlackMarketBoots
-class BlackMarketBoots(GenesisItem):
-    item_name = ("Black Market Boots", {"color":"white"})
-    rarity = "uncommon"
-    category = ["boots"]
-    stats = ("feet", {"armor":5,"speed":-50})
-    equippable = {"slot":"feet","asset_id":"minecraft:diamond"}
-
 # NomadicShawl
 class NomadicShawl(GenesisItem):
     item_name = ("Nomadic Shawl", {"color":"white"})

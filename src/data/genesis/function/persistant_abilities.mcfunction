@@ -95,15 +95,22 @@ append function ~/5tick:
 
 append function genesis:tick:
     # --Cryorazor-- # 
-    execute as @a[tag=genesis.ability.cryorazor] run tag @s remove genesis.ability.cryorazor
     execute as @e[type=item_display,tag=genesis.ability.cryorazor] at @s function genesis:persistant_abilities/cryorazor:
         particle minecraft:trial_spawner_detection_ominous ~ ~ ~ 0 0 0 0 2
         scoreboard players add @s genesis 3
+        prepare_id('@s','genesis.relation.owner')
+        prepare_team()
+        execute if score @s genesis matches 150.. as @a[predicate=(match_id),limit=1] run tag @s remove genesis.ability.cryorazor
         execute if score @s genesis matches 150.. run kill @s
-        execute as @e[distance=..2,tag=!genesis.player] run damage @s 4 minecraft:generic
+        with hitbox(2, f'@e[predicate=!{match_team}]'):
+            damage @s 3 minecraft:generic by @a[predicate=(match_id),limit=1]
+            if score @s genesis.status.unique.frostbite.value.stacks matches 1.. run damage @s 6 minecraft:generic by @a[predicate=(match_id),limit=1]
         execute store result storage genesis:temp item.cryorazor.distance float 0.01 run scoreboard players get @s genesis
         execute function genesis:persistant_abilities/cryorazor_macro with storage genesis:temp item.cryorazor:
             $execute rotated ~ 0 run teleport @s ^ ^ ^$(distance) ~12 90
+
+    # --Delta Flow-- #
+    execute as @a[tag=genesis.ability.delta_flow] run tag @s remove genesis.ability.delta_flow
 
     # --Persistant Cosmetics-- #
     execute as @e[type=area_effect_cloud,tag=genesis.ability.polar_vortex_particle] at @s function genesis:persistant_abilities/polar_vortex_particle:

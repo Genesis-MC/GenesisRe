@@ -61,7 +61,7 @@ class Zweihander(GenesisItem):
     item_name = ("Zweihander", {"color":"white"})
     rarity = "uncommon"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":120,"attack_speed":75})
+    stats = ("mainhand", {"physical_power":130,"attack_speed":75})
     @right_click_ability(
         name = "Stance Swap - Onslaught",
         description = "Toggles Onslaught Stance. While Onslaught Stance is active, gain +40 Speed, +10% Attack Speed but -20 Armor, -20 Armor Toughness.",
@@ -97,7 +97,7 @@ class SwashbucklersGlory(GenesisItem):
     item_name = ("Swashbucklers Glory", {"color":"blue"})
     rarity = "epic"
     category = ["greatsword"]
-    stats = ("mainhand", {"physical_power":140,"attack_speed":60,"armor_toughness":30})
+    stats = ("mainhand", {"physical_power":140,"attack_speed":75,"speed":20})
     @right_click_ability(
         name = "Cleave II",
         description = "Slash all enemies in a 4-block radius, dealing 75% of your Physical Power.",
@@ -131,14 +131,18 @@ class Exetol(GenesisItem):
 
     @on_attack(slot = 'mainhand')
     def delta_flow():
-        with ensure_id():
-            scoreboard players operation #caster genesis = @s argon.id
-        prepare_team()
+        execute on attacker if entity @s[tag=genesis.ability.delta_flow] run return 0
         playsound genesis:ability.delta_flow.burst player @a ~ ~ ~ 0.3 1.6
         particle dust_pillar{block_state:"blackstone"} ~ ~-0.2 ~ 0.3 0 0.3 0 20
-        # Summon marker as same rotation and xz as player but y of the mob
-        execute on attacker at @s run summon marker ~ ~ ~ {Tags:["genesis.ability.magma_spike_reference"]}
-        execute on attacker run tp @e[tag=genesis.ability.magma_spike_reference,limit=1] @s
+        execute on attacker function ~/../delta_flow_relation_setup:
+            # Limit player to only spawn 1 magma spikes, immediately remove tag next tick
+            tag @s add genesis.ability.delta_flow
+            with ensure_id():
+                scoreboard players operation #caster genesis = @s argon.id
+            prepare_team()
+            # Summon marker as same rotation and xz as player but y of the mob
+            at @s run summon marker ~ ~ ~ {Tags:["genesis.ability.magma_spike_reference"]}
+            tp @e[tag=genesis.ability.magma_spike_reference,limit=1] @s
         execute store result entity @e[tag=genesis.ability.magma_spike_reference,limit=1] Pos[1] double 1 run data get entity @s Pos[1] 1 
         # Spawn spikes
         execute facing entity @e[tag=genesis.ability.magma_spike_reference,limit=1] eyes function ~/../delta_flow_spawnspikes:
